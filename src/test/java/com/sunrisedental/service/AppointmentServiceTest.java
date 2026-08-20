@@ -78,4 +78,33 @@ class AppointmentServiceTest {
         verify(appointmentDAO, never())
                 .saveAppointment(appointment);
     }
+
+    @Test
+    void registerAppointmentShouldRejectBlankAppointmentNumber()
+            throws SQLException {
+
+        // Use a blank number to represent invalid appointment details.
+        Appointment appointment =
+                new Appointment(
+                        3,
+                        ""
+                );
+
+        when(appointmentDAO.findByAppointmentNumber(""))
+                .thenReturn(Optional.empty());
+
+        when(appointmentDAO.saveAppointment(appointment))
+                .thenReturn(true);
+
+        // Try to register an appointment without a valid number.
+        boolean result =
+                appointmentService.registerAppointment(appointment);
+
+        // Invalid appointment details should not be saved.
+        assertFalse(result);
+
+        verify(appointmentDAO, never())
+                .saveAppointment(appointment);
+    }
 }
+
