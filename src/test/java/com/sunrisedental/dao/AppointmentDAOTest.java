@@ -223,4 +223,57 @@ class AppointmentDAOTest {
                     .close();
         }
     }
+
+    @Test
+    void findByAppointmentNumberShouldCloseResourcesWhenSearchFails()
+            throws SQLException {
+
+        // Use a normal search but make reading the result fail.
+        String appointmentNumber = "APT001";
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        ResultSet resultSet =
+                mock(ResultSet.class);
+
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(statement);
+
+        when(statement.executeQuery())
+                .thenReturn(resultSet);
+
+        when(resultSet.next())
+                .thenThrow(
+                        new SQLException("Database error")
+                );
+
+        try (MockedStatic<DBConnectionFactory> mocked =
+                     mockStatic(DBConnectionFactory.class)) {
+
+            mocked.when(DBConnectionFactory::getConnection)
+                    .thenReturn(connection);
+
+            // The database error should still be reported.
+            assertThrows(
+                    SQLException.class,
+                    () -> appointmentDAO.findByAppointmentNumber(
+                            appointmentNumber
+                    )
+            );
+
+            // Resources should be closed after the failed search.
+            verify(resultSet)
+                    .close();
+
+            verify(statement)
+                    .close();
+
+            verify(connection)
+                    .close();
+        }
+    }
 }
