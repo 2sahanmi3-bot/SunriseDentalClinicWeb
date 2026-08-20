@@ -13,27 +13,45 @@ public class AppointmentDAO {
     public boolean saveAppointment(Appointment appointment)
             throws SQLException {
 
-        Connection connection =
-                DBConnectionFactory.getConnection();
+        Connection connection = null;
+        PreparedStatement statement = null;
 
-        PreparedStatement statement =
-                connection.prepareStatement(
-                        "INSERT INTO appointments " +
-                                "(appointment_id, appointment_number) " +
-                                "VALUES (?, ?)"
-                );
+        try {
 
-        statement.setInt(
-                1,
-                appointment.getAppointmentId()
-        );
+            connection =
+                    DBConnectionFactory.getConnection();
 
-        statement.setString(
-                2,
-                appointment.getAppointmentNumber()
-        );
+            statement =
+                    connection.prepareStatement(
+                            "INSERT INTO appointments " +
+                                    "(appointment_id, appointment_number) " +
+                                    "VALUES (?, ?)"
+                    );
 
-        return statement.executeUpdate() > 0;
+            statement.setInt(
+                    1,
+                    appointment.getAppointmentId()
+            );
+
+            statement.setString(
+                    2,
+                    appointment.getAppointmentNumber()
+            );
+
+            return statement.executeUpdate() > 0;
+
+        } finally {
+
+            // Close the statement after the save attempt is finished.
+            if (statement != null) {
+                statement.close();
+            }
+
+            // Close the connection after the save attempt is finished.
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     public Optional<Appointment> findByAppointmentNumber(
