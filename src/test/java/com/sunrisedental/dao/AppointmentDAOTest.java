@@ -128,4 +128,52 @@ class AppointmentDAOTest {
                     .executeQuery();
         }
     }
+
+    @Test
+    void findByAppointmentNumberShouldReturnEmptyWhenNotFound()
+            throws SQLException {
+
+        // Use an appointment number that has no matching database result.
+        String appointmentNumber = "APT999";
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        ResultSet resultSet =
+                mock(ResultSet.class);
+
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(statement);
+
+        when(statement.executeQuery())
+                .thenReturn(resultSet);
+
+        when(resultSet.next())
+                .thenReturn(false);
+
+        try (MockedStatic<DBConnectionFactory> mocked =
+                     mockStatic(DBConnectionFactory.class)) {
+
+            mocked.when(DBConnectionFactory::getConnection)
+                    .thenReturn(connection);
+
+            // Search for an appointment that does not exist.
+            Optional<Appointment> result =
+                    appointmentDAO.findByAppointmentNumber(
+                            appointmentNumber
+                    );
+
+            // No appointment should be returned.
+            assertTrue(result.isEmpty());
+
+            verify(statement)
+                    .setString(1, appointmentNumber);
+
+            verify(statement)
+                    .executeQuery();
+        }
+    }
 }
