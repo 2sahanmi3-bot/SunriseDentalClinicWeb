@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class AppointmentDAOTest {
@@ -174,6 +175,52 @@ class AppointmentDAOTest {
 
             verify(statement)
                     .executeQuery();
+        }
+    }
+
+    @Test
+    void saveAppointmentShouldCloseResourcesWhenSaveFails()
+            throws SQLException {
+
+        // Use a normal appointment but make the database save fail.
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT001"
+                );
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(statement);
+
+        when(statement.executeUpdate())
+                .thenThrow(
+                        new SQLException("Database error")
+                );
+
+        try (MockedStatic<DBConnectionFactory> mocked =
+                     mockStatic(DBConnectionFactory.class)) {
+
+            mocked.when(DBConnectionFactory::getConnection)
+                    .thenReturn(connection);
+
+            // The database error should still be reported.
+            assertThrows(
+                    SQLException.class,
+                    () -> appointmentDAO.saveAppointment(appointment)
+            );
+
+            // Resources should be closed even when the save fails.
+            verify(statement)
+                    .close();
+
+            verify(connection)
+                    .close();
         }
     }
 }
