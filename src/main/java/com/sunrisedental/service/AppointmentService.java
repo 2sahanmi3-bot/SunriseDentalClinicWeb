@@ -16,6 +16,6 @@ public class AppointmentService {
     public boolean registerAppointment(Appointment appointment)
             throws SQLException {
 
-        return false;
+        return appointmentDAO.saveAppointment(appointment);
     }
 }
