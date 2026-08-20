@@ -5,6 +5,7 @@ import com.sunrisedental.model.Appointment;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class AppointmentDAO {
 
@@ -32,5 +33,11 @@ public class AppointmentDAO {
         );
 
         return statement.executeUpdate() > 0;
+    }
+    public Optional<Appointment> findByAppointmentNumber(
+            String appointmentNumber)
+            throws SQLException {
+
+        return Optional.empty();
     }
 }
