@@ -2,18 +2,22 @@ package com.sunrisedental.model;
 
 public class Appointment {
 
+    private int appointmentId;
+    private String appointmentNumber;
+
     public Appointment(
             int appointmentId,
             String appointmentNumber) {
 
-        // Appointment details are not stored yet.
+        this.appointmentId = appointmentId;
+        this.appointmentNumber = appointmentNumber;
     }
 
     public int getAppointmentId() {
-        return 0;
+        return appointmentId;
     }
 
     public String getAppointmentNumber() {
-        return null;
+        return appointmentNumber;
     }
 }
