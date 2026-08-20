@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AppointmentServiceTest {
@@ -105,6 +106,40 @@ class AppointmentServiceTest {
 
         verify(appointmentDAO, never())
                 .saveAppointment(appointment);
+    }
+
+    @Test
+    void findByAppointmentNumberShouldReturnAppointment()
+            throws SQLException {
+
+        // Use an appointment number that is already registered.
+        String appointmentNumber = "APT001";
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT001"
+                );
+
+        when(appointmentDAO.findByAppointmentNumber(appointmentNumber))
+                .thenReturn(Optional.of(appointment));
+
+        // Search for the existing appointment.
+        Optional<Appointment> result =
+                appointmentService.findByAppointmentNumber(
+                        appointmentNumber
+                );
+
+        // The matching appointment should be returned.
+        assertTrue(result.isPresent());
+
+        assertEquals(
+                "APT001",
+                result.get().getAppointmentNumber()
+        );
+
+        verify(appointmentDAO)
+                .findByAppointmentNumber(appointmentNumber);
     }
 }
 

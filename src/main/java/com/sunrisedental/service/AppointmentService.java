@@ -38,4 +38,11 @@ public class AppointmentService {
 
         return appointmentDAO.saveAppointment(appointment);
     }
+
+    public Optional<Appointment> findByAppointmentNumber(
+            String appointmentNumber)
+            throws SQLException {
+
+        return Optional.empty();
+    }
 }
