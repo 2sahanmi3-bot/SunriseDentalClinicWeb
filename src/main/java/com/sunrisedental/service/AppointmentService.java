@@ -43,6 +43,8 @@ public class AppointmentService {
             String appointmentNumber)
             throws SQLException {
 
-        return Optional.empty();
+        return appointmentDAO.findByAppointmentNumber(
+                appointmentNumber
+        );
     }
 }
