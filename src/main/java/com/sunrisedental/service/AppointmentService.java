@@ -17,9 +17,18 @@ public class AppointmentService {
     public boolean registerAppointment(Appointment appointment)
             throws SQLException {
 
+        String appointmentNumber =
+                appointment.getAppointmentNumber();
+
+        // Do not register an appointment without a valid number.
+        if (appointmentNumber == null
+                || appointmentNumber.isBlank()) {
+            return false;
+        }
+
         Optional<Appointment> existingAppointment =
                 appointmentDAO.findByAppointmentNumber(
-                        appointment.getAppointmentNumber()
+                        appointmentNumber
                 );
 
         // Save the appointment only when its number is available.
