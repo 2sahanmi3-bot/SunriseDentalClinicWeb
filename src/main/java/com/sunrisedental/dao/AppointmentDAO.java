@@ -58,35 +58,59 @@ public class AppointmentDAO {
             String appointmentNumber)
             throws SQLException {
 
-        Connection connection =
-                DBConnectionFactory.getConnection();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
 
-        PreparedStatement statement =
-                connection.prepareStatement(
-                        "SELECT appointment_id, appointment_number " +
-                                "FROM appointments " +
-                                "WHERE appointment_number = ?"
-                );
+        try {
 
-        statement.setString(
-                1,
-                appointmentNumber
-        );
+            connection =
+                    DBConnectionFactory.getConnection();
 
-        ResultSet resultSet =
-                statement.executeQuery();
-
-        if (resultSet.next()) {
-
-            Appointment appointment =
-                    new Appointment(
-                            resultSet.getInt("appointment_id"),
-                            resultSet.getString("appointment_number")
+            statement =
+                    connection.prepareStatement(
+                            "SELECT appointment_id, appointment_number " +
+                                    "FROM appointments " +
+                                    "WHERE appointment_number = ?"
                     );
 
-            return Optional.of(appointment);
-        }
+            statement.setString(
+                    1,
+                    appointmentNumber
+            );
 
-        return Optional.empty();
+            resultSet =
+                    statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                Appointment appointment =
+                        new Appointment(
+                                resultSet.getInt("appointment_id"),
+                                resultSet.getString("appointment_number")
+                        );
+
+                return Optional.of(appointment);
+            }
+
+            return Optional.empty();
+
+        } finally {
+
+            // Close the result after the search attempt is finished.
+            if (resultSet != null) {
+                resultSet.close();
+            }
+
+            // Close the statement after the search attempt is finished.
+            if (statement != null) {
+                statement.close();
+            }
+
+            // Close the connection after the search attempt is finished.
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 }
