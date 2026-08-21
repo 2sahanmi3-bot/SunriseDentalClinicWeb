@@ -141,5 +141,28 @@ class AppointmentServiceTest {
         verify(appointmentDAO)
                 .findByAppointmentNumber(appointmentNumber);
     }
+
+    @Test
+    void findByAppointmentNumberShouldReturnEmptyWhenNotFound()
+            throws SQLException {
+
+        // Use an appointment number that is not registered.
+        String appointmentNumber = "APT999";
+
+        when(appointmentDAO.findByAppointmentNumber(appointmentNumber))
+                .thenReturn(Optional.empty());
+
+        // Search for an appointment that does not exist.
+        Optional<Appointment> result =
+                appointmentService.findByAppointmentNumber(
+                        appointmentNumber
+                );
+
+        // No appointment should be returned.
+        assertTrue(result.isEmpty());
+
+        verify(appointmentDAO)
+                .findByAppointmentNumber(appointmentNumber);
+    }
 }
 
