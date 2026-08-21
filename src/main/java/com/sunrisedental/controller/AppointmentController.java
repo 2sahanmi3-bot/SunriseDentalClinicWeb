@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Optional;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -81,6 +83,39 @@ public class AppointmentController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        String action =
+                request.getParameter("action");
 
+        if ("search".equals(action)) {
+
+            String appointmentNumber =
+                    request.getParameter("appointmentNumber");
+
+            try {
+
+                Optional<Appointment> appointment =
+                        appointmentService.findByAppointmentNumber(
+                                appointmentNumber
+                        );
+
+                if (appointment.isPresent()) {
+
+                    request.setAttribute(
+                            "appointment",
+                            appointment.get()
+                    );
+
+                    request.getRequestDispatcher(
+                            "WEB-INF/view/viewAppointment.jsp"
+                    ).forward(
+                            request,
+                            response
+                    );
+                }
+
+            } catch (SQLException e) {
+                throw new ServletException(e);
+            }
+        }
     }
 }

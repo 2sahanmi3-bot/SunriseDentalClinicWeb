@@ -158,4 +158,42 @@ class AppointmentControllerTest {
                         response
                 );
     }
+
+    @Test
+    void getSearchShouldShowMessageWhenAppointmentNotFound()
+            throws Exception {
+
+        when(request.getParameter("action"))
+                .thenReturn("search");
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn("APT999");
+
+        when(appointmentService.findByAppointmentNumber("APT999"))
+                .thenReturn(Optional.empty());
+
+        when(request.getRequestDispatcher(
+                "WEB-INF/view/viewAppointment.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doGet(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .findByAppointmentNumber("APT999");
+
+        verify(request)
+                .setAttribute(
+                        "errorMessage",
+                        "Appointment not found"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+    }
 }
