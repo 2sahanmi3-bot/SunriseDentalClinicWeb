@@ -53,6 +53,20 @@ public class AppointmentController extends HttpServlet {
                             "appointment?action=search&appointmentNumber="
                                     + appointmentNumber
                     );
+                } else {
+
+                    // Show a clear message when the appointment cannot be registered.
+                    request.setAttribute(
+                            "errorMessage",
+                            "Appointment could not be registered"
+                    );
+
+                    request.getRequestDispatcher(
+                            "WEB-INF/view/addAppointment.jsp"
+                    ).forward(
+                            request,
+                            response
+                    );
                 }
 
             } catch (SQLException e) {
