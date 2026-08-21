@@ -164,5 +164,40 @@ class AppointmentServiceTest {
         verify(appointmentDAO)
                 .findByAppointmentNumber(appointmentNumber);
     }
+
+    @Test
+    void registerAppointmentShouldRejectMissingRequiredDetails()
+            throws SQLException {
+
+        // Leave the patient name empty to represent incomplete registration details.
+        Appointment appointment =
+                new Appointment(
+                        6,
+                        "APT006",
+                        "",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-08-26",
+                        "11:00"
+                );
+
+        when(appointmentDAO.findByAppointmentNumber("APT006"))
+                .thenReturn(Optional.empty());
+
+        when(appointmentDAO.saveAppointment(appointment))
+                .thenReturn(true);
+
+        // Try to register an appointment with missing required details.
+        boolean result =
+                appointmentService.registerAppointment(appointment);
+
+        // Incomplete appointment details should not be saved.
+        assertFalse(result);
+
+        verify(appointmentDAO, never())
+                .saveAppointment(appointment);
+    }
 }
 

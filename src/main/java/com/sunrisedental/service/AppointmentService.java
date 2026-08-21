@@ -26,6 +26,25 @@ public class AppointmentService {
             return false;
         }
 
+        // Make sure the required appointment details are provided.
+        if (appointment.getPatientName() == null
+                || appointment.getPatientName().isBlank()
+                || appointment.getAddress() == null
+                || appointment.getAddress().isBlank()
+                || appointment.getContactNumber() == null
+                || appointment.getContactNumber().isBlank()
+                || appointment.getDentistName() == null
+                || appointment.getDentistName().isBlank()
+                || appointment.getTreatmentType() == null
+                || appointment.getTreatmentType().isBlank()
+                || appointment.getAppointmentDate() == null
+                || appointment.getAppointmentDate().isBlank()
+                || appointment.getAppointmentTime() == null
+                || appointment.getAppointmentTime().isBlank()) {
+
+            return false;
+        }
+
         Optional<Appointment> existingAppointment =
                 appointmentDAO.findByAppointmentNumber(
                         appointmentNumber
