@@ -111,6 +111,21 @@ public class AppointmentController extends HttpServlet {
                             request,
                             response
                     );
+
+                } else {
+
+                    // Show a clear message when no appointment is found.
+                    request.setAttribute(
+                            "errorMessage",
+                            "Appointment not found"
+                    );
+
+                    request.getRequestDispatcher(
+                            "WEB-INF/view/viewAppointment.jsp"
+                    ).forward(
+                            request,
+                            response
+                    );
                 }
 
             } catch (SQLException e) {
@@ -119,3 +134,4 @@ public class AppointmentController extends HttpServlet {
         }
     }
 }
+
