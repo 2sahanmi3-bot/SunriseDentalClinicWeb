@@ -28,11 +28,22 @@ class AppointmentServiceTest {
     void registerAppointmentShouldSaveAppointment()
             throws SQLException {
 
+        // Use complete details for a valid appointment registration.
         Appointment appointment =
                 new Appointment(
                         1,
-                        "APT001"
+                        "APT001",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-08-25",
+                        "10:30"
                 );
+
+        when(appointmentDAO.findByAppointmentNumber("APT001"))
+                .thenReturn(Optional.empty());
 
         when(appointmentDAO.saveAppointment(appointment))
                 .thenReturn(true);
@@ -43,6 +54,9 @@ class AppointmentServiceTest {
         assertTrue(result);
 
         verify(appointmentDAO)
+                .findByAppointmentNumber("APT001");
+
+        verify(appointmentDAO)
                 .saveAppointment(appointment);
     }
 
@@ -50,27 +64,39 @@ class AppointmentServiceTest {
     void registerAppointmentShouldRejectDuplicateNumber()
             throws SQLException {
 
-        // Use an appointment number that is already registered.
+        // Use complete details with a number that is already registered.
         Appointment appointment =
                 new Appointment(
                         2,
-                        "APT001"
+                        "APT001",
+                        "Kamal Silva",
+                        "Kandy",
+                        "0712345678",
+                        "Dr Fernando",
+                        "Filling",
+                        "2026-08-26",
+                        "11:00"
                 );
 
         Appointment existingAppointment =
                 new Appointment(
                         1,
-                        "APT001"
+                        "APT001",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-08-25",
+                        "10:30"
                 );
 
         when(appointmentDAO.findByAppointmentNumber("APT001"))
                 .thenReturn(Optional.of(existingAppointment));
 
-        // Try to register another appointment with the same number.
         boolean result =
                 appointmentService.registerAppointment(appointment);
 
-        // A duplicate should not be saved.
         assertFalse(result);
 
         verify(appointmentDAO)
