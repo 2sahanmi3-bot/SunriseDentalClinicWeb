@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.RequestDispatcher;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
@@ -104,6 +106,50 @@ class AppointmentControllerTest {
                 .setAttribute(
                         "errorMessage",
                         "Appointment could not be registered"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+    }
+
+    @Test
+    void getSearchShouldLoadAppointmentAndForwardToDetailsPage()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT001"
+                );
+
+        when(request.getParameter("action"))
+                .thenReturn("search");
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn("APT001");
+
+        when(appointmentService.findByAppointmentNumber("APT001"))
+                .thenReturn(Optional.of(appointment));
+
+        when(request.getRequestDispatcher(
+                "WEB-INF/view/viewAppointment.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doGet(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .findByAppointmentNumber("APT001");
+
+        verify(request)
+                .setAttribute(
+                        "appointment",
+                        appointment
                 );
 
         verify(dispatcher)
