@@ -13,37 +13,61 @@ public class UserDAO {
     public Optional<User> findByUsername(String username)
             throws SQLException {
 
-        Connection connection =
-                DBConnectionFactory.getConnection();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
 
-        PreparedStatement statement =
-                connection.prepareStatement(
-                        "SELECT user_id, username, password " +
-                                "FROM users " +
-                                "WHERE username = ?"
-                );
+        try {
 
-        statement.setString(
-                1,
-                username
-        );
+            connection =
+                    DBConnectionFactory.getConnection();
 
-        ResultSet resultSet =
-                statement.executeQuery();
-
-        if (resultSet.next()) {
-
-            User user =
-                    new User(
-                            resultSet.getInt("user_id"),
-                            resultSet.getString("username"),
-                            resultSet.getString("password")
+            statement =
+                    connection.prepareStatement(
+                            "SELECT user_id, username, password " +
+                                    "FROM users " +
+                                    "WHERE username = ?"
                     );
 
-            return Optional.of(user);
-        }
+            statement.setString(
+                    1,
+                    username
+            );
 
-        return Optional.empty();
+            resultSet =
+                    statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                User user =
+                        new User(
+                                resultSet.getInt("user_id"),
+                                resultSet.getString("username"),
+                                resultSet.getString("password")
+                        );
+
+                return Optional.of(user);
+            }
+
+            return Optional.empty();
+
+        } finally {
+
+            // Close the result after the staff search is finished.
+            if (resultSet != null) {
+                resultSet.close();
+            }
+
+            // Close the statement after the staff search is finished.
+            if (statement != null) {
+                statement.close();
+            }
+
+            // Close the connection after the staff search is finished.
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 }
 
