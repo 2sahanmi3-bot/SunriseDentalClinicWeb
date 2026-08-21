@@ -87,4 +87,48 @@ class UserDAOTest {
                     .executeQuery();
         }
     }
+
+    @Test
+    void findByUsernameShouldReturnEmptyWhenStaffNotFound()
+            throws SQLException {
+
+        // Use a username that has no matching database result.
+        String username = "unknown";
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        ResultSet resultSet =
+                mock(ResultSet.class);
+
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(statement);
+
+        when(statement.executeQuery())
+                .thenReturn(resultSet);
+
+        when(resultSet.next())
+                .thenReturn(false);
+
+        try (MockedStatic<DBConnectionFactory> mocked =
+                     mockStatic(DBConnectionFactory.class)) {
+
+            mocked.when(DBConnectionFactory::getConnection)
+                    .thenReturn(connection);
+
+            Optional<User> result =
+                    userDAO.findByUsername(username);
+
+            assertTrue(result.isEmpty());
+
+            verify(statement)
+                    .setString(1, username);
+
+            verify(statement)
+                    .executeQuery();
+        }
+    }
 }
