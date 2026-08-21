@@ -276,4 +276,104 @@ class AppointmentDAOTest {
                     .close();
         }
     }
+
+    @Test
+    void saveAppointmentShouldStoreFullAppointmentDetails()
+            throws SQLException {
+
+        // Use all details required when registering an appointment.
+        Appointment appointment =
+                new Appointment(
+                        2,
+                        "APT002",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-08-25",
+                        "10:30"
+                );
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(statement);
+
+        when(statement.executeUpdate())
+                .thenReturn(1);
+
+        try (MockedStatic<DBConnectionFactory> mocked =
+                     mockStatic(DBConnectionFactory.class)) {
+
+            mocked.when(DBConnectionFactory::getConnection)
+                    .thenReturn(connection);
+
+            boolean result =
+                    appointmentDAO.saveAppointment(appointment);
+
+            assertTrue(result);
+
+            verify(statement)
+                    .setInt(
+                            1,
+                            appointment.getAppointmentId()
+                    );
+
+            verify(statement)
+                    .setString(
+                            2,
+                            appointment.getAppointmentNumber()
+                    );
+
+            verify(statement)
+                    .setString(
+                            3,
+                            appointment.getPatientName()
+                    );
+
+            verify(statement)
+                    .setString(
+                            4,
+                            appointment.getAddress()
+                    );
+
+            verify(statement)
+                    .setString(
+                            5,
+                            appointment.getContactNumber()
+                    );
+
+            verify(statement)
+                    .setString(
+                            6,
+                            appointment.getDentistName()
+                    );
+
+            verify(statement)
+                    .setString(
+                            7,
+                            appointment.getTreatmentType()
+                    );
+
+            verify(statement)
+                    .setString(
+                            8,
+                            appointment.getAppointmentDate()
+                    );
+
+            verify(statement)
+                    .setString(
+                            9,
+                            appointment.getAppointmentTime()
+                    );
+
+            verify(statement)
+                    .executeUpdate();
+        }
+    }
 }
