@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -19,6 +20,7 @@ class AppointmentControllerTest {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private RequestDispatcher dispatcher;
 
     @BeforeEach
     void setUp() {
@@ -36,6 +38,9 @@ class AppointmentControllerTest {
 
         response =
                 mock(HttpServletResponse.class);
+
+        dispatcher =
+                mock(RequestDispatcher.class);
     }
 
     @Test
@@ -69,6 +74,42 @@ class AppointmentControllerTest {
         verify(response)
                 .sendRedirect(
                         "appointment?action=search&appointmentNumber=APT001"
+                );
+    }
+
+    @Test
+    void postRegisterShouldShowErrorWhenRegistrationFails()
+            throws Exception {
+
+        when(request.getParameter("action"))
+                .thenReturn("register");
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn("APT001");
+
+        when(appointmentService.registerAppointment(
+                any(Appointment.class)))
+                .thenReturn(false);
+
+        when(request.getRequestDispatcher(
+                "WEB-INF/view/addAppointment.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(request)
+                .setAttribute(
+                        "errorMessage",
+                        "Appointment could not be registered"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
                 );
     }
 }
