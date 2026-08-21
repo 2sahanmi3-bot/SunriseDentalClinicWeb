@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 class AuthenticationServiceTest {
@@ -48,6 +49,36 @@ class AuthenticationServiceTest {
                 );
 
         assertTrue(result);
+
+        verify(userDAO)
+                .findByUsername(username);
+    }
+
+    @Test
+    void authenticateShouldReturnFalseForInvalidPassword()
+            throws SQLException {
+
+        // Use a valid username with the wrong password.
+        String username = "admin";
+        String password = "wrong123";
+
+        User user =
+                new User(
+                        1,
+                        "admin",
+                        "admin123"
+                );
+
+        when(userDAO.findByUsername(username))
+                .thenReturn(Optional.of(user));
+
+        boolean result =
+                authenticationService.authenticate(
+                        username,
+                        password
+                );
+
+        assertFalse(result);
 
         verify(userDAO)
                 .findByUsername(username);
