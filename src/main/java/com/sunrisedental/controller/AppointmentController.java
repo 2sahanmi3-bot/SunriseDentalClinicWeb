@@ -37,10 +37,38 @@ public class AppointmentController extends HttpServlet {
             String appointmentNumber =
                     request.getParameter("appointmentNumber");
 
+            String patientName =
+                    request.getParameter("patientName");
+
+            String address =
+                    request.getParameter("address");
+
+            String contactNumber =
+                    request.getParameter("contactNumber");
+
+            String dentistName =
+                    request.getParameter("dentistName");
+
+            String treatmentType =
+                    request.getParameter("treatmentType");
+
+            String appointmentDate =
+                    request.getParameter("appointmentDate");
+
+            String appointmentTime =
+                    request.getParameter("appointmentTime");
+
             Appointment appointment =
                     new Appointment(
                             0,
-                            appointmentNumber
+                            appointmentNumber,
+                            patientName,
+                            address,
+                            contactNumber,
+                            dentistName,
+                            treatmentType,
+                            appointmentDate,
+                            appointmentTime
                     );
 
             try {
