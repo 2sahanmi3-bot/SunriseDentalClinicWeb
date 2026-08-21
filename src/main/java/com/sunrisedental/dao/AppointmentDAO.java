@@ -24,8 +24,11 @@ public class AppointmentDAO {
             statement =
                     connection.prepareStatement(
                             "INSERT INTO appointments " +
-                                    "(appointment_id, appointment_number) " +
-                                    "VALUES (?, ?)"
+                                    "(appointment_id, appointment_number, " +
+                                    "patient_name, address, contact_number, " +
+                                    "dentist_name, treatment_type, " +
+                                    "appointment_date, appointment_time) " +
+                                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     );
 
             statement.setInt(
@@ -36,6 +39,41 @@ public class AppointmentDAO {
             statement.setString(
                     2,
                     appointment.getAppointmentNumber()
+            );
+
+            statement.setString(
+                    3,
+                    appointment.getPatientName()
+            );
+
+            statement.setString(
+                    4,
+                    appointment.getAddress()
+            );
+
+            statement.setString(
+                    5,
+                    appointment.getContactNumber()
+            );
+
+            statement.setString(
+                    6,
+                    appointment.getDentistName()
+            );
+
+            statement.setString(
+                    7,
+                    appointment.getTreatmentType()
+            );
+
+            statement.setString(
+                    8,
+                    appointment.getAppointmentDate()
+            );
+
+            statement.setString(
+                    9,
+                    appointment.getAppointmentTime()
             );
 
             return statement.executeUpdate() > 0;
