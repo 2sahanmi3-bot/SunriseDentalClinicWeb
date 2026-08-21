@@ -107,7 +107,10 @@ public class AppointmentDAO {
 
             statement =
                     connection.prepareStatement(
-                            "SELECT appointment_id, appointment_number " +
+                            "SELECT appointment_id, appointment_number, " +
+                                    "patient_name, address, contact_number, " +
+                                    "dentist_name, treatment_type, " +
+                                    "appointment_date, appointment_time " +
                                     "FROM appointments " +
                                     "WHERE appointment_number = ?"
                     );
@@ -125,7 +128,14 @@ public class AppointmentDAO {
                 Appointment appointment =
                         new Appointment(
                                 resultSet.getInt("appointment_id"),
-                                resultSet.getString("appointment_number")
+                                resultSet.getString("appointment_number"),
+                                resultSet.getString("patient_name"),
+                                resultSet.getString("address"),
+                                resultSet.getString("contact_number"),
+                                resultSet.getString("dentist_name"),
+                                resultSet.getString("treatment_type"),
+                                resultSet.getString("appointment_date"),
+                                resultSet.getString("appointment_time")
                         );
 
                 return Optional.of(appointment);
