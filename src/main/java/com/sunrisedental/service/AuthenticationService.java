@@ -1,8 +1,10 @@
 package com.sunrisedental.service;
 
 import com.sunrisedental.dao.UserDAO;
+import com.sunrisedental.model.User;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class AuthenticationService {
 
@@ -17,6 +19,15 @@ public class AuthenticationService {
             String password)
             throws SQLException {
 
-        return false;
+        Optional<User> user =
+                userDAO.findByUsername(username);
+
+        if (user.isEmpty()) {
+            return false;
+        }
+
+        return user.get()
+                .getPassword()
+                .equals(password);
     }
 }
