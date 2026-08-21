@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -129,6 +130,57 @@ class UserDAOTest {
 
             verify(statement)
                     .executeQuery();
+        }
+    }
+
+    @Test
+    void findByUsernameShouldCloseResourcesWhenSearchFails()
+            throws SQLException {
+
+        // Use a normal search but make reading the result fail.
+        String username = "admin";
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        ResultSet resultSet =
+                mock(ResultSet.class);
+
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(statement);
+
+        when(statement.executeQuery())
+                .thenReturn(resultSet);
+
+        when(resultSet.next())
+                .thenThrow(
+                        new SQLException("Database error")
+                );
+
+        try (MockedStatic<DBConnectionFactory> mocked =
+                     mockStatic(DBConnectionFactory.class)) {
+
+            mocked.when(DBConnectionFactory::getConnection)
+                    .thenReturn(connection);
+
+            // The database error should still be reported.
+            assertThrows(
+                    SQLException.class,
+                    () -> userDAO.findByUsername(username)
+            );
+
+            // Resources should be closed after the failed search.
+            verify(resultSet)
+                    .close();
+
+            verify(statement)
+                    .close();
+
+            verify(connection)
+                    .close();
         }
     }
 }
