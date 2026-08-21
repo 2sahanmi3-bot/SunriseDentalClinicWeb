@@ -196,4 +196,75 @@ class AppointmentControllerTest {
                         response
                 );
     }
+
+    @Test
+    void postRegisterShouldPassFullAppointmentDetailsToService()
+            throws Exception {
+
+        when(request.getParameter("action"))
+                .thenReturn("register");
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn("APT005");
+
+        when(request.getParameter("patientName"))
+                .thenReturn("Nimal Perera");
+
+        when(request.getParameter("address"))
+                .thenReturn("Colombo");
+
+        when(request.getParameter("contactNumber"))
+                .thenReturn("0771234567");
+
+        when(request.getParameter("dentistName"))
+                .thenReturn("Dr Silva");
+
+        when(request.getParameter("treatmentType"))
+                .thenReturn("Cleaning");
+
+        when(request.getParameter("appointmentDate"))
+                .thenReturn("2026-08-27");
+
+        when(request.getParameter("appointmentTime"))
+                .thenReturn("09:30");
+
+        when(appointmentService.registerAppointment(
+                any(Appointment.class)))
+                .thenReturn(true);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .registerAppointment(
+                        argThat(appointment ->
+                                "APT005".equals(
+                                        appointment.getAppointmentNumber()
+                                )
+                                        && "Nimal Perera".equals(
+                                        appointment.getPatientName()
+                                )
+                                        && "Colombo".equals(
+                                        appointment.getAddress()
+                                )
+                                        && "0771234567".equals(
+                                        appointment.getContactNumber()
+                                )
+                                        && "Dr Silva".equals(
+                                        appointment.getDentistName()
+                                )
+                                        && "Cleaning".equals(
+                                        appointment.getTreatmentType()
+                                )
+                                        && "2026-08-27".equals(
+                                        appointment.getAppointmentDate()
+                                )
+                                        && "09:30".equals(
+                                        appointment.getAppointmentTime()
+                                )
+                        )
+                );
+    }
 }
