@@ -376,4 +376,109 @@ class AppointmentDAOTest {
                     .executeUpdate();
         }
     }
+
+    @Test
+    void findByAppointmentNumberShouldReturnFullAppointmentDetails()
+            throws SQLException {
+
+        // Use a complete database result for an existing appointment.
+        String appointmentNumber = "APT002";
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        ResultSet resultSet =
+                mock(ResultSet.class);
+
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(statement);
+
+        when(statement.executeQuery())
+                .thenReturn(resultSet);
+
+        when(resultSet.next())
+                .thenReturn(true);
+
+        when(resultSet.getInt("appointment_id"))
+                .thenReturn(2);
+
+        when(resultSet.getString("appointment_number"))
+                .thenReturn("APT002");
+
+        when(resultSet.getString("patient_name"))
+                .thenReturn("Nimal Perera");
+
+        when(resultSet.getString("address"))
+                .thenReturn("Colombo");
+
+        when(resultSet.getString("contact_number"))
+                .thenReturn("0771234567");
+
+        when(resultSet.getString("dentist_name"))
+                .thenReturn("Dr Silva");
+
+        when(resultSet.getString("treatment_type"))
+                .thenReturn("Cleaning");
+
+        when(resultSet.getString("appointment_date"))
+                .thenReturn("2026-08-25");
+
+        when(resultSet.getString("appointment_time"))
+                .thenReturn("10:30");
+
+        try (MockedStatic<DBConnectionFactory> mocked =
+                     mockStatic(DBConnectionFactory.class)) {
+
+            mocked.when(DBConnectionFactory::getConnection)
+                    .thenReturn(connection);
+
+            Optional<Appointment> result =
+                    appointmentDAO.findByAppointmentNumber(
+                            appointmentNumber
+                    );
+
+            assertTrue(result.isPresent());
+
+            Appointment appointment =
+                    result.get();
+
+            assertEquals(
+                    "Nimal Perera",
+                    appointment.getPatientName()
+            );
+
+            assertEquals(
+                    "Colombo",
+                    appointment.getAddress()
+            );
+
+            assertEquals(
+                    "0771234567",
+                    appointment.getContactNumber()
+            );
+
+            assertEquals(
+                    "Dr Silva",
+                    appointment.getDentistName()
+            );
+
+            assertEquals(
+                    "Cleaning",
+                    appointment.getTreatmentType()
+            );
+
+            assertEquals(
+                    "2026-08-25",
+                    appointment.getAppointmentDate()
+            );
+
+            assertEquals(
+                    "10:30",
+                    appointment.getAppointmentTime()
+            );
+        }
+    }
 }
