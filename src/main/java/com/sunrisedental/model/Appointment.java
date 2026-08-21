@@ -4,6 +4,13 @@ public class Appointment {
 
     private int appointmentId;
     private String appointmentNumber;
+    private String patientName;
+    private String address;
+    private String contactNumber;
+    private String dentistName;
+    private String treatmentType;
+    private String appointmentDate;
+    private String appointmentTime;
 
     public Appointment(
             int appointmentId,
@@ -26,8 +33,13 @@ public class Appointment {
 
         this.appointmentId = appointmentId;
         this.appointmentNumber = appointmentNumber;
-
-        // The remaining appointment details are not stored yet.
+        this.patientName = patientName;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.dentistName = dentistName;
+        this.treatmentType = treatmentType;
+        this.appointmentDate = appointmentDate;
+        this.appointmentTime = appointmentTime;
     }
 
     public int getAppointmentId() {
@@ -39,30 +51,30 @@ public class Appointment {
     }
 
     public String getPatientName() {
-        return null;
+        return patientName;
     }
 
     public String getAddress() {
-        return null;
+        return address;
     }
 
     public String getContactNumber() {
-        return null;
+        return contactNumber;
     }
 
     public String getDentistName() {
-        return null;
+        return dentistName;
     }
 
     public String getTreatmentType() {
-        return null;
+        return treatmentType;
     }
 
     public String getAppointmentDate() {
-        return null;
+        return appointmentDate;
     }
 
     public String getAppointmentTime() {
-        return null;
+        return appointmentTime;
     }
 }
