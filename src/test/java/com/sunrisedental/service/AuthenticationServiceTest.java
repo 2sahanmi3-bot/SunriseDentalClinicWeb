@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class AuthenticationServiceTest {
@@ -82,5 +83,25 @@ class AuthenticationServiceTest {
 
         verify(userDAO)
                 .findByUsername(username);
+    }
+
+    @Test
+    void authenticateShouldRejectBlankCredentials()
+            throws SQLException {
+
+        // Use empty login details to represent invalid staff input.
+        String username = "";
+        String password = "";
+
+        boolean result =
+                authenticationService.authenticate(
+                        username,
+                        password
+                );
+
+        assertFalse(result);
+
+        verify(userDAO, never())
+                .findByUsername(anyString());
     }
 }
