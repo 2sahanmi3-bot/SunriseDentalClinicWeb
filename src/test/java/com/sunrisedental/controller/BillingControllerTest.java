@@ -10,6 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.mock;
 
+import com.sunrisedental.model.Appointment;
+import com.sunrisedental.model.Bill;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
+
 class BillingControllerTest {
 
     private AppointmentService appointmentService;
@@ -42,5 +50,87 @@ class BillingControllerTest {
 
         dispatcher =
                 mock(RequestDispatcher.class);
+    }
+
+    @Test
+    void generateBillShouldForwardReceiptForExistingAppointment()
+            throws Exception {
+
+        String appointmentNumber = "APT001";
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT001",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-08-25",
+                        "10:30"
+                );
+
+        Bill bill =
+                new Bill(
+                        "APT001",
+                        "Nimal Perera",
+                        "Cleaning",
+                        5000.00,
+                        1500.00,
+                        6500.00
+                );
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn(appointmentNumber);
+
+        when(request.getParameter("treatmentCharge"))
+                .thenReturn("5000.00");
+
+        when(request.getParameter("consultationFee"))
+                .thenReturn("1500.00");
+
+        when(appointmentService.findByAppointmentNumber(
+                appointmentNumber))
+                .thenReturn(Optional.of(appointment));
+
+        when(billingService.createBill(
+                appointment,
+                5000.00,
+                1500.00))
+                .thenReturn(bill);
+
+        when(request.getRequestDispatcher(
+                "receipt.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .findByAppointmentNumber(
+                        appointmentNumber
+                );
+
+        verify(billingService)
+                .createBill(
+                        appointment,
+                        5000.00,
+                        1500.00
+                );
+
+        verify(request)
+                .setAttribute(
+                        "bill",
+                        bill
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
     }
 }
