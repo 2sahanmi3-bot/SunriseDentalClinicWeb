@@ -6,6 +6,7 @@ public class BillingService {
             double treatmentCharge,
             double consultationFee) {
 
-        return 0.0;
+        return treatmentCharge
+                + consultationFee;
     }
 }
