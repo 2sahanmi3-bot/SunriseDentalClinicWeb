@@ -136,5 +136,27 @@ class AuthenticationControllerTest {
                 .getSession();
     }
 
+    @Test
+    void logoutShouldInvalidateSessionAndRedirectToLogin()
+            throws Exception {
+
+        when(request.getParameter("action"))
+                .thenReturn("logout");
+
+        when(request.getSession(false))
+                .thenReturn(session);
+
+        controller.doGet(
+                request,
+                response
+        );
+
+        verify(session)
+                .invalidate();
+
+        verify(response)
+                .sendRedirect("login.jsp");
+    }
+
 }
 
