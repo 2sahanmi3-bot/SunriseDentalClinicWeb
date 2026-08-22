@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.jupiter.api.Test;
+
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 
 class AuthenticationControllerTest {
@@ -36,5 +39,47 @@ class AuthenticationControllerTest {
 
         session =
                 mock(HttpSession.class);
+    }
+
+    @Test
+    void loginShouldCreateSessionAndRedirectForValidCredentials()
+            throws Exception {
+
+        String username = "admin";
+        String password = "admin123";
+
+        when(request.getParameter("username"))
+                .thenReturn(username);
+
+        when(request.getParameter("password"))
+                .thenReturn(password);
+
+        when(authenticationService.authenticate(
+                username,
+                password))
+                .thenReturn(true);
+
+        when(request.getSession())
+                .thenReturn(session);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(authenticationService)
+                .authenticate(
+                        username,
+                        password
+                );
+
+        verify(session)
+                .setAttribute(
+                        "staffUser",
+                        username
+                );
+
+        verify(response)
+                .sendRedirect("appointment");
     }
 }
