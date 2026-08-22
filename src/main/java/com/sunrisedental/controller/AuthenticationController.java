@@ -79,4 +79,12 @@ public class AuthenticationController extends HttpServlet {
             throw new ServletException(e);
         }
     }
+
+    @Override
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+    }
 }
