@@ -81,6 +81,23 @@ public class BillingController extends HttpServlet {
                         request,
                         response
                 );
+
+            } else {
+
+                request.setAttribute(
+                        "errorMessage",
+                        "Appointment not found"
+                );
+
+                RequestDispatcher dispatcher =
+                        request.getRequestDispatcher(
+                                "bill.jsp"
+                        );
+
+                dispatcher.forward(
+                        request,
+                        response
+                );
             }
 
         } catch (SQLException e) {
