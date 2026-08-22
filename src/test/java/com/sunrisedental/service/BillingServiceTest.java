@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BillingServiceTest {
 
@@ -30,6 +31,21 @@ class BillingServiceTest {
         assertEquals(
                 6500.00,
                 total
+        );
+    }
+
+    @Test
+    void calculateTotalShouldRejectNegativeCharges() {
+
+        double treatmentCharge = -500.00;
+        double consultationFee = 1500.00;
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> billingService.calculateTotal(
+                        treatmentCharge,
+                        consultationFee
+                )
         );
     }
 }
