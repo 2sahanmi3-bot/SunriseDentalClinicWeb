@@ -19,6 +19,14 @@ public class AuthenticationService {
             String password)
             throws SQLException {
 
+        // Reject empty login details before checking the database.
+        if (username == null
+                || username.isBlank()
+                || password == null
+                || password.isBlank()) {
+            return false;
+        }
+
         Optional<User> user =
                 userDAO.findByUsername(username);
 
