@@ -1,5 +1,8 @@
 package com.sunrisedental.service;
 
+import com.sunrisedental.model.Appointment;
+import com.sunrisedental.model.Bill;
+
 public class BillingService {
 
     public double calculateTotal(
@@ -16,5 +19,13 @@ public class BillingService {
 
         return treatmentCharge
                 + consultationFee;
+    }
+
+    public Bill createBill(
+            Appointment appointment,
+            double treatmentCharge,
+            double consultationFee) {
+
+        return null;
     }
 }
