@@ -2,9 +2,15 @@ package com.sunrisedental.controller;
 
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.BillingService;
+import com.sunrisedental.model.Appointment;
+import com.sunrisedental.model.Bill;
+
+import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,5 +38,53 @@ public class BillingController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        String appointmentNumber =
+                request.getParameter("appointmentNumber");
+
+        double treatmentCharge =
+                Double.parseDouble(
+                        request.getParameter("treatmentCharge")
+                );
+
+        double consultationFee =
+                Double.parseDouble(
+                        request.getParameter("consultationFee")
+                );
+
+        try {
+
+            Optional<Appointment> appointment =
+                    appointmentService.findByAppointmentNumber(
+                            appointmentNumber
+                    );
+
+            if (appointment.isPresent()) {
+
+                Bill bill =
+                        billingService.createBill(
+                                appointment.get(),
+                                treatmentCharge,
+                                consultationFee
+                        );
+
+                request.setAttribute(
+                        "bill",
+                        bill
+                );
+
+                RequestDispatcher dispatcher =
+                        request.getRequestDispatcher(
+                                "receipt.jsp"
+                        );
+
+                dispatcher.forward(
+                        request,
+                        response
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new ServletException(e);
+        }
     }
 }
