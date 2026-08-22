@@ -26,6 +26,19 @@ public class BillingService {
             double treatmentCharge,
             double consultationFee) {
 
-        return null;
+        double totalAmount =
+                calculateTotal(
+                        treatmentCharge,
+                        consultationFee
+                );
+
+        return new Bill(
+                appointment.getAppointmentNumber(),
+                appointment.getPatientName(),
+                appointment.getTreatmentType(),
+                treatmentCharge,
+                consultationFee,
+                totalAmount
+        );
     }
 }
