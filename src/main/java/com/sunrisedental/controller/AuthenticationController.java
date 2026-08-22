@@ -86,5 +86,21 @@ public class AuthenticationController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        String action =
+                request.getParameter("action");
+
+        if ("logout".equals(action)) {
+
+            HttpSession session =
+                    request.getSession(false);
+
+            if (session != null) {
+                session.invalidate();
+            }
+
+            response.sendRedirect(
+                    "login.jsp"
+            );
+        }
     }
 }
