@@ -8,14 +8,15 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static org.mockito.Mockito.mock;
-
 import com.sunrisedental.model.Appointment;
 import com.sunrisedental.model.Bill;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.*;
 
 class BillingControllerTest {
@@ -131,6 +132,59 @@ class BillingControllerTest {
                 .forward(
                         request,
                         response
+                );
+    }
+
+    @Test
+    void generateBillShouldShowErrorWhenAppointmentNotFound()
+            throws Exception {
+
+        String appointmentNumber = "APT999";
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn(appointmentNumber);
+
+        when(request.getParameter("treatmentCharge"))
+                .thenReturn("5000.00");
+
+        when(request.getParameter("consultationFee"))
+                .thenReturn("1500.00");
+
+        when(appointmentService.findByAppointmentNumber(
+                appointmentNumber))
+                .thenReturn(Optional.empty());
+
+        when(request.getRequestDispatcher(
+                "bill.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .findByAppointmentNumber(
+                        appointmentNumber
+                );
+
+        verify(request)
+                .setAttribute(
+                        "errorMessage",
+                        "Appointment not found"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+
+        verify(billingService, never())
+                .createBill(
+                        any(Appointment.class),
+                        anyDouble(),
+                        anyDouble()
                 );
     }
 }
