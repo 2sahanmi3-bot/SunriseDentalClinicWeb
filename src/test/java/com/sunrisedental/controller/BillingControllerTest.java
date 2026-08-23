@@ -187,4 +187,32 @@ class BillingControllerTest {
                         anyDouble()
                 );
     }
+
+    @Test
+    void receiptRequestShouldForwardToReceiptPage()
+            throws Exception {
+
+        when(request.getParameter("action"))
+                .thenReturn("receipt");
+
+        when(request.getRequestDispatcher(
+                "receipt.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doGet(
+                request,
+                response
+        );
+
+        verify(request)
+                .getRequestDispatcher(
+                        "receipt.jsp"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+    }
 }
