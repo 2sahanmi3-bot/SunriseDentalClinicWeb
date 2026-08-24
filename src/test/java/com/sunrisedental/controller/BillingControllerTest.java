@@ -215,4 +215,44 @@ class BillingControllerTest {
                         response
                 );
     }
+
+    @Test
+    void generateBillShouldShowErrorForNonNumericCharge()
+            throws Exception {
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn("APT001");
+
+        when(request.getParameter("treatmentCharge"))
+                .thenReturn("abc");
+
+        when(request.getParameter("consultationFee"))
+                .thenReturn("1500.00");
+
+        when(request.getRequestDispatcher(
+                "bill.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(request)
+                .setAttribute(
+                        "errorMessage",
+                        "Please enter valid billing charges"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+
+        verifyNoInteractions(
+                appointmentService,
+                billingService
+        );
+    }
 }
