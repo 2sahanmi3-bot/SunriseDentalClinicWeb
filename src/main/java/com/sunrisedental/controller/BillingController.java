@@ -125,6 +125,23 @@ public class BillingController extends HttpServlet {
                 );
             }
 
+        } catch (IllegalArgumentException e) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    e.getMessage()
+            );
+
+            RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(
+                            "bill.jsp"
+                    );
+
+            dispatcher.forward(
+                    request,
+                    response
+            );
+
         } catch (SQLException e) {
             throw new ServletException(e);
         }
