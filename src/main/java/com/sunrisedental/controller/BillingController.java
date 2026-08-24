@@ -41,15 +41,40 @@ public class BillingController extends HttpServlet {
         String appointmentNumber =
                 request.getParameter("appointmentNumber");
 
-        double treatmentCharge =
-                Double.parseDouble(
-                        request.getParameter("treatmentCharge")
-                );
+        double treatmentCharge;
+        double consultationFee;
 
-        double consultationFee =
-                Double.parseDouble(
-                        request.getParameter("consultationFee")
-                );
+        try {
+
+            treatmentCharge =
+                    Double.parseDouble(
+                            request.getParameter("treatmentCharge")
+                    );
+
+            consultationFee =
+                    Double.parseDouble(
+                            request.getParameter("consultationFee")
+                    );
+
+        } catch (NumberFormatException e) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    "Please enter valid billing charges"
+            );
+
+            RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(
+                            "bill.jsp"
+                    );
+
+            dispatcher.forward(
+                    request,
+                    response
+            );
+
+            return;
+        }
 
         try {
 
