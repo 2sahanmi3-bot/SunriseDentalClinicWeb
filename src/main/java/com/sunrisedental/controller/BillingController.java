@@ -111,5 +111,20 @@ public class BillingController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        String action =
+                request.getParameter("action");
+
+        if ("receipt".equals(action)) {
+
+            RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(
+                            "receipt.jsp"
+                    );
+
+            dispatcher.forward(
+                    request,
+                    response
+            );
+        }
     }
 }
