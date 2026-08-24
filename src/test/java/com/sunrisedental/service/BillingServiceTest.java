@@ -112,5 +112,20 @@ class BillingServiceTest {
                 bill.getTotalAmount()
         );
     }
+
+    @Test
+    void calculateTotalShouldRejectNegativeConsultationFee() {
+
+        double treatmentCharge = 5000.00;
+        double consultationFee = -500.00;
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> billingService.calculateTotal(
+                        treatmentCharge,
+                        consultationFee
+                )
+        );
+    }
 }
 
