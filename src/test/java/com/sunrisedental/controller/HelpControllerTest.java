@@ -6,6 +6,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.junit.jupiter.api.Test;
+
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 
 class HelpControllerTest {
@@ -30,4 +33,30 @@ class HelpControllerTest {
         dispatcher =
                 mock(RequestDispatcher.class);
     }
+
+    @Test
+    void helpRequestShouldForwardToHelpPage()
+            throws Exception {
+
+        when(request.getRequestDispatcher(
+                "help.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doGet(
+                request,
+                response
+        );
+
+        verify(request)
+                .getRequestDispatcher(
+                        "help.jsp"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+    }
 }
+
