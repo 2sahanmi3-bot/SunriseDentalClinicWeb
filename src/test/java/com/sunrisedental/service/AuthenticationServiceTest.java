@@ -104,4 +104,27 @@ class AuthenticationServiceTest {
         verify(userDAO, never())
                 .findByUsername(anyString());
     }
+
+    @Test
+    void authenticateShouldReturnFalseWhenUsernameDoesNotExist()
+            throws SQLException {
+
+        // Use a username that is not registered as a staff user.
+        String username = "unknown";
+        String password = "admin123";
+
+        when(userDAO.findByUsername(username))
+                .thenReturn(Optional.empty());
+
+        boolean result =
+                authenticationService.authenticate(
+                        username,
+                        password
+                );
+
+        assertFalse(result);
+
+        verify(userDAO)
+                .findByUsername(username);
+    }
 }
