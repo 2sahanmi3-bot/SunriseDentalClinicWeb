@@ -255,4 +255,80 @@ class BillingControllerTest {
                 billingService
         );
     }
+
+    @Test
+    void generateBillShouldShowErrorForNegativeCharge()
+            throws Exception {
+
+        String appointmentNumber = "APT001";
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT001",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-08-25",
+                        "10:30"
+                );
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn(appointmentNumber);
+
+        when(request.getParameter("treatmentCharge"))
+                .thenReturn("-500.00");
+
+        when(request.getParameter("consultationFee"))
+                .thenReturn("1500.00");
+
+        when(appointmentService.findByAppointmentNumber(
+                appointmentNumber))
+                .thenReturn(Optional.of(appointment));
+
+        when(billingService.createBill(
+                appointment,
+                -500.00,
+                1500.00))
+                .thenThrow(
+                        new IllegalArgumentException(
+                                "Charges cannot be negative"
+                        )
+                );
+
+        when(request.getRequestDispatcher(
+                "bill.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .findByAppointmentNumber(
+                        appointmentNumber
+                );
+
+        verify(billingService)
+                .createBill(
+                        appointment,
+                        -500.00,
+                        1500.00
+                );
+
+        verify(request)
+                .setAttribute(
+                        "errorMessage",
+                        "Charges cannot be negative"
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+    }
 }
