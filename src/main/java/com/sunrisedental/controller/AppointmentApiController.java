@@ -81,6 +81,23 @@ public class AppointmentApiController extends HttpServlet {
                                 + "\""
                                 + "}"
                 );
+
+            } else {
+
+                response.setStatus(
+                        HttpServletResponse.SC_NOT_FOUND
+                );
+
+                response.setContentType(
+                        "application/json"
+                );
+
+                PrintWriter writer =
+                        response.getWriter();
+
+                writer.print(
+                        "{\"error\":\"Appointment not found\"}"
+                );
             }
 
         } catch (SQLException e) {
