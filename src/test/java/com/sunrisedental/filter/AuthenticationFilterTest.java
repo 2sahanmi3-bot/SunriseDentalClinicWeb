@@ -91,4 +91,33 @@ class AuthenticationFilterTest {
                         response
                 );
     }
+
+    @Test
+    void authenticatedRequestShouldContinueFilterChain()
+            throws Exception {
+
+        // A valid staff session should be allowed to continue.
+        when(request.getSession(false))
+                .thenReturn(session);
+
+        when(session.getAttribute("staffUser"))
+                .thenReturn("admin");
+
+        filter.doFilter(
+                request,
+                response,
+                chain
+        );
+
+        verify(chain)
+                .doFilter(
+                        request,
+                        response
+                );
+
+        verify(response, never())
+                .sendRedirect(
+                        "login.jsp"
+                );
+    }
 }
