@@ -1,6 +1,11 @@
 package com.sunrisedental.controller;
 
 import com.sunrisedental.service.AppointmentService;
+import com.sunrisedental.model.Appointment;
+
+import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,5 +31,60 @@ public class AppointmentApiController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        String appointmentNumber =
+                request.getParameter("appointmentNumber");
+
+        try {
+
+            Optional<Appointment> appointment =
+                    appointmentService.findByAppointmentNumber(
+                            appointmentNumber
+                    );
+
+            if (appointment.isPresent()) {
+
+                Appointment foundAppointment =
+                        appointment.get();
+
+                response.setContentType(
+                        "application/json"
+                );
+
+                PrintWriter writer =
+                        response.getWriter();
+
+                writer.print(
+                        "{"
+                                + "\"appointmentNumber\":\""
+                                + foundAppointment.getAppointmentNumber()
+                                + "\","
+                                + "\"patientName\":\""
+                                + foundAppointment.getPatientName()
+                                + "\","
+                                + "\"address\":\""
+                                + foundAppointment.getAddress()
+                                + "\","
+                                + "\"contactNumber\":\""
+                                + foundAppointment.getContactNumber()
+                                + "\","
+                                + "\"dentistName\":\""
+                                + foundAppointment.getDentistName()
+                                + "\","
+                                + "\"treatmentType\":\""
+                                + foundAppointment.getTreatmentType()
+                                + "\","
+                                + "\"appointmentDate\":\""
+                                + foundAppointment.getAppointmentDate()
+                                + "\","
+                                + "\"appointmentTime\":\""
+                                + foundAppointment.getAppointmentTime()
+                                + "\""
+                                + "}"
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new ServletException(e);
+        }
     }
 }
