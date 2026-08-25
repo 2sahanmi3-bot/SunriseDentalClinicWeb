@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.FilterChain;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,7 @@ class AuthenticationFilterTest {
     private HttpServletRequest request;
     private HttpServletResponse response;
     private FilterChain chain;
+    private HttpSession session;
 
     @BeforeEach
     void setUp() {
@@ -30,6 +32,9 @@ class AuthenticationFilterTest {
 
         chain =
                 mock(FilterChain.class);
+
+        session =
+                mock(HttpSession.class);
     }
 
     @Test
@@ -38,6 +43,35 @@ class AuthenticationFilterTest {
 
         // No existing session means the user is not authenticated.
         when(request.getSession(false))
+                .thenReturn(null);
+
+        filter.doFilter(
+                request,
+                response,
+                chain
+        );
+
+        verify(response)
+                .sendRedirect(
+                        "login.jsp"
+                );
+
+        verify(chain, never())
+                .doFilter(
+                        request,
+                        response
+                );
+    }
+
+    @Test
+    void sessionWithoutStaffUserShouldRedirectToLogin()
+            throws Exception {
+
+        // A session alone does not prove the user has logged in.
+        when(request.getSession(false))
+                .thenReturn(session);
+
+        when(session.getAttribute("staffUser"))
                 .thenReturn(null);
 
         filter.doFilter(
