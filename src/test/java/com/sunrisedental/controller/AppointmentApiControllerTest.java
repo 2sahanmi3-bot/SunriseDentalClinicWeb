@@ -108,4 +108,54 @@ class AppointmentApiControllerTest {
                         .contains("\"treatmentType\":\"Cleaning\"")
         );
     }
+
+    @Test
+    void appointmentApiShouldReturnNotFoundForMissingAppointment()
+            throws Exception {
+
+        String appointmentNumber = "APT999";
+
+        StringWriter responseBody =
+                new StringWriter();
+
+        PrintWriter writer =
+                new PrintWriter(responseBody);
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn(appointmentNumber);
+
+        when(appointmentService.findByAppointmentNumber(
+                appointmentNumber))
+                .thenReturn(Optional.empty());
+
+        when(response.getWriter())
+                .thenReturn(writer);
+
+        controller.doGet(
+                request,
+                response
+        );
+
+        writer.flush();
+
+        verify(appointmentService)
+                .findByAppointmentNumber(
+                        appointmentNumber
+                );
+
+        verify(response)
+                .setStatus(
+                        HttpServletResponse.SC_NOT_FOUND
+                );
+
+        verify(response)
+                .setContentType(
+                        "application/json"
+                );
+
+        assertTrue(
+                responseBody.toString()
+                        .contains("\"error\":\"Appointment not found\"")
+        );
+    }
 }
