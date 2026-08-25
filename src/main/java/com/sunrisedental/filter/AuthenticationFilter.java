@@ -30,7 +30,8 @@ public class AuthenticationFilter implements Filter {
         HttpSession session =
                 httpRequest.getSession(false);
 
-        if (session == null) {
+        if (session == null
+                || session.getAttribute("staffUser") == null) {
 
             httpResponse.sendRedirect(
                     "login.jsp"
