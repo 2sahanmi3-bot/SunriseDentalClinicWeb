@@ -10,10 +10,11 @@ public class DBConnectionFactory {
             "jdbc:mysql://localhost:3306/sunrise_dental";
 
     private static final String USERNAME =
-            "root";
+            System.getenv("SUNRISE_DB_USERNAME");
 
     private static final String PASSWORD =
-            "";
+            System.getenv("SUNRISE_DB_PASSWORD");
+
 
     public static Connection getConnection()
             throws SQLException {
