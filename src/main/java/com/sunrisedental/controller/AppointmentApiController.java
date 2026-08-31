@@ -1,5 +1,6 @@
 package com.sunrisedental.controller;
 
+import com.sunrisedental.dao.AppointmentDAO;
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.model.Appointment;
 
@@ -8,15 +9,26 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+@WebServlet("/api/appointments")
 public class AppointmentApiController extends HttpServlet {
 
     private AppointmentService appointmentService;
+
+    public AppointmentApiController() {
+
+        this(
+                new AppointmentService(
+                        new AppointmentDAO()
+                )
+        );
+    }
 
     public AppointmentApiController(
             AppointmentService appointmentService) {
