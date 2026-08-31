@@ -1,5 +1,6 @@
 package com.sunrisedental.controller;
 
+import com.sunrisedental.dao.AppointmentDAO;
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.BillingService;
 import com.sunrisedental.model.Appointment;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +18,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+@WebServlet("/billing")
 public class BillingController extends HttpServlet {
 
     private AppointmentService appointmentService;
     private BillingService billingService;
+
+    public BillingController() {
+
+        this(
+                new AppointmentService(
+                        new AppointmentDAO()
+                ),
+                new BillingService()
+        );
+    }
 
     public BillingController(
             AppointmentService appointmentService,
