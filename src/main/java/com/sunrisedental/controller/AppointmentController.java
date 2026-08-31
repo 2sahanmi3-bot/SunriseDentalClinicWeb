@@ -13,9 +13,23 @@ import java.util.Optional;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import com.sunrisedental.dao.AppointmentDAO;
+
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/appointment")
 public class AppointmentController extends HttpServlet {
 
     private AppointmentService appointmentService;
+
+    public AppointmentController() {
+
+        this(
+                new AppointmentService(
+                        new AppointmentDAO()
+                )
+        );
+    }
 
     public AppointmentController(
             AppointmentService appointmentService) {
@@ -162,4 +176,3 @@ public class AppointmentController extends HttpServlet {
         }
     }
 }
-

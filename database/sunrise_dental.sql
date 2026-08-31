@@ -6,11 +6,8 @@ CREATE DATABASE sunrise_dental
 
 USE sunrise_dental;
 
-
--- =========================================================
 -- USERS
 -- Stores authorised staff login credentials.
--- =========================================================
 
 CREATE TABLE users (
 
@@ -33,14 +30,12 @@ CREATE TABLE users (
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-
--- =========================================================
 -- TREATMENTS
 -- Stores treatment types and billing charges.
---
+
 -- Charges below are sample values used for development
 -- and system demonstration.
--- =========================================================
+
 
 CREATE TABLE treatments (
 
@@ -72,14 +67,11 @@ CREATE TABLE treatments (
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-
--- =========================================================
 -- APPOINTMENTS
 -- Stores patient and appointment details.
---
+
 -- Column names remain aligned with Appointment.java
 -- and AppointmentDAO.java.
--- =========================================================
 
 CREATE TABLE appointments (
 
@@ -126,11 +118,9 @@ CREATE TABLE appointments (
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-
--- =========================================================
 -- INITIAL AUTHORISED STAFF ACCOUNT
 -- Development/demo account.
--- =========================================================
+
 
 INSERT INTO users (
     username,
@@ -141,14 +131,12 @@ VALUES (
            'admin123'
        );
 
-
--- =========================================================
 -- INITIAL TREATMENT DATA
---
+
 -- These are development/demo assumptions.
 -- Cleaning values match the billing data already used
 -- in the existing unit tests.
--- =========================================================
+
 
 INSERT INTO treatments (
     treatment_name,
@@ -163,9 +151,8 @@ VALUES
     ('Crown',      20000.00, 1500.00);
 
 
--- =========================================================
+
 -- VERIFICATION QUERIES
--- =========================================================
 
 SHOW TABLES;
 
