@@ -79,6 +79,14 @@ class BillingControllerTest {
                         "10:30"
                 );
 
+        Treatment treatment =
+                new Treatment(
+                        1,
+                        "Cleaning",
+                        5000.00,
+                        1500.00
+                );
+
         Bill bill =
                 new Bill(
                         "APT001",
@@ -101,6 +109,10 @@ class BillingControllerTest {
         when(appointmentService.findByAppointmentNumber(
                 appointmentNumber))
                 .thenReturn(Optional.of(appointment));
+
+        when(treatmentService.findByTreatmentName(
+                "Cleaning"))
+                .thenReturn(Optional.of(treatment));
 
         when(billingService.createBill(
                 appointment,
@@ -282,6 +294,14 @@ class BillingControllerTest {
                         "10:30"
                 );
 
+        Treatment treatment =
+                new Treatment(
+                        1,
+                        "Cleaning",
+                        -500.00,
+                        1500.00
+                );
+
         when(request.getParameter("appointmentNumber"))
                 .thenReturn(appointmentNumber);
 
@@ -294,6 +314,10 @@ class BillingControllerTest {
         when(appointmentService.findByAppointmentNumber(
                 appointmentNumber))
                 .thenReturn(Optional.of(appointment));
+
+        when(treatmentService.findByTreatmentName(
+                "Cleaning"))
+                .thenReturn(Optional.of(treatment));
 
         when(billingService.createBill(
                 appointment,
@@ -657,4 +681,3 @@ class BillingControllerTest {
         );
     }
 }
-

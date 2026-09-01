@@ -130,22 +130,33 @@ public class BillingController extends HttpServlet {
                                         .getTreatmentType()
                         );
 
+                if (treatment.isEmpty()) {
+
+                    request.setAttribute(
+                            "errorMessage",
+                            "Treatment not found"
+                    );
+
+                    RequestDispatcher dispatcher =
+                            request.getRequestDispatcher(
+                                    "bill.jsp"
+                            );
+
+                    dispatcher.forward(
+                            request,
+                            response
+                    );
+
+                    return;
+                }
+
                 double finalTreatmentCharge =
-                        treatmentCharge;
+                        treatment.get()
+                                .getTreatmentCharge();
 
                 double finalConsultationFee =
-                        consultationFee;
-
-                if (treatment.isPresent()) {
-
-                    finalTreatmentCharge =
-                            treatment.get()
-                                    .getTreatmentCharge();
-
-                    finalConsultationFee =
-                            treatment.get()
-                                    .getConsultationFee();
-                }
+                        treatment.get()
+                                .getConsultationFee();
 
                 Bill bill =
                         billingService.createBill(
