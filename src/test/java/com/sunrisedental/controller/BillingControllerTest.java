@@ -461,5 +461,113 @@ class BillingControllerTest {
                 response
         );
     }
+
+    @Test
+    void shouldGenerateBillWithoutManualChargeInput()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT001",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-09-01",
+                        "10:30"
+                );
+
+        Treatment treatment =
+                new Treatment(
+                        1,
+                        "Cleaning",
+                        5000.00,
+                        1500.00
+                );
+
+        Bill bill =
+                mock(Bill.class);
+
+        when(
+                request.getParameter(
+                        "appointmentNumber"
+                )
+        ).thenReturn(
+                "APT001"
+        );
+
+        // No treatmentCharge or consultationFee request parameters are supplied
+
+        when(
+                appointmentService
+                        .findByAppointmentNumber(
+                                "APT001"
+                        )
+        ).thenReturn(
+                Optional.of(appointment)
+        );
+
+        when(
+                treatmentService
+                        .findByTreatmentName(
+                                "Cleaning"
+                        )
+        ).thenReturn(
+                Optional.of(treatment)
+        );
+
+        when(
+                billingService.createBill(
+                        appointment,
+                        5000.00,
+                        1500.00
+                )
+        ).thenReturn(
+                bill
+        );
+
+        when(
+                request.getRequestDispatcher(
+                        "receipt.jsp"
+                )
+        ).thenReturn(
+                dispatcher
+        );
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(
+                treatmentService
+        ).findByTreatmentName(
+                "Cleaning"
+        );
+
+        verify(
+                billingService
+        ).createBill(
+                appointment,
+                5000.00,
+                1500.00
+        );
+
+        verify(
+                request
+        ).setAttribute(
+                "bill",
+                bill
+        );
+
+        verify(
+                dispatcher
+        ).forward(
+                request,
+                response
+        );
+    }
 }
 
