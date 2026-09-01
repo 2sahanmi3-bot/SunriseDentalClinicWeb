@@ -5,6 +5,9 @@ import com.sunrisedental.model.Appointment;
 
 import java.sql.SQLException;
 import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 public class AppointmentService {
 
@@ -51,6 +54,34 @@ public class AppointmentService {
 
             throw new IllegalArgumentException(
                     "Invalid contact number"
+            );
+        }
+
+        // Make sure the appointment date is a real calendar date.
+        try {
+
+            LocalDate.parse(
+                    appointment.getAppointmentDate()
+            );
+
+        } catch (DateTimeParseException e) {
+
+            throw new IllegalArgumentException(
+                    "Invalid appointment date"
+            );
+        }
+
+        // Make sure the appointment time is a real time.
+        try {
+
+            LocalTime.parse(
+                    appointment.getAppointmentTime()
+            );
+
+        } catch (DateTimeParseException e) {
+
+            throw new IllegalArgumentException(
+                    "Invalid appointment time"
             );
         }
 
