@@ -6,6 +6,7 @@ import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.BillingService;
 import com.sunrisedental.service.TreatmentService;
 import com.sunrisedental.model.Appointment;
+import com.sunrisedental.model.Treatment;
 import com.sunrisedental.model.Bill;
 
 import java.sql.SQLException;
@@ -108,11 +109,34 @@ public class BillingController extends HttpServlet {
 
             if (appointment.isPresent()) {
 
+                Optional<Treatment> treatment =
+                        treatmentService.findByTreatmentName(
+                                appointment.get()
+                                        .getTreatmentType()
+                        );
+
+                double finalTreatmentCharge =
+                        treatmentCharge;
+
+                double finalConsultationFee =
+                        consultationFee;
+
+                if (treatment.isPresent()) {
+
+                    finalTreatmentCharge =
+                            treatment.get()
+                                    .getTreatmentCharge();
+
+                    finalConsultationFee =
+                            treatment.get()
+                                    .getConsultationFee();
+                }
+
                 Bill bill =
                         billingService.createBill(
                                 appointment.get(),
-                                treatmentCharge,
-                                consultationFee
+                                finalTreatmentCharge,
+                                finalConsultationFee
                         );
 
                 request.setAttribute(
