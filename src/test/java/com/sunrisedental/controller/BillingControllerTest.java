@@ -375,10 +375,7 @@ class BillingControllerTest {
                 "APT001"
         );
 
-        /*
-         * These are deliberately different from
-         * the stored treatment prices.
-         */
+        // Different values to check stored treatment prices are used
         when(
                 request.getParameter(
                         "treatmentCharge"
