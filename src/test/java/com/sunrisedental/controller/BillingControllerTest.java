@@ -569,5 +569,92 @@ class BillingControllerTest {
                 response
         );
     }
+
+    @Test
+    void generateBillShouldShowErrorWhenTreatmentNotFound()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT001",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Unknown Treatment",
+                        "2026-09-01",
+                        "10:30"
+                );
+
+        when(
+                request.getParameter(
+                        "appointmentNumber"
+                )
+        ).thenReturn(
+                "APT001"
+        );
+
+        // No prices are sent because they should come from the stored treatment.
+        when(
+                appointmentService
+                        .findByAppointmentNumber(
+                                "APT001"
+                        )
+        ).thenReturn(
+                Optional.of(appointment)
+        );
+
+        when(
+                treatmentService
+                        .findByTreatmentName(
+                                "Unknown Treatment"
+                        )
+        ).thenReturn(
+                Optional.empty()
+        );
+
+        when(
+                request.getRequestDispatcher(
+                        "bill.jsp"
+                )
+        ).thenReturn(
+                dispatcher
+        );
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(
+                treatmentService
+        ).findByTreatmentName(
+                "Unknown Treatment"
+        );
+
+        verify(
+                request
+        ).setAttribute(
+                "errorMessage",
+                "Treatment not found"
+        );
+
+        verify(
+                dispatcher
+        ).forward(
+                request,
+                response
+        );
+
+        verify(
+                billingService,
+                never()
+        ).createBill(
+                any(Appointment.class),
+                anyDouble(),
+                anyDouble()
+        );
+    }
 }
 
