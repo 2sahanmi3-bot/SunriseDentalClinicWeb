@@ -65,39 +65,54 @@ public class BillingController extends HttpServlet {
         String appointmentNumber =
                 request.getParameter("appointmentNumber");
 
-        double treatmentCharge;
-        double consultationFee;
+        String treatmentChargeValue =
+                request.getParameter(
+                        "treatmentCharge"
+                );
 
-        try {
+        String consultationFeeValue =
+                request.getParameter(
+                        "consultationFee"
+                );
 
-            treatmentCharge =
-                    Double.parseDouble(
-                            request.getParameter("treatmentCharge")
-                    );
+        double treatmentCharge = 0;
+        double consultationFee = 0;
 
-            consultationFee =
-                    Double.parseDouble(
-                            request.getParameter("consultationFee")
-                    );
+        // The form may not send charges because billing can use the stored treatment price.
+        if (treatmentChargeValue != null
+                && consultationFeeValue != null) {
 
-        } catch (NumberFormatException e) {
+            try {
 
-            request.setAttribute(
-                    "errorMessage",
-                    "Please enter valid billing charges"
-            );
+                treatmentCharge =
+                        Double.parseDouble(
+                                treatmentChargeValue
+                        );
 
-            RequestDispatcher dispatcher =
-                    request.getRequestDispatcher(
-                            "bill.jsp"
-                    );
+                consultationFee =
+                        Double.parseDouble(
+                                consultationFeeValue
+                        );
 
-            dispatcher.forward(
-                    request,
-                    response
-            );
+            } catch (NumberFormatException e) {
 
-            return;
+                request.setAttribute(
+                        "errorMessage",
+                        "Please enter valid billing charges"
+                );
+
+                RequestDispatcher dispatcher =
+                        request.getRequestDispatcher(
+                                "bill.jsp"
+                        );
+
+                dispatcher.forward(
+                        request,
+                        response
+                );
+
+                return;
+            }
         }
 
         try {
