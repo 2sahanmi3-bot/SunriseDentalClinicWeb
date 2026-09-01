@@ -21,8 +21,8 @@ public class TreatmentService {
             String treatmentName)
             throws SQLException {
 
-        throw new UnsupportedOperationException(
-                "Not implemented"
+        return treatmentDAO.findByTreatmentName(
+                treatmentName
         );
     }
 }
