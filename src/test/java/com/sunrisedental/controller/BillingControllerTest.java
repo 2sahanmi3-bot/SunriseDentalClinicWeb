@@ -2,6 +2,7 @@ package com.sunrisedental.controller;
 
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.BillingService;
+import com.sunrisedental.service.TreatmentService;
 import org.junit.jupiter.api.BeforeEach;
 
 import javax.servlet.RequestDispatcher;
@@ -23,6 +24,7 @@ class BillingControllerTest {
 
     private AppointmentService appointmentService;
     private BillingService billingService;
+    private TreatmentService treatmentService;
     private BillingController controller;
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -37,10 +39,14 @@ class BillingControllerTest {
         billingService =
                 mock(BillingService.class);
 
+        treatmentService =
+                mock(TreatmentService.class);
+
         controller =
                 new BillingController(
                         appointmentService,
-                        billingService
+                        billingService,
+                        treatmentService
                 );
 
         request =

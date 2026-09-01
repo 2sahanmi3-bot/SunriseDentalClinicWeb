@@ -1,8 +1,10 @@
 package com.sunrisedental.controller;
 
 import com.sunrisedental.dao.AppointmentDAO;
+import com.sunrisedental.dao.TreatmentDAO;
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.BillingService;
+import com.sunrisedental.service.TreatmentService;
 import com.sunrisedental.model.Appointment;
 import com.sunrisedental.model.Bill;
 
@@ -23,6 +25,7 @@ public class BillingController extends HttpServlet {
 
     private AppointmentService appointmentService;
     private BillingService billingService;
+    private TreatmentService treatmentService;
 
     public BillingController() {
 
@@ -30,19 +33,26 @@ public class BillingController extends HttpServlet {
                 new AppointmentService(
                         new AppointmentDAO()
                 ),
-                new BillingService()
+                new BillingService(),
+                new TreatmentService(
+                        new TreatmentDAO()
+                )
         );
     }
 
     public BillingController(
             AppointmentService appointmentService,
-            BillingService billingService) {
+            BillingService billingService,
+            TreatmentService treatmentService) {
 
         this.appointmentService =
                 appointmentService;
 
         this.billingService =
                 billingService;
+
+        this.treatmentService =
+                treatmentService;
     }
 
     @Override
