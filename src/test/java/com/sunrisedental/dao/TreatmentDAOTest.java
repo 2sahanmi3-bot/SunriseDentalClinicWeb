@@ -139,4 +139,64 @@ public class TreatmentDAOTest {
             verify(connection).close();
         }
     }
+
+    @Test
+    void shouldReturnEmptyWhenTreatmentNotFound()
+            throws Exception {
+
+        when(
+                connection.prepareStatement(
+                        anyString()
+                )
+        ).thenReturn(
+                statement
+        );
+
+        when(
+                statement.executeQuery()
+        ).thenReturn(
+                resultSet
+        );
+
+        when(
+                resultSet.next()
+        ).thenReturn(
+                false
+        );
+
+        try (
+                MockedStatic<DBConnectionFactory> mocked =
+                        mockStatic(
+                                DBConnectionFactory.class
+                        )
+        ) {
+
+            mocked.when(
+                    DBConnectionFactory::getConnection
+            ).thenReturn(
+                    connection
+            );
+
+            TreatmentDAO treatmentDAO =
+                    new TreatmentDAO();
+
+            Optional<Treatment> result =
+                    treatmentDAO.findByTreatmentName(
+                            "Unknown Treatment"
+                    );
+
+            assertTrue(
+                    result.isEmpty()
+            );
+
+            verify(statement).setString(
+                    1,
+                    "Unknown Treatment"
+            );
+
+            verify(resultSet).close();
+            verify(statement).close();
+            verify(connection).close();
+        }
+    }
 }
