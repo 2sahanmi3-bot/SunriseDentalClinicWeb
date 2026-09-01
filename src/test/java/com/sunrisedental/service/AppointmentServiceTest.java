@@ -263,5 +263,42 @@ class AppointmentServiceTest {
                 appointmentDAO
         );
     }
+
+    @Test
+    void shouldRejectInvalidAppointmentDate()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        0,
+                        "APT101",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-02-30",
+                        "10:30"
+                );
+
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                appointmentService
+                                        .registerAppointment(
+                                                appointment
+                                        )
+                );
+
+        assertEquals(
+                "Invalid appointment date",
+                exception.getMessage()
+        );
+
+        verifyNoInteractions(
+                appointmentDAO
+        );
+    }
 }
 
