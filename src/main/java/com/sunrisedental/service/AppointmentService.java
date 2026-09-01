@@ -45,6 +45,15 @@ public class AppointmentService {
             return false;
         }
 
+        // Keep contact numbers in a simple 10-digit format.
+        if (!appointment.getContactNumber()
+                .matches("0\\d{9}")) {
+
+            throw new IllegalArgumentException(
+                    "Invalid contact number"
+            );
+        }
+
         Optional<Appointment> existingAppointment =
                 appointmentDAO.findByAppointmentNumber(
                         appointmentNumber
