@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class AppointmentServiceTest {
@@ -224,6 +225,43 @@ class AppointmentServiceTest {
 
         verify(appointmentDAO, never())
                 .saveAppointment(appointment);
+    }
+
+    @Test
+    void shouldRejectInvalidContactNumber()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        0,
+                        "APT100",
+                        "Nimal Perera",
+                        "Colombo",
+                        "07712ABC67",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-09-10",
+                        "10:30"
+                );
+
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                appointmentService
+                                        .registerAppointment(
+                                                appointment
+                                        )
+                );
+
+        assertEquals(
+                "Invalid contact number",
+                exception.getMessage()
+        );
+
+        verifyNoInteractions(
+                appointmentDAO
+        );
     }
 }
 
