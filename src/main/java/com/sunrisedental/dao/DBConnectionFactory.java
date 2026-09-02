@@ -15,9 +15,22 @@ public class DBConnectionFactory {
     private static final String PASSWORD =
             System.getenv("SUNRISE_DB_PASSWORD");
 
-
     public static Connection getConnection()
             throws SQLException {
+
+        try {
+
+            Class.forName(
+                    "com.mysql.cj.jdbc.Driver"
+            );
+
+        } catch (ClassNotFoundException e) {
+
+            throw new SQLException(
+                    "MySQL JDBC driver not found",
+                    e
+            );
+        }
 
         return DriverManager.getConnection(
                 URL,
