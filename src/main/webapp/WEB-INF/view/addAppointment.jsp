@@ -51,6 +51,49 @@
 
     <main class="content-card">
 
+        <div class="search-section">
+
+            <h2>Search Appointment</h2>
+
+            <p class="page-description">
+                Enter the appointment number to view the appointment details.
+            </p>
+
+            <form method="get"
+                  action="${pageContext.request.contextPath}/appointment"
+                  class="search-form">
+
+                <input type="hidden"
+                       name="action"
+                       value="search">
+
+                <div class="form-group search-input">
+
+                    <label for="searchAppointmentNumber">
+                        Appointment Number
+                    </label>
+
+                    <input type="text"
+                           id="searchAppointmentNumber"
+                           name="appointmentNumber"
+                           placeholder="e.g. APT001"
+                           required>
+
+                </div>
+
+                <button type="submit"
+                        class="primary-button">
+
+                    Search Appointment
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <hr class="section-divider">
+
         <h2>
             Register New Appointment
         </h2>
