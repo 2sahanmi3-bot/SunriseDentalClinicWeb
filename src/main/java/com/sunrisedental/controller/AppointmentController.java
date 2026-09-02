@@ -128,6 +128,19 @@ public class AppointmentController extends HttpServlet {
         String action =
                 request.getParameter("action");
 
+        // Show the appointment form after staff login.
+        if (action == null) {
+
+            request.getRequestDispatcher(
+                    "WEB-INF/view/addAppointment.jsp"
+            ).forward(
+                    request,
+                    response
+            );
+
+            return;
+        }
+
         if ("search".equals(action)) {
 
             String appointmentNumber =

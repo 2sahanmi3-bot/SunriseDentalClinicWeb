@@ -1,3 +1,5 @@
+/* Basic styling used across the whole website. */
+
 * {
     box-sizing: border-box;
 }
@@ -8,6 +10,9 @@ body {
     background: #f4f7f8;
     color: #333333;
 }
+
+
+/* Login page. */
 
 .login-page {
     min-height: 100vh;
@@ -37,6 +42,9 @@ body {
     margin-bottom: 28px;
     color: #666666;
 }
+
+
+/* Form fields shared by the login and appointment pages. */
 
 .form-group {
     margin-bottom: 18px;
@@ -71,4 +79,126 @@ body {
     border: 1px solid #d6a0a0;
     border-radius: 6px;
     background: #fff3f3;
+}
+
+
+/* Main layout used after staff login. */
+
+.page-container {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.top-bar {
+    background: white;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dddddd;
+}
+
+.top-bar h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.top-bar p {
+    margin: 5px 0 0;
+    color: #666666;
+}
+
+
+/* Navigation links shown on staff pages. */
+
+.main-nav {
+    display: flex;
+    gap: 18px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+}
+
+.main-nav a:hover {
+    text-decoration: underline;
+}
+
+
+/* Main content area for staff pages. */
+
+.content-card {
+    width: calc(100% - 40px);
+    max-width: 1000px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+.content-card h2 {
+    margin-top: 0;
+}
+
+.page-description {
+    color: #666666;
+    margin-bottom: 25px;
+}
+
+
+/* Appointment form layout. */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    font-size: 15px;
+    background: white;
+}
+
+.form-actions {
+    margin-top: 24px;
+}
+
+.form-actions .primary-button {
+    width: auto;
+    min-width: 200px;
+}
+
+
+/* Keep the pages usable on smaller screens. */
+
+@media (max-width: 700px) {
+
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .main-nav {
+        flex-wrap: wrap;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
 }
