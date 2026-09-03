@@ -174,7 +174,7 @@ class BillingControllerTest {
                 .thenReturn(Optional.empty());
 
         when(request.getRequestDispatcher(
-                "bill.jsp"))
+                "WEB-INF/view/bill.jsp"))
                 .thenReturn(dispatcher);
 
         controller.doPost(
@@ -249,7 +249,7 @@ class BillingControllerTest {
                 .thenReturn("1500.00");
 
         when(request.getRequestDispatcher(
-                "bill.jsp"))
+                "WEB-INF/view/bill.jsp"))
                 .thenReturn(dispatcher);
 
         controller.doPost(
@@ -330,7 +330,7 @@ class BillingControllerTest {
                 );
 
         when(request.getRequestDispatcher(
-                "bill.jsp"))
+                "WEB-INF/view/bill.jsp"))
                 .thenReturn(dispatcher);
 
         controller.doPost(
@@ -640,7 +640,7 @@ class BillingControllerTest {
 
         when(
                 request.getRequestDispatcher(
-                        "bill.jsp"
+                        "WEB-INF/view/bill.jsp"
                 )
         ).thenReturn(
                 dispatcher

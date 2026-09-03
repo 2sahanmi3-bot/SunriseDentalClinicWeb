@@ -209,6 +209,27 @@ body {
 }
 
 
+/* Billing page. */
+
+.billing-card {
+    max-width: 700px;
+}
+
+.billing-note {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f4f7f8;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+}
+
+.billing-note p {
+    margin-bottom: 0;
+    color: #666666;
+    line-height: 1.5;
+}
+
+
 /* Keep the pages usable on smaller screens. */
 
 @media (max-width: 700px) {

@@ -103,7 +103,7 @@ public class BillingController extends HttpServlet {
 
                 RequestDispatcher dispatcher =
                         request.getRequestDispatcher(
-                                "bill.jsp"
+                                "WEB-INF/view/bill.jsp"
                         );
 
                 dispatcher.forward(
@@ -139,7 +139,7 @@ public class BillingController extends HttpServlet {
 
                     RequestDispatcher dispatcher =
                             request.getRequestDispatcher(
-                                    "bill.jsp"
+                                    "WEB-INF/view/bill.jsp"
                             );
 
                     dispatcher.forward(
@@ -189,7 +189,7 @@ public class BillingController extends HttpServlet {
 
                 RequestDispatcher dispatcher =
                         request.getRequestDispatcher(
-                                "bill.jsp"
+                                "WEB-INF/view/bill.jsp"
                         );
 
                 dispatcher.forward(
@@ -207,7 +207,7 @@ public class BillingController extends HttpServlet {
 
             RequestDispatcher dispatcher =
                     request.getRequestDispatcher(
-                            "bill.jsp"
+                            "WEB-INF/view/bill.jsp"
                     );
 
             dispatcher.forward(
@@ -228,6 +228,21 @@ public class BillingController extends HttpServlet {
 
         String action =
                 request.getParameter("action");
+
+        if (action == null) {
+
+            RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(
+                            "WEB-INF/view/bill.jsp"
+                    );
+
+            dispatcher.forward(
+                    request,
+                    response
+            );
+
+            return;
+        }
 
         if ("receipt".equals(action)) {
 
