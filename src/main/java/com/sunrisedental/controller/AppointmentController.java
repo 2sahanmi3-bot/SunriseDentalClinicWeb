@@ -152,6 +152,12 @@ public class AppointmentController extends HttpServlet {
             String appointmentNumber =
                     request.getParameter("appointmentNumber");
 
+            // Remove accidental spaces around the appointment number.
+            if (appointmentNumber != null) {
+                appointmentNumber =
+                        appointmentNumber.trim();
+            }
+
             try {
 
                 Optional<Appointment> appointment =
