@@ -30,7 +30,9 @@
 
         <nav class="main-nav">
 
-            <a href="${pageContext.request.contextPath}/appointment">
+            <a href="${pageContext.request.contextPath}/appointment"
+               class="active-nav"
+               aria-current="page">
                 Appointments
             </a>
 

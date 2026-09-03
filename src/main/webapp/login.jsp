@@ -52,6 +52,8 @@
                 <input type="text"
                        id="username"
                        name="username"
+                       maxlength="50"
+                       autocomplete="username"
                        required>
 
             </div>
@@ -65,6 +67,7 @@
                 <input type="password"
                        id="password"
                        name="password"
+                       autocomplete="current-password"
                        required>
 
             </div>

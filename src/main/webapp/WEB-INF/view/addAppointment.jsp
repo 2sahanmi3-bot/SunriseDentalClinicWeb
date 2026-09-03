@@ -29,7 +29,9 @@
 
         <nav class="main-nav">
 
-            <a href="${pageContext.request.contextPath}/appointment">
+            <a href="${pageContext.request.contextPath}/appointment"
+               class="active-nav"
+               aria-current="page">
                 Appointments
             </a>
 
@@ -76,6 +78,7 @@
                     <input type="text"
                            id="searchAppointmentNumber"
                            name="appointmentNumber"
+                           maxlength="20"
                            placeholder="e.g. APT001"
                            required>
 
@@ -138,6 +141,8 @@
                     <input type="text"
                            id="appointmentNumber"
                            name="appointmentNumber"
+                           maxlength="20"
+                           placeholder="e.g. APT001"
                            required>
 
                 </div>
@@ -151,6 +156,7 @@
                     <input type="text"
                            id="patientName"
                            name="patientName"
+                           maxlength="100"
                            required>
 
                 </div>
@@ -164,6 +170,7 @@
                     <input type="text"
                            id="address"
                            name="address"
+                           maxlength="255"
                            required>
 
                 </div>
@@ -179,6 +186,9 @@
                            name="contactNumber"
                            placeholder="0771234567"
                            maxlength="10"
+                           pattern="0[0-9]{9}"
+                           inputmode="numeric"
+                           title="Enter a 10-digit contact number starting with 0"
                            required>
 
                 </div>
@@ -192,6 +202,7 @@
                     <input type="text"
                            id="dentistName"
                            name="dentistName"
+                           maxlength="100"
                            required>
 
                 </div>

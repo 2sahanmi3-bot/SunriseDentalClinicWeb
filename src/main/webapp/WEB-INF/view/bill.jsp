@@ -30,7 +30,9 @@
                 Appointments
             </a>
 
-            <a href="${pageContext.request.contextPath}/billing">
+            <a href="${pageContext.request.contextPath}/billing"
+               class="active-nav"
+               aria-current="page">
                 Billing
             </a>
 
@@ -85,6 +87,7 @@
                 <input type="text"
                        id="appointmentNumber"
                        name="appointmentNumber"
+                       maxlength="20"
                        placeholder="e.g. APT001"
                        required>
 
