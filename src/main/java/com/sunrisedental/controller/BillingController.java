@@ -65,6 +65,12 @@ public class BillingController extends HttpServlet {
         String appointmentNumber =
                 request.getParameter("appointmentNumber");
 
+        // Remove accidental spaces around the appointment number.
+        if (appointmentNumber != null) {
+            appointmentNumber =
+                    appointmentNumber.trim();
+        }
+
         String treatmentChargeValue =
                 request.getParameter(
                         "treatmentCharge"
