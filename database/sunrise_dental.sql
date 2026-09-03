@@ -1,5 +1,3 @@
-
-
 CREATE DATABASE sunrise_dental
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
@@ -21,10 +19,16 @@ CREATE TABLE users (
                        password VARCHAR(255)
                            NOT NULL,
 
+                       role VARCHAR(20)
+                           NOT NULL,
+
                        PRIMARY KEY (user_id),
 
                        CONSTRAINT uq_users_username
-                           UNIQUE (username)
+                           UNIQUE (username),
+
+                       CONSTRAINT chk_users_role
+                           CHECK (role IN ('ADMIN', 'STAFF'))
 )
     ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -124,11 +128,13 @@ COLLATE = utf8mb4_unicode_ci;
 
 INSERT INTO users (
     username,
-    password
+    password,
+    role
 )
 VALUES (
            'admin',
-           'admin123'
+           'admin123',
+           'ADMIN'
        );
 
 -- INITIAL TREATMENT DATA
