@@ -301,4 +301,53 @@ class AppointmentControllerTest {
                         "appointment?action=search&appointmentNumber=APT100"
                 );
     }
+
+    @Test
+    void getSearchShouldTrimAppointmentNumber()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT100"
+                );
+
+        when(request.getParameter("action"))
+                .thenReturn("search");
+
+        when(request.getParameter("appointmentNumber"))
+                .thenReturn("  APT100  ");
+
+        when(appointmentService.findByAppointmentNumber(
+                anyString()))
+                .thenReturn(
+                        Optional.of(appointment)
+                );
+
+        when(request.getRequestDispatcher(
+                "WEB-INF/view/viewAppointment.jsp"))
+                .thenReturn(dispatcher);
+
+        controller.doGet(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .findByAppointmentNumber(
+                        "APT100"
+                );
+
+        verify(request)
+                .setAttribute(
+                        "appointment",
+                        appointment
+                );
+
+        verify(dispatcher)
+                .forward(
+                        request,
+                        response
+                );
+    }
 }
