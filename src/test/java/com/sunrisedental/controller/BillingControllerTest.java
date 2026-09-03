@@ -680,4 +680,86 @@ class BillingControllerTest {
                 anyDouble()
         );
     }
+
+    @Test
+    void generateBillShouldTrimAppointmentNumber()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        1,
+                        "APT100",
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-09-15",
+                        "10:30"
+                );
+
+        Treatment treatment =
+                new Treatment(
+                        1,
+                        "Cleaning",
+                        5000.00,
+                        1500.00
+                );
+
+        Bill bill =
+                mock(Bill.class);
+
+        when(request.getParameter(
+                "appointmentNumber"))
+                .thenReturn(
+                        "  APT100  "
+                );
+
+        when(appointmentService
+                .findByAppointmentNumber(
+                        anyString()))
+                .thenReturn(
+                        Optional.of(appointment)
+                );
+
+        when(treatmentService
+                .findByTreatmentName(
+                        "Cleaning"))
+                .thenReturn(
+                        Optional.of(treatment)
+                );
+
+        when(billingService.createBill(
+                appointment,
+                5000.00,
+                1500.00))
+                .thenReturn(bill);
+
+        when(request.getRequestDispatcher(
+                anyString()))
+                .thenReturn(dispatcher);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(appointmentService)
+                .findByAppointmentNumber(
+                        "APT100"
+                );
+
+        verify(billingService)
+                .createBill(
+                        appointment,
+                        5000.00,
+                        1500.00
+                );
+
+        verify(request)
+                .setAttribute(
+                        "bill",
+                        bill
+                );
+    }
 }
