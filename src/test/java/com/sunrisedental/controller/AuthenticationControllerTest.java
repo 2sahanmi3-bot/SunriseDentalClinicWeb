@@ -56,16 +56,26 @@ class AuthenticationControllerTest {
         String username = "admin";
         String password = "admin123";
 
+        User user =
+                new User(
+                        1,
+                        "admin",
+                        "admin123",
+                        "ADMIN"
+                );
+
         when(request.getParameter("username"))
                 .thenReturn(username);
 
         when(request.getParameter("password"))
                 .thenReturn(password);
 
-        when(authenticationService.authenticate(
+        when(authenticationService.authenticateUser(
                 username,
                 password))
-                .thenReturn(true);
+                .thenReturn(
+                        Optional.of(user)
+                );
 
         when(request.getSession())
                 .thenReturn(session);
@@ -76,7 +86,7 @@ class AuthenticationControllerTest {
         );
 
         verify(authenticationService)
-                .authenticate(
+                .authenticateUser(
                         username,
                         password
                 );
@@ -104,10 +114,12 @@ class AuthenticationControllerTest {
         when(request.getParameter("password"))
                 .thenReturn(password);
 
-        when(authenticationService.authenticate(
+        when(authenticationService.authenticateUser(
                 username,
                 password))
-                .thenReturn(false);
+                .thenReturn(
+                        Optional.empty()
+                );
 
         when(request.getRequestDispatcher(
                 "login.jsp"))
@@ -119,7 +131,7 @@ class AuthenticationControllerTest {
         );
 
         verify(authenticationService)
-                .authenticate(
+                .authenticateUser(
                         username,
                         password
                 );

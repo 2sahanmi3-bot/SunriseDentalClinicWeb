@@ -1,6 +1,7 @@
 package com.sunrisedental.controller;
 
 import com.sunrisedental.dao.UserDAO;
+import com.sunrisedental.model.User;
 import com.sunrisedental.service.AuthenticationService;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.RequestDispatcher;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @WebServlet("/auth")
 public class AuthenticationController extends HttpServlet {
@@ -49,20 +51,28 @@ public class AuthenticationController extends HttpServlet {
 
         try {
 
-            boolean authenticated =
-                    authenticationService.authenticate(
+            Optional<User> authenticatedUser =
+                    authenticationService.authenticateUser(
                             username,
                             password
                     );
 
-            if (authenticated) {
+            if (authenticatedUser.isPresent()) {
 
                 HttpSession session =
                         request.getSession();
 
+                User user =
+                        authenticatedUser.get();
+
                 session.setAttribute(
                         "staffUser",
-                        username
+                        user.getUsername()
+                );
+
+                session.setAttribute(
+                        "staffRole",
+                        user.getRole()
                 );
 
                 response.sendRedirect(
