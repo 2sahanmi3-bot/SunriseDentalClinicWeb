@@ -121,7 +121,7 @@ class BillingControllerTest {
                 .thenReturn(bill);
 
         when(request.getRequestDispatcher(
-                "receipt.jsp"))
+                "WEB-INF/view/receipt.jsp"))
                 .thenReturn(dispatcher);
 
         controller.doPost(
@@ -215,7 +215,7 @@ class BillingControllerTest {
                 .thenReturn("receipt");
 
         when(request.getRequestDispatcher(
-                "receipt.jsp"))
+                "WEB-INF/view/receipt.jsp"))
                 .thenReturn(dispatcher);
 
         controller.doGet(
@@ -225,7 +225,7 @@ class BillingControllerTest {
 
         verify(request)
                 .getRequestDispatcher(
-                        "receipt.jsp"
+                        "WEB-INF/view/receipt.jsp"
                 );
 
         verify(dispatcher)
@@ -446,7 +446,7 @@ class BillingControllerTest {
 
         when(
                 request.getRequestDispatcher(
-                        "receipt.jsp"
+                        "WEB-INF/view/receipt.jsp"
                 )
         ).thenReturn(
                 dispatcher
@@ -554,7 +554,7 @@ class BillingControllerTest {
 
         when(
                 request.getRequestDispatcher(
-                        "receipt.jsp"
+                        "WEB-INF/view/receipt.jsp"
                 )
         ).thenReturn(
                 dispatcher

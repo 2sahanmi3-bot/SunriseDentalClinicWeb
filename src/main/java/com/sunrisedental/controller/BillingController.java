@@ -172,7 +172,7 @@ public class BillingController extends HttpServlet {
 
                 RequestDispatcher dispatcher =
                         request.getRequestDispatcher(
-                                "receipt.jsp"
+                                "WEB-INF/view/receipt.jsp"
                         );
 
                 dispatcher.forward(
@@ -248,7 +248,7 @@ public class BillingController extends HttpServlet {
 
             RequestDispatcher dispatcher =
                     request.getRequestDispatcher(
-                            "receipt.jsp"
+                            "WEB-INF/view/receipt.jsp"
                     );
 
             dispatcher.forward(
