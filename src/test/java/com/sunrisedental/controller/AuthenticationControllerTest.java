@@ -1,5 +1,6 @@
 package com.sunrisedental.controller;
 
+import com.sunrisedental.model.User;
 import com.sunrisedental.service.AuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
@@ -87,6 +90,7 @@ class AuthenticationControllerTest {
         verify(response)
                 .sendRedirect("appointment");
     }
+
     @Test
     void loginShouldReturnToLoginPageForInvalidCredentials()
             throws Exception {
@@ -158,5 +162,60 @@ class AuthenticationControllerTest {
                 .sendRedirect("login.jsp");
     }
 
-}
+    @Test
+    void loginShouldStoreUserRoleInSession()
+            throws Exception {
 
+        User user =
+                new User(
+                        1,
+                        "admin",
+                        "admin123",
+                        "ADMIN"
+                );
+
+        when(request.getParameter("username"))
+                .thenReturn("admin");
+
+        when(request.getParameter("password"))
+                .thenReturn("admin123");
+
+        // Keep the current controller on its successful login path for RED.
+        when(authenticationService.authenticate(
+                "admin",
+                "admin123"))
+                .thenReturn(true);
+
+        when(authenticationService.authenticateUser(
+                "admin",
+                "admin123"))
+                .thenReturn(
+                        Optional.of(user)
+                );
+
+        when(request.getSession())
+                .thenReturn(session);
+
+        controller.doPost(
+                request,
+                response
+        );
+
+        verify(session)
+                .setAttribute(
+                        "staffUser",
+                        "admin"
+                );
+
+        verify(session)
+                .setAttribute(
+                        "staffRole",
+                        "ADMIN"
+                );
+
+        verify(response)
+                .sendRedirect(
+                        "appointment"
+                );
+    }
+}
