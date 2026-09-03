@@ -19,24 +19,10 @@ public class AuthenticationService {
             String password)
             throws SQLException {
 
-        // Reject empty login details before checking the database.
-        if (username == null
-                || username.isBlank()
-                || password == null
-                || password.isBlank()) {
-            return false;
-        }
-
-        Optional<User> user =
-                userDAO.findByUsername(username);
-
-        if (user.isEmpty()) {
-            return false;
-        }
-
-        return user.get()
-                .getPassword()
-                .equals(password);
+        return authenticateUser(
+                username,
+                password
+        ).isPresent();
     }
 
     public Optional<User> authenticateUser(
@@ -44,8 +30,31 @@ public class AuthenticationService {
             String password)
             throws SQLException {
 
-        throw new UnsupportedOperationException(
-                "Not implemented"
-        );
+        // Reject empty login details before checking the database.
+        if (username == null
+                || username.isBlank()
+                || password == null
+                || password.isBlank()) {
+
+            return Optional.empty();
+        }
+
+        Optional<User> user =
+                userDAO.findByUsername(
+                        username
+                );
+
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (!user.get()
+                .getPassword()
+                .equals(password)) {
+
+            return Optional.empty();
+        }
+
+        return user;
     }
 }
