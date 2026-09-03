@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -126,5 +127,52 @@ class AuthenticationServiceTest {
 
         verify(userDAO)
                 .findByUsername(username);
+    }
+
+    @Test
+    void shouldReturnAuthenticatedUserWithRole()
+            throws Exception {
+
+        User user =
+                new User(
+                        1,
+                        "admin",
+                        "admin123",
+                        "ADMIN"
+                );
+
+        when(
+                userDAO.findByUsername(
+                        "admin"
+                )
+        ).thenReturn(
+                Optional.of(user)
+        );
+
+        Optional<User> result =
+                authenticationService.authenticateUser(
+                        "admin",
+                        "admin123"
+                );
+
+        assertTrue(
+                result.isPresent()
+        );
+
+        assertEquals(
+                "admin",
+                result.get().getUsername()
+        );
+
+        assertEquals(
+                "ADMIN",
+                result.get().getRole()
+        );
+
+        verify(
+                userDAO
+        ).findByUsername(
+                "admin"
+        );
     }
 }
