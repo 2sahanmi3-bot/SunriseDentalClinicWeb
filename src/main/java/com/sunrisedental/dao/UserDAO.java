@@ -24,7 +24,7 @@ public class UserDAO {
 
             statement =
                     connection.prepareStatement(
-                            "SELECT user_id, username, password " +
+                            "SELECT user_id, username, password, role " +
                                     "FROM users " +
                                     "WHERE username = ?"
                     );
@@ -43,7 +43,8 @@ public class UserDAO {
                         new User(
                                 resultSet.getInt("user_id"),
                                 resultSet.getString("username"),
-                                resultSet.getString("password")
+                                resultSet.getString("password"),
+                                resultSet.getString("role")
                         );
 
                 return Optional.of(user);
@@ -70,4 +71,3 @@ public class UserDAO {
         }
     }
 }
-
