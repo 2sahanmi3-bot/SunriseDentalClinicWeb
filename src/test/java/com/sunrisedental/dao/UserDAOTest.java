@@ -90,6 +90,102 @@ class UserDAOTest {
     }
 
     @Test
+    void shouldLoadStaffRole()
+            throws Exception {
+
+        String username = "admin";
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        ResultSet resultSet =
+                mock(ResultSet.class);
+
+        when(
+                connection.prepareStatement(
+                        anyString()
+                )
+        ).thenReturn(
+                statement
+        );
+
+        when(
+                statement.executeQuery()
+        ).thenReturn(
+                resultSet
+        );
+
+        when(
+                resultSet.next()
+        ).thenReturn(
+                true
+        );
+
+        when(
+                resultSet.getInt(
+                        "user_id"
+                )
+        ).thenReturn(
+                1
+        );
+
+        when(
+                resultSet.getString(
+                        "username"
+                )
+        ).thenReturn(
+                "admin"
+        );
+
+        when(
+                resultSet.getString(
+                        "password"
+                )
+        ).thenReturn(
+                "admin123"
+        );
+
+        when(
+                resultSet.getString(
+                        "role"
+                )
+        ).thenReturn(
+                "ADMIN"
+        );
+
+        try (
+                MockedStatic<DBConnectionFactory> mocked =
+                        mockStatic(
+                                DBConnectionFactory.class
+                        )
+        ) {
+
+            mocked.when(
+                    DBConnectionFactory::getConnection
+            ).thenReturn(
+                    connection
+            );
+
+            Optional<User> result =
+                    userDAO.findByUsername(
+                            username
+                    );
+
+            assertTrue(
+                    result.isPresent()
+            );
+
+            assertEquals(
+                    "ADMIN",
+                    result.get().getRole()
+            );
+        }
+    }
+
+    @Test
     void findByUsernameShouldReturnEmptyWhenStaffNotFound()
             throws SQLException {
 
