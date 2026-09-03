@@ -38,4 +38,14 @@ public class AuthenticationService {
                 .getPassword()
                 .equals(password);
     }
+
+    public Optional<User> authenticateUser(
+            String username,
+            String password)
+            throws SQLException {
+
+        throw new UnsupportedOperationException(
+                "Not implemented"
+        );
+    }
 }
