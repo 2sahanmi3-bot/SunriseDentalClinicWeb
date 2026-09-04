@@ -75,8 +75,47 @@ public class UserDAO {
             User user)
             throws SQLException {
 
-        throw new UnsupportedOperationException(
-                "Not implemented"
-        );
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            connection =
+                    DBConnectionFactory.getConnection();
+
+            statement =
+                    connection.prepareStatement(
+                            "INSERT INTO users " +
+                                    "(username, password, role) " +
+                                    "VALUES (?, ?, ?)"
+                    );
+
+            statement.setString(
+                    1,
+                    user.getUsername()
+            );
+
+            statement.setString(
+                    2,
+                    user.getPassword()
+            );
+
+            statement.setString(
+                    3,
+                    user.getRole()
+            );
+
+            return statement.executeUpdate() > 0;
+
+        } finally {
+
+            if (statement != null) {
+                statement.close();
+            }
+
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 }
