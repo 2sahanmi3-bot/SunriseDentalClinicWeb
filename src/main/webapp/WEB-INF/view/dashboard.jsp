@@ -123,71 +123,124 @@
     <section class="card">
 
         <h2>
-            Quick Actions
+            Clinic Statistics
         </h2>
 
-        <a href="${pageContext.request.contextPath}/patient">
-            Patient Management
-        </a>
+        <div class="dashboard-grid">
 
-        <a href="${pageContext.request.contextPath}/appointment">
-            Appointments
-        </a>
+            <div class="dashboard-card">
 
-        <a href="${pageContext.request.contextPath}/billing">
-            Billing
-        </a>
+                <h3>
+                    Today's Appointments
+                </h3>
 
-        <a href="${pageContext.request.contextPath}/reports">
-            Reports
-        </a>
+                <p class="dashboard-number">
+                    <c:out value="${stats.todayAppointments}"/>
+                </p>
 
-        <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+            </div>
 
-            <a href="${pageContext.request.contextPath}/admin/staff">
-                User Management
-            </a>
+            <div class="dashboard-card">
 
-            <a href="${pageContext.request.contextPath}/admin/dentists">
-                Dentist Management
-            </a>
+                <h3>
+                    Upcoming Appointments
+                </h3>
 
-            <a href="${pageContext.request.contextPath}/admin/treatments">
-                Treatment Management
-            </a>
+                <p class="dashboard-number">
+                    <c:out value="${stats.upcomingAppointments}"/>
+                </p>
 
-        </c:if>
+            </div>
+
+            <div class="dashboard-card">
+
+                <h3>
+                    Registered Patients
+                </h3>
+
+                <p class="dashboard-number">
+                    <c:out value="${stats.totalPatients}"/>
+                </p>
+
+            </div>
+
+            <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+
+                <div class="dashboard-card">
+
+                    <h3>
+                        Active Dentists
+                    </h3>
+
+                    <p class="dashboard-number">
+                        <c:out value="${stats.activeDentists}"/>
+                    </p>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <h3>
+                        Active User Accounts
+                    </h3>
+
+                    <p class="dashboard-number">
+                        <c:out value="${stats.activeUsers}"/>
+                    </p>
+
+                </div>
+
+            </c:if>
+
+        </div>
 
     </section>
 
 
-    <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+    <section class="card">
 
-        <section class="card">
+        <h2>
+            Quick Actions
+        </h2>
 
-            <h2>
-                Administration
-            </h2>
+        <div class="quick-actions">
 
-            <p>
-                Manage authorized clinic users and administrative functions.
-            </p>
-
-            <a href="${pageContext.request.contextPath}/admin/staff">
-                Manage Users
+            <a href="${pageContext.request.contextPath}/patient">
+                Patients
             </a>
 
-            <a href="${pageContext.request.contextPath}/admin/dentists">
-                Manage Dentists
+            <a href="${pageContext.request.contextPath}/appointment">
+                Appointments
             </a>
 
-            <a href="${pageContext.request.contextPath}/admin/treatments">
-                Manage Treatments
+            <a href="${pageContext.request.contextPath}/billing">
+                Billing
             </a>
 
-        </section>
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
 
-    </c:if>
+            <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+
+                <a href="${pageContext.request.contextPath}/admin/staff">
+                    User Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/dentists">
+                    Dentist Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/treatments">
+                    Treatment Management
+                </a>
+
+            </c:if>
+
+        </div>
+
+    </section>
+
 
 </main>
 

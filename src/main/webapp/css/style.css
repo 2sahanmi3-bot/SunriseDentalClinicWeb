@@ -247,6 +247,39 @@ select:focus {
 }
 
 
+/* Dashboard. */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.dashboard-card {
+    padding: 18px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    background: #f9fbfb;
+}
+
+.dashboard-card h3 {
+    margin: 0 0 12px;
+    font-size: 16px;
+}
+
+.dashboard-number {
+    margin: 0;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+
 /* Billing receipt. */
 
 .receipt-card {
