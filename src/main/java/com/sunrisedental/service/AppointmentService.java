@@ -139,4 +139,56 @@ public class AppointmentService {
                 patientId
         );
     }
+
+    public boolean changeAppointmentStatus(
+            String appointmentNumber,
+            String status)
+            throws SQLException {
+
+        if (appointmentNumber == null
+                || appointmentNumber.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "Appointment number is required"
+            );
+        }
+
+        if (!"COMPLETED".equals(status)
+                && !"CANCELLED".equals(status)) {
+
+            throw new IllegalArgumentException(
+                    "Invalid appointment status"
+            );
+        }
+
+        String normalizedAppointmentNumber =
+                appointmentNumber.trim();
+
+        Optional<Appointment> appointment =
+                appointmentDAO.findByAppointmentNumber(
+                        normalizedAppointmentNumber
+                );
+
+        if (appointment.isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "Appointment not found"
+            );
+        }
+
+        if (!"SCHEDULED".equals(
+                appointment.get().getStatus()
+        )) {
+
+            throw new IllegalArgumentException(
+                    "Only scheduled appointments can be updated"
+            );
+        }
+
+        return appointmentDAO
+                .updateAppointmentStatus(
+                        normalizedAppointmentNumber,
+                        status
+                );
+    }
 }

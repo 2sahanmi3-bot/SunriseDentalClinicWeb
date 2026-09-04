@@ -85,6 +85,14 @@
 
         <% } %>
 
+        <c:if test="${not empty successMessage}">
+
+            <div class="success-message">
+                <c:out value="${successMessage}"/>
+            </div>
+
+        </c:if>
+
         <% if (appointment != null) { %>
 
         <div class="appointment-details">
@@ -129,9 +137,66 @@
                 <%= appointment.getAppointmentTime() %>
             </p>
 
+            <p>
+                <strong>Status:</strong>
+                <c:out value="${appointment.status}"/>
+            </p>
+
         </div>
 
         <% } %>
+
+        <c:if test="${appointment.status == 'SCHEDULED'}">
+
+            <div class="appointment-actions">
+
+                <form method="post"
+                      action="${pageContext.request.contextPath}/appointment">
+
+                    <input type="hidden"
+                           name="action"
+                           value="updateStatus">
+
+                    <input type="hidden"
+                           name="appointmentNumber"
+                           value="${appointment.appointmentNumber}">
+
+                    <input type="hidden"
+                           name="status"
+                           value="COMPLETED">
+
+                    <button type="submit">
+                        Mark Completed
+                    </button>
+
+                </form>
+
+
+                <form method="post"
+                      action="${pageContext.request.contextPath}/appointment">
+
+                    <input type="hidden"
+                           name="action"
+                           value="updateStatus">
+
+                    <input type="hidden"
+                           name="appointmentNumber"
+                           value="${appointment.appointmentNumber}">
+
+                    <input type="hidden"
+                           name="status"
+                           value="CANCELLED">
+
+                    <button type="submit"
+                            onclick="return confirm('Cancel this appointment?');">
+                        Cancel Appointment
+                    </button>
+
+                </form>
+
+            </div>
+
+        </c:if>
 
         <div class="form-actions">
 

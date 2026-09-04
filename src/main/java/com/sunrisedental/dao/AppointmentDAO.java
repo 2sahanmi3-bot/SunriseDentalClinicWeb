@@ -338,6 +338,50 @@ public class AppointmentDAO {
         }
     }
 
+    public boolean updateAppointmentStatus(
+            String appointmentNumber,
+            String status)
+            throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            connection =
+                    DBConnectionFactory.getConnection();
+
+            statement =
+                    connection.prepareStatement(
+                            "UPDATE appointments " +
+                                    "SET status = ? " +
+                                    "WHERE appointment_number = ?"
+                    );
+
+            statement.setString(
+                    1,
+                    status
+            );
+
+            statement.setString(
+                    2,
+                    appointmentNumber
+            );
+
+            return statement.executeUpdate() > 0;
+
+        } finally {
+
+            if (statement != null) {
+                statement.close();
+            }
+
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
     public boolean existsDentistBooking(
             int dentistId,
             String appointmentDate,

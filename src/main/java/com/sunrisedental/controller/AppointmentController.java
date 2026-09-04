@@ -131,6 +131,84 @@ public class AppointmentController extends HttpServlet {
                         "action"
                 );
 
+        if ("updateStatus".equals(action)) {
+
+            try {
+
+                String appointmentNumber =
+                        request.getParameter(
+                                "appointmentNumber"
+                        );
+
+                String status =
+                        request.getParameter(
+                                "status"
+                        );
+
+                appointmentService
+                        .changeAppointmentStatus(
+                                appointmentNumber,
+                                status
+                        );
+
+                request.setAttribute(
+                        "successMessage",
+                        "CANCELLED".equals(status)
+                                ? "Appointment cancelled successfully"
+                                : "Appointment marked as completed"
+                );
+
+                if (appointmentNumber != null) {
+
+                    appointmentNumber =
+                            appointmentNumber.trim();
+                }
+
+                Optional<Appointment> appointment =
+                        appointmentService
+                                .findByAppointmentNumber(
+                                        appointmentNumber
+                                );
+
+                if (appointment.isPresent()) {
+
+                    request.setAttribute(
+                            "appointment",
+                            appointment.get()
+                    );
+                }
+
+                request.getRequestDispatcher(
+                        "/WEB-INF/view/viewAppointment.jsp"
+                ).forward(
+                        request,
+                        response
+                );
+
+                return;
+
+            } catch (IllegalArgumentException e) {
+
+                request.setAttribute(
+                        "errorMessage",
+                        e.getMessage()
+                );
+
+                request.getRequestDispatcher(
+                        "/WEB-INF/view/viewAppointment.jsp"
+                ).forward(
+                        request,
+                        response
+                );
+
+                return;
+
+            } catch (SQLException e) {
+
+                throw new ServletException(e);
+            }
+        }
+
         if ("register".equals(action)) {
 
             try {

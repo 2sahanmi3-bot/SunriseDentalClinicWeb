@@ -189,6 +189,13 @@ select:focus {
     min-width: 200px;
 }
 
+.appointment-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+}
+
 
 /* Appointment search area. */
 
