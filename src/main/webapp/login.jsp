@@ -16,12 +16,32 @@
 
 <div class="login-page">
 
+    <section class="login-intro">
+
+        <h1>
+            Sunrise Dental Clinic
+        </h1>
+
+        <p>
+            Simple and reliable clinic management for your team.
+            Manage patients, appointments, treatments and billing securely
+            from one professional system.
+        </p>
+
+        <div class="login-highlights">
+            <span>Secure</span>
+            <span>Simple</span>
+            <span>Clinic focused</span>
+        </div>
+
+    </section>
+
     <div class="login-card">
 
-        <h1>Sunrise Dental Clinic</h1>
+        <h1>Sign In</h1>
 
         <p class="subtitle">
-            Staff Login
+            Sign in to access the clinic management system.
         </p>
 
         <c:if test="${not empty errorMessage}">

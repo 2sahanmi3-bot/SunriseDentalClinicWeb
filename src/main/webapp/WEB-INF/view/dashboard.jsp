@@ -18,6 +18,15 @@
 
 <body>
 
+<c:set var="activePage"
+       value="dashboard"/>
+
+<div class="app-layout">
+
+<jsp:include page="/WEB-INF/view/includes/sidebar.jsp"/>
+
+<div class="app-main">
+
 <header class="top-bar">
 
     <div class="container">
@@ -81,6 +90,18 @@
 
 
 <main class="container">
+
+    <div class="page-header">
+
+        <h1>
+            Welcome back, <c:out value="${sessionScope.staffUser}"/>
+        </h1>
+
+        <p>
+            Here's what's happening at Sunrise Dental Clinic today.
+        </p>
+
+    </div>
 
     <c:if test="${not empty sessionScope.loginMessage}">
 
@@ -206,19 +227,19 @@
         <div class="quick-actions">
 
             <a href="${pageContext.request.contextPath}/patient">
-                Patients
+                Find Patient
             </a>
 
             <a href="${pageContext.request.contextPath}/appointment">
-                Appointments
+                Register Appointment
             </a>
 
             <a href="${pageContext.request.contextPath}/billing">
-                Billing
+                Generate Bill
             </a>
 
             <a href="${pageContext.request.contextPath}/reports">
-                Reports
+                View Reports
             </a>
 
             <c:if test="${sessionScope.staffRole == 'ADMIN'}">
@@ -243,6 +264,10 @@
 
 
 </main>
+
+</div>
+
+</div>
 
 </body>
 </html>
