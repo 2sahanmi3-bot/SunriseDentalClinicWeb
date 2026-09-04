@@ -3,6 +3,7 @@ package com.sunrisedental.controller;
 import com.sunrisedental.dao.UserDAO;
 import com.sunrisedental.service.StaffManagementService;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/admin/staff")
 public class StaffManagementController extends HttpServlet {
@@ -38,8 +40,69 @@ public class StaffManagementController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        throw new UnsupportedOperationException(
-                "Not implemented"
-        );
+        String username =
+                request.getParameter(
+                        "username"
+                );
+
+        String password =
+                request.getParameter(
+                        "password"
+                );
+
+        String role =
+                request.getParameter(
+                        "role"
+                );
+
+        try {
+
+            boolean created =
+                    staffManagementService
+                            .createStaffUser(
+                                    username,
+                                    password,
+                                    role
+                            );
+
+            if (created) {
+
+                request.setAttribute(
+                        "successMessage",
+                        "Staff account created successfully"
+                );
+            }
+
+            RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(
+                            "WEB-INF/view/manageStaff.jsp"
+                    );
+
+            dispatcher.forward(
+                    request,
+                    response
+            );
+
+        } catch (IllegalArgumentException e) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    e.getMessage()
+            );
+
+            RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(
+                            "WEB-INF/view/manageStaff.jsp"
+                    );
+
+            dispatcher.forward(
+                    request,
+                    response
+            );
+
+        } catch (SQLException e) {
+
+            throw new ServletException(e);
+        }
     }
 }
