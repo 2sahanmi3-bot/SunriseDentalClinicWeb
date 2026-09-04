@@ -70,4 +70,13 @@ public class UserDAO {
             }
         }
     }
+
+    public boolean saveUser(
+            User user)
+            throws SQLException {
+
+        throw new UnsupportedOperationException(
+                "Not implemented"
+        );
+    }
 }
