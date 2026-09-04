@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 class StaffManagementServiceTest {
 
     private UserDAO userDAO;
@@ -64,5 +66,55 @@ class StaffManagementServiceTest {
                                 )
                         )
                 );
+    }
+
+    @Test
+    void shouldRejectDuplicateUsername()
+            throws Exception {
+
+        User existingUser =
+                new User(
+                        2,
+                        "staff01",
+                        "staff123",
+                        "STAFF"
+                );
+
+        when(
+                userDAO.findByUsername(
+                        "staff01"
+                )
+        ).thenReturn(
+                Optional.of(existingUser)
+        );
+
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                staffManagementService
+                                        .createStaffUser(
+                                                "staff01",
+                                                "newpass123",
+                                                "STAFF"
+                                        )
+                );
+
+        assertEquals(
+                "Username already exists",
+                exception.getMessage()
+        );
+
+        verify(userDAO)
+                .findByUsername(
+                        "staff01"
+                );
+
+        verify(
+                userDAO,
+                never()
+        ).saveUser(
+                any(User.class)
+        );
     }
 }
