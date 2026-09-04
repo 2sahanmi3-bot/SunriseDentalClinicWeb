@@ -64,6 +64,32 @@ CREATE TABLE patients (
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+-- DENTISTS
+-- Stores dentists available for clinic appointments.
+
+CREATE TABLE dentists (
+
+                          dentist_id INT
+                              NOT NULL
+                              AUTO_INCREMENT,
+
+                          dentist_name VARCHAR(100)
+                              NOT NULL,
+
+                          specialization VARCHAR(100),
+
+                          contact_number VARCHAR(10),
+
+                          active BOOLEAN
+                              NOT NULL
+                              DEFAULT TRUE,
+
+                          PRIMARY KEY (dentist_id)
+)
+    ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
 -- TREATMENTS
 -- Stores treatment types and billing charges.
 
@@ -213,6 +239,8 @@ DESCRIBE users;
 
 DESCRIBE patients;
 
+DESCRIBE dentists;
+
 DESCRIBE treatments;
 
 DESCRIBE appointments;
@@ -220,6 +248,8 @@ DESCRIBE appointments;
 SELECT * FROM users;
 
 SELECT * FROM patients;
+
+SELECT * FROM dentists;
 
 SELECT * FROM treatments;
 
