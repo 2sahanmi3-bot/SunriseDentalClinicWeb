@@ -51,6 +51,10 @@
                     User Management
                 </a>
 
+                <a href="${pageContext.request.contextPath}/admin/dentists">
+                    Dentist Management
+                </a>
+
             </c:if>
 
             <a href="${pageContext.request.contextPath}/help">
@@ -132,6 +136,10 @@
                 User Management
             </a>
 
+            <a href="${pageContext.request.contextPath}/admin/dentists">
+                Dentist Management
+            </a>
+
         </c:if>
 
     </section>
@@ -151,6 +159,10 @@
 
             <a href="${pageContext.request.contextPath}/admin/staff">
                 Manage Users
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/dentists">
+                Manage Dentists
             </a>
 
         </section>
