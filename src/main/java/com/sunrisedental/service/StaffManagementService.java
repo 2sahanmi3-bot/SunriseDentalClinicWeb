@@ -36,6 +36,15 @@ public class StaffManagementService {
             );
         }
 
+        // Only the two supported staff roles can be saved.
+        if (!"ADMIN".equals(role)
+                && !"STAFF".equals(role)) {
+
+            throw new IllegalArgumentException(
+                    "Invalid user role"
+            );
+        }
+
         User user =
                 new User(
                         0,
