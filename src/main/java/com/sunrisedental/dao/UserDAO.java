@@ -175,4 +175,48 @@ public class UserDAO {
             }
         }
     }
+
+    public boolean updateUserRole(
+            int userId,
+            String role)
+            throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            connection =
+                    DBConnectionFactory.getConnection();
+
+            statement =
+                    connection.prepareStatement(
+                            "UPDATE users " +
+                                    "SET role = ? " +
+                                    "WHERE user_id = ?"
+                    );
+
+            statement.setString(
+                    1,
+                    role
+            );
+
+            statement.setInt(
+                    2,
+                    userId
+            );
+
+            return statement.executeUpdate() > 0;
+
+        } finally {
+
+            if (statement != null) {
+                statement.close();
+            }
+
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 }

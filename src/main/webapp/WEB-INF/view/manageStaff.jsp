@@ -152,6 +152,7 @@
                         <th>User ID</th>
                         <th>Username</th>
                         <th>Role</th>
+                        <th>Change Role</th>
                     </tr>
                     </thead>
 
@@ -171,6 +172,42 @@
 
                             <td>
                                     ${user.role}
+                            </td>
+
+                            <td>
+
+                                <form method="post"
+                                      action="${pageContext.request.contextPath}/admin/staff">
+
+                                    <input type="hidden"
+                                           name="action"
+                                           value="updateRole">
+
+                                    <input type="hidden"
+                                           name="userId"
+                                           value="${user.userId}">
+
+                                    <select name="role"
+                                            required>
+
+                                        <option value="STAFF"
+                                            ${user.role == 'STAFF' ? 'selected' : ''}>
+                                            Staff
+                                        </option>
+
+                                        <option value="ADMIN"
+                                            ${user.role == 'ADMIN' ? 'selected' : ''}>
+                                            Admin
+                                        </option>
+
+                                    </select>
+
+                                    <button type="submit">
+                                        Update
+                                    </button>
+
+                                </form>
+
                             </td>
                         </tr>
 

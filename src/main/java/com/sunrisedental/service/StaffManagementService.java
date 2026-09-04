@@ -63,4 +63,23 @@ public class StaffManagementService {
 
         return userDAO.findAllUsers();
     }
+
+    public boolean changeUserRole(
+            int userId,
+            String role)
+            throws SQLException {
+
+        if (!"ADMIN".equals(role)
+                && !"STAFF".equals(role)) {
+
+            throw new IllegalArgumentException(
+                    "Invalid user role"
+            );
+        }
+
+        return userDAO.updateUserRole(
+                userId,
+                role
+        );
+    }
 }
