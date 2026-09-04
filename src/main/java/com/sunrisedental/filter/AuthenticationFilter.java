@@ -19,6 +19,7 @@ import java.io.IOException;
                 "/patient",
                 "/appointment",
                 "/billing",
+                "/reports",
                 "/help"
         }
 )

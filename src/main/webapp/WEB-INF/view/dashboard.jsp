@@ -45,6 +45,10 @@
                 Billing
             </a>
 
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
+
             <c:if test="${sessionScope.staffRole == 'ADMIN'}">
 
                 <a href="${pageContext.request.contextPath}/admin/staff">
@@ -132,6 +136,10 @@
 
         <a href="${pageContext.request.contextPath}/billing">
             Billing
+        </a>
+
+        <a href="${pageContext.request.contextPath}/reports">
+            Reports
         </a>
 
         <c:if test="${sessionScope.staffRole == 'ADMIN'}">
