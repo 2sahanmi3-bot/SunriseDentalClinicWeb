@@ -186,6 +186,92 @@ class UserDAOTest {
     }
 
     @Test
+    void shouldSaveStaffUser()
+            throws Exception {
+
+        User user =
+                new User(
+                        0,
+                        "staff01",
+                        "staff123",
+                        "STAFF"
+                );
+
+        Connection connection =
+                mock(Connection.class);
+
+        PreparedStatement statement =
+                mock(PreparedStatement.class);
+
+        when(
+                connection.prepareStatement(
+                        anyString()
+                )
+        ).thenReturn(
+                statement
+        );
+
+        when(
+                statement.executeUpdate()
+        ).thenReturn(
+                1
+        );
+
+        try (
+                MockedStatic<DBConnectionFactory> mocked =
+                        mockStatic(
+                                DBConnectionFactory.class
+                        )
+        ) {
+
+            mocked.when(
+                    DBConnectionFactory::getConnection
+            ).thenReturn(
+                    connection
+            );
+
+            UserDAO userDAO =
+                    new UserDAO();
+
+            boolean result =
+                    userDAO.saveUser(
+                            user
+                    );
+
+            assertTrue(
+                    result
+            );
+
+            verify(statement)
+                    .setString(
+                            1,
+                            "staff01"
+                    );
+
+            verify(statement)
+                    .setString(
+                            2,
+                            "staff123"
+                    );
+
+            verify(statement)
+                    .setString(
+                            3,
+                            "STAFF"
+                    );
+
+            verify(statement)
+                    .executeUpdate();
+
+            verify(statement)
+                    .close();
+
+            verify(connection)
+                    .close();
+        }
+    }
+
+    @Test
     void findByUsernameShouldReturnEmptyWhenStaffNotFound()
             throws SQLException {
 
