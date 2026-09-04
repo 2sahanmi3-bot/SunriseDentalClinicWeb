@@ -1,32 +1,40 @@
 package com.sunrisedental.controller;
 
+import com.sunrisedental.dao.AppointmentDAO;
+import com.sunrisedental.dao.PatientDAO;
+
 import com.sunrisedental.model.Appointment;
+import com.sunrisedental.model.Patient;
+
 import com.sunrisedental.service.AppointmentService;
+import com.sunrisedental.service.PatientService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.util.Optional;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.sunrisedental.dao.AppointmentDAO;
-
-import javax.servlet.annotation.WebServlet;
+import java.util.Optional;
 
 @WebServlet("/appointment")
 public class AppointmentController extends HttpServlet {
 
     private AppointmentService appointmentService;
+    private PatientService patientService;
 
     public AppointmentController() {
 
         this(
                 new AppointmentService(
                         new AppointmentDAO()
+                ),
+                new PatientService(
+                        new PatientDAO()
                 )
         );
     }
@@ -34,7 +42,23 @@ public class AppointmentController extends HttpServlet {
     public AppointmentController(
             AppointmentService appointmentService) {
 
-        this.appointmentService = appointmentService;
+        this(
+                appointmentService,
+                new PatientService(
+                        new PatientDAO()
+                )
+        );
+    }
+
+    public AppointmentController(
+            AppointmentService appointmentService,
+            PatientService patientService) {
+
+        this.appointmentService =
+                appointmentService;
+
+        this.patientService =
+                patientService;
     }
 
     @Override
@@ -44,65 +68,106 @@ public class AppointmentController extends HttpServlet {
             throws ServletException, IOException {
 
         String action =
-                request.getParameter("action");
+                request.getParameter(
+                        "action"
+                );
 
         if ("register".equals(action)) {
 
             String appointmentNumber =
-                    request.getParameter("appointmentNumber");
+                    request.getParameter(
+                            "appointmentNumber"
+                    );
 
             // Remove accidental spaces around the appointment number.
             if (appointmentNumber != null) {
+
                 appointmentNumber =
                         appointmentNumber.trim();
             }
 
             String patientName =
-                    request.getParameter("patientName");
+                    request.getParameter(
+                            "patientName"
+                    );
 
             String address =
-                    request.getParameter("address");
+                    request.getParameter(
+                            "address"
+                    );
 
             String contactNumber =
-                    request.getParameter("contactNumber");
+                    request.getParameter(
+                            "contactNumber"
+                    );
 
             String dentistName =
-                    request.getParameter("dentistName");
+                    request.getParameter(
+                            "dentistName"
+                    );
 
             String treatmentType =
-                    request.getParameter("treatmentType");
+                    request.getParameter(
+                            "treatmentType"
+                    );
 
             String appointmentDate =
-                    request.getParameter("appointmentDate");
+                    request.getParameter(
+                            "appointmentDate"
+                    );
 
             String appointmentTime =
-                    request.getParameter("appointmentTime");
+                    request.getParameter(
+                            "appointmentTime"
+                    );
+
+            Integer patientId =
+                    null;
+
+            String patientIdParameter =
+                    request.getParameter(
+                            "patientId"
+                    );
+
+            if (patientIdParameter != null
+                    && !patientIdParameter.isBlank()) {
+
+                patientId =
+                        Integer.valueOf(
+                                patientIdParameter
+                        );
+            }
 
             Appointment appointment =
                     new Appointment(
                             0,
                             appointmentNumber,
+                            patientId,
                             patientName,
                             address,
                             contactNumber,
                             dentistName,
                             treatmentType,
                             appointmentDate,
-                            appointmentTime
+                            appointmentTime,
+                            "SCHEDULED"
                     );
 
             try {
 
                 boolean registered =
-                        appointmentService.registerAppointment(
-                                appointment
-                        );
+                        appointmentService
+                                .registerAppointment(
+                                        appointment
+                                );
 
                 if (registered) {
+
                     response.sendRedirect(
                             "appointment?action=search&appointmentNumber="
                                     + appointmentNumber
                     );
+
                 } else {
 
                     // Show a clear message when the appointment cannot be registered.
@@ -120,6 +185,7 @@ public class AppointmentController extends HttpServlet {
                 }
 
             } catch (SQLException e) {
+
                 throw new ServletException(e);
             }
         }
@@ -132,10 +198,53 @@ public class AppointmentController extends HttpServlet {
             throws ServletException, IOException {
 
         String action =
-                request.getParameter("action");
+                request.getParameter(
+                        "action"
+                );
 
         // Show the appointment form after staff login.
         if (action == null) {
+
+            String patientIdParameter =
+                    request.getParameter(
+                            "patientId"
+                    );
+
+            if (patientIdParameter != null
+                    && !patientIdParameter.isBlank()) {
+
+                try {
+
+                    int patientId =
+                            Integer.parseInt(
+                                    patientIdParameter
+                            );
+
+                    Optional<Patient> patient =
+                            patientService.getPatient(
+                                    patientId
+                            );
+
+                    if (patient.isPresent()) {
+
+                        request.setAttribute(
+                                "selectedPatient",
+                                patient.get()
+                        );
+                    }
+
+                } catch (SQLException e) {
+
+                    throw new ServletException(e);
+
+                } catch (NumberFormatException e) {
+
+                    request.setAttribute(
+                            "errorMessage",
+                            "Invalid patient"
+                    );
+                }
+            }
 
             request.getRequestDispatcher(
                     "WEB-INF/view/addAppointment.jsp"
@@ -150,10 +259,13 @@ public class AppointmentController extends HttpServlet {
         if ("search".equals(action)) {
 
             String appointmentNumber =
-                    request.getParameter("appointmentNumber");
+                    request.getParameter(
+                            "appointmentNumber"
+                    );
 
             // Remove accidental spaces around the appointment number.
             if (appointmentNumber != null) {
+
                 appointmentNumber =
                         appointmentNumber.trim();
             }
@@ -161,9 +273,10 @@ public class AppointmentController extends HttpServlet {
             try {
 
                 Optional<Appointment> appointment =
-                        appointmentService.findByAppointmentNumber(
-                                appointmentNumber
-                        );
+                        appointmentService
+                                .findByAppointmentNumber(
+                                        appointmentNumber
+                                );
 
                 if (appointment.isPresent()) {
 
@@ -196,6 +309,7 @@ public class AppointmentController extends HttpServlet {
                 }
 
             } catch (SQLException e) {
+
                 throw new ServletException(e);
             }
         }

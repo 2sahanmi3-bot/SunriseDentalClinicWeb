@@ -307,6 +307,92 @@
                 Edit Patient
             </a>
 
+            <a href="${pageContext.request.contextPath}/appointment?patientId=${selectedPatient.patientId}">
+                Book Appointment
+            </a>
+
+
+            <h3>Appointment and Treatment History</h3>
+
+            <c:choose>
+
+                <c:when test="${empty appointments}">
+
+                    <p>
+                        No appointments found for this patient.
+                    </p>
+
+                </c:when>
+
+                <c:otherwise>
+
+                    <table>
+
+                        <thead>
+
+                        <tr>
+                            <th>Appointment</th>
+                            <th>Treatment</th>
+                            <th>Dentist</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Billing</th>
+                        </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        <c:forEach var="appointment"
+                                   items="${appointments}">
+
+                            <tr>
+
+                                <td>
+                                    <c:out value="${appointment.appointmentNumber}"/>
+                                </td>
+
+                                <td>
+                                    <c:out value="${appointment.treatmentType}"/>
+                                </td>
+
+                                <td>
+                                    <c:out value="${appointment.dentistName}"/>
+                                </td>
+
+                                <td>
+                                    <c:out value="${appointment.appointmentDate}"/>
+                                </td>
+
+                                <td>
+                                    <c:out value="${appointment.appointmentTime}"/>
+                                </td>
+
+                                <td>
+                                    <c:out value="${appointment.status}"/>
+                                </td>
+
+                                <td>
+
+                                    <a href="${pageContext.request.contextPath}/billing?appointmentNumber=${appointment.appointmentNumber}">
+                                        Bill
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        </c:forEach>
+
+                        </tbody>
+
+                    </table>
+
+                </c:otherwise>
+
+            </c:choose>
+
         </section>
 
     </c:if>

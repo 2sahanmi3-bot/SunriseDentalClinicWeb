@@ -1,7 +1,11 @@
 package com.sunrisedental.controller;
 
+import com.sunrisedental.dao.AppointmentDAO;
 import com.sunrisedental.dao.PatientDAO;
+
 import com.sunrisedental.model.Patient;
+
+import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.PatientService;
 
 import javax.servlet.ServletException;
@@ -13,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,12 +25,16 @@ import java.util.Optional;
 public class PatientController extends HttpServlet {
 
     private PatientService patientService;
+    private AppointmentService appointmentService;
 
     public PatientController() {
 
         this(
                 new PatientService(
                         new PatientDAO()
+                ),
+                new AppointmentService(
+                        new AppointmentDAO()
                 )
         );
     }
@@ -33,8 +42,23 @@ public class PatientController extends HttpServlet {
     public PatientController(
             PatientService patientService) {
 
+        this(
+                patientService,
+                new AppointmentService(
+                        new AppointmentDAO()
+                )
+        );
+    }
+
+    public PatientController(
+            PatientService patientService,
+            AppointmentService appointmentService) {
+
         this.patientService =
                 patientService;
+
+        this.appointmentService =
+                appointmentService;
     }
 
     @Override
@@ -98,6 +122,14 @@ public class PatientController extends HttpServlet {
                     request.setAttribute(
                             "selectedPatient",
                             patient.get()
+                    );
+
+                    request.setAttribute(
+                            "appointments",
+                            appointmentService
+                                    .findByPatientId(
+                                            patientId
+                                    )
                     );
 
                     if ("edit".equals(action)) {
@@ -188,12 +220,21 @@ public class PatientController extends HttpServlet {
                                     patientId
                             );
 
-                    patient.ifPresent(value ->
-                            request.setAttribute(
-                                    "selectedPatient",
-                                    value
-                            )
-                    );
+                    if (patient.isPresent()) {
+
+                        request.setAttribute(
+                                "selectedPatient",
+                                patient.get()
+                        );
+
+                        request.setAttribute(
+                                "appointments",
+                                appointmentService
+                                        .findByPatientId(
+                                                patientId
+                                        )
+                        );
+                    }
                 }
 
             } else {

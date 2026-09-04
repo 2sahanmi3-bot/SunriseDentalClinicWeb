@@ -61,7 +61,17 @@ public class PatientService {
                     email.trim();
 
             if (email.isBlank()) {
-                email = null;
+
+                email =
+                        null;
+
+            } else if (!email.matches(
+                    "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+            )) {
+
+                throw new IllegalArgumentException(
+                        "Invalid email address"
+                );
             }
         }
 
@@ -151,7 +161,17 @@ public class PatientService {
                     email.trim();
 
             if (email.isBlank()) {
-                email = null;
+
+                email =
+                        null;
+
+            } else if (!email.matches(
+                    "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+            )) {
+
+                throw new IllegalArgumentException(
+                        "Invalid email address"
+                );
             }
         }
 

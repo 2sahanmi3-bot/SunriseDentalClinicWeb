@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -41,9 +42,11 @@
             </a>
 
             <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+
                 <a href="${pageContext.request.contextPath}/admin/staff">
                     Staff Management
                 </a>
+
             </c:if>
 
             <a href="${pageContext.request.contextPath}/help">
@@ -137,6 +140,14 @@
                    name="action"
                    value="register">
 
+            <c:if test="${not empty selectedPatient}">
+
+                <input type="hidden"
+                       name="patientId"
+                       value="${selectedPatient.patientId}">
+
+            </c:if>
+
             <div class="form-grid">
 
                 <div class="form-group">
@@ -164,6 +175,7 @@
                            id="patientName"
                            name="patientName"
                            maxlength="100"
+                           value="<c:out value='${selectedPatient.patientName}'/>"
                            required>
 
                 </div>
@@ -178,6 +190,7 @@
                            id="address"
                            name="address"
                            maxlength="255"
+                           value="<c:out value='${selectedPatient.address}'/>"
                            required>
 
                 </div>
@@ -196,6 +209,7 @@
                            pattern="0[0-9]{9}"
                            inputmode="numeric"
                            title="Enter a 10-digit contact number starting with 0"
+                           value="<c:out value='${selectedPatient.contactNumber}'/>"
                            required>
 
                 </div>

@@ -70,7 +70,6 @@ COLLATE = utf8mb4_unicode_ci;
 -- Charges below are sample values used for development
 -- and system demonstration.
 
-
 CREATE TABLE treatments (
 
                             treatment_id INT
@@ -116,6 +115,9 @@ CREATE TABLE appointments (
                               appointment_number VARCHAR(20)
                                   NOT NULL,
 
+                              patient_id INT
+                                  NULL,
+
                               patient_name VARCHAR(100)
                                   NOT NULL,
 
@@ -137,6 +139,10 @@ CREATE TABLE appointments (
                               appointment_time TIME
                                   NOT NULL,
 
+                              status VARCHAR(20)
+                                  NOT NULL
+                                  DEFAULT 'SCHEDULED',
+
                               PRIMARY KEY (appointment_id),
 
                               CONSTRAINT uq_appointments_number
@@ -146,7 +152,20 @@ CREATE TABLE appointments (
                                   FOREIGN KEY (treatment_type)
                                       REFERENCES treatments (treatment_name)
                                       ON UPDATE CASCADE
-                                      ON DELETE RESTRICT
+                                      ON DELETE RESTRICT,
+
+                              CONSTRAINT fk_appointments_patient
+                                  FOREIGN KEY (patient_id)
+                                      REFERENCES patients (patient_id),
+
+                              CONSTRAINT chk_appointment_status
+                                  CHECK (
+                                      status IN (
+                                                 'SCHEDULED',
+                                                 'COMPLETED',
+                                                 'CANCELLED'
+                                          )
+                                      )
 )
     ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -154,7 +173,6 @@ COLLATE = utf8mb4_unicode_ci;
 
 -- INITIAL AUTHORISED STAFF ACCOUNT
 -- Development/demo account.
-
 
 INSERT INTO users (
     username,
@@ -172,7 +190,6 @@ VALUES (
 -- These are development/demo assumptions.
 -- Cleaning values match the billing data already used
 -- in the existing unit tests.
-
 
 INSERT INTO treatments (
     treatment_name,

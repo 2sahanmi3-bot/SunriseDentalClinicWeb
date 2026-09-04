@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -38,9 +39,11 @@
             </a>
 
             <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+
                 <a href="${pageContext.request.contextPath}/admin/staff">
                     Staff Management
                 </a>
+
             </c:if>
 
             <a href="${pageContext.request.contextPath}/help">
@@ -96,6 +99,7 @@
                        name="appointmentNumber"
                        maxlength="20"
                        placeholder="e.g. APT001"
+                       value="<c:out value='${param.appointmentNumber}'/>"
                        required>
 
             </div>

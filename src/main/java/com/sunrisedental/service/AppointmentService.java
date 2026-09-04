@@ -4,7 +4,10 @@ import com.sunrisedental.dao.AppointmentDAO;
 import com.sunrisedental.model.Appointment;
 
 import java.sql.SQLException;
+
+import java.util.List;
 import java.util.Optional;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -13,11 +16,15 @@ public class AppointmentService {
 
     private AppointmentDAO appointmentDAO;
 
-    public AppointmentService(AppointmentDAO appointmentDAO) {
-        this.appointmentDAO = appointmentDAO;
+    public AppointmentService(
+            AppointmentDAO appointmentDAO) {
+
+        this.appointmentDAO =
+                appointmentDAO;
     }
 
-    public boolean registerAppointment(Appointment appointment)
+    public boolean registerAppointment(
+            Appointment appointment)
             throws SQLException {
 
         String appointmentNumber =
@@ -26,6 +33,7 @@ public class AppointmentService {
         // Do not register an appointment without a valid number.
         if (appointmentNumber == null
                 || appointmentNumber.isBlank()) {
+
             return false;
         }
 
@@ -95,7 +103,9 @@ public class AppointmentService {
             return false;
         }
 
-        return appointmentDAO.saveAppointment(appointment);
+        return appointmentDAO.saveAppointment(
+                appointment
+        );
     }
 
     public Optional<Appointment> findByAppointmentNumber(
@@ -104,6 +114,15 @@ public class AppointmentService {
 
         return appointmentDAO.findByAppointmentNumber(
                 appointmentNumber
+        );
+    }
+
+    public List<Appointment> findByPatientId(
+            int patientId)
+            throws SQLException {
+
+        return appointmentDAO.findByPatientId(
+                patientId
         );
     }
 }
