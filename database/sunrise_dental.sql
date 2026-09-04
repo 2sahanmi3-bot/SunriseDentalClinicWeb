@@ -208,6 +208,43 @@ CREATE TABLE appointments (
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+CREATE INDEX idx_dentist_schedule
+    ON appointments (
+                     dentist_id,
+                     appointment_date,
+                     appointment_time,
+                     status
+        );
+
+DELIMITER //
+
+CREATE TRIGGER trg_prevent_dentist_double_booking
+    BEFORE INSERT ON appointments
+    FOR EACH ROW
+BEGIN
+
+    IF NEW.status = 'SCHEDULED'
+       AND NEW.dentist_id IS NOT NULL
+       AND EXISTS (
+            SELECT 1
+            FROM appointments
+            WHERE dentist_id = NEW.dentist_id
+              AND appointment_date = NEW.appointment_date
+              AND appointment_time = NEW.appointment_time
+              AND status = 'SCHEDULED'
+       )
+    THEN
+
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT =
+            'Dentist is already booked for this date and time';
+
+END IF;
+
+END//
+
+DELIMITER ;
+
 -- INITIAL AUTHORISED STAFF ACCOUNT
 -- Development/demo account.
 
