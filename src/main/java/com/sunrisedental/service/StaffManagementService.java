@@ -82,4 +82,15 @@ public class StaffManagementService {
                 role
         );
     }
+
+    public boolean changeUserStatus(
+            int userId,
+            boolean active)
+            throws SQLException {
+
+        return userDAO.updateUserStatus(
+                userId,
+                active
+        );
+    }
 }

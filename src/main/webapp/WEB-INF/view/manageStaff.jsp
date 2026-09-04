@@ -152,7 +152,9 @@
                         <th>User ID</th>
                         <th>Username</th>
                         <th>Role</th>
+                        <th>Status</th>
                         <th>Change Role</th>
+                        <th>Account</th>
                     </tr>
                     </thead>
 
@@ -172,6 +174,22 @@
 
                             <td>
                                     ${user.role}
+                            </td>
+
+                            <td>
+
+                                <c:choose>
+
+                                    <c:when test="${user.active}">
+                                        Active
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        Inactive
+                                    </c:otherwise>
+
+                                </c:choose>
+
                             </td>
 
                             <td>
@@ -205,6 +223,51 @@
                                     <button type="submit">
                                         Update
                                     </button>
+
+                                </form>
+
+                            </td>
+
+                            <td>
+
+                                <form method="post"
+                                      action="${pageContext.request.contextPath}/admin/staff">
+
+                                    <input type="hidden"
+                                           name="action"
+                                           value="updateStatus">
+
+                                    <input type="hidden"
+                                           name="userId"
+                                           value="${user.userId}">
+
+                                    <c:choose>
+
+                                        <c:when test="${user.active}">
+
+                                            <input type="hidden"
+                                                   name="active"
+                                                   value="false">
+
+                                            <button type="submit">
+                                                Deactivate
+                                            </button>
+
+                                        </c:when>
+
+                                        <c:otherwise>
+
+                                            <input type="hidden"
+                                                   name="active"
+                                                   value="true">
+
+                                            <button type="submit">
+                                                Activate
+                                            </button>
+
+                                        </c:otherwise>
+
+                                    </c:choose>
 
                                 </form>
 

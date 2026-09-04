@@ -26,7 +26,7 @@ public class UserDAO {
 
             statement =
                     connection.prepareStatement(
-                            "SELECT user_id, username, password, role " +
+                            "SELECT user_id, username, password, role, active " +
                                     "FROM users " +
                                     "WHERE username = ?"
                     );
@@ -46,7 +46,8 @@ public class UserDAO {
                                 resultSet.getInt("user_id"),
                                 resultSet.getString("username"),
                                 resultSet.getString("password"),
-                                resultSet.getString("role")
+                                resultSet.getString("role"),
+                                resultSet.getBoolean("active")
                         );
 
                 return Optional.of(user);
@@ -90,7 +91,7 @@ public class UserDAO {
 
             statement =
                     connection.prepareStatement(
-                            "SELECT user_id, username, password, role " +
+                            "SELECT user_id, username, password, role, active " +
                                     "FROM users " +
                                     "ORDER BY username"
                     );
@@ -105,7 +106,8 @@ public class UserDAO {
                                 resultSet.getInt("user_id"),
                                 resultSet.getString("username"),
                                 resultSet.getString("password"),
-                                resultSet.getString("role")
+                                resultSet.getString("role"),
+                                resultSet.getBoolean("active")
                         )
                 );
             }
@@ -199,6 +201,50 @@ public class UserDAO {
             statement.setString(
                     1,
                     role
+            );
+
+            statement.setInt(
+                    2,
+                    userId
+            );
+
+            return statement.executeUpdate() > 0;
+
+        } finally {
+
+            if (statement != null) {
+                statement.close();
+            }
+
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    public boolean updateUserStatus(
+            int userId,
+            boolean active)
+            throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            connection =
+                    DBConnectionFactory.getConnection();
+
+            statement =
+                    connection.prepareStatement(
+                            "UPDATE users " +
+                                    "SET active = ? " +
+                                    "WHERE user_id = ?"
+                    );
+
+            statement.setBoolean(
+                    1,
+                    active
             );
 
             statement.setInt(

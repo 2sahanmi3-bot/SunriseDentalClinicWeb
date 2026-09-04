@@ -48,6 +48,11 @@ public class AuthenticationService {
             return Optional.empty();
         }
 
+        // Inactive accounts are not allowed to log in.
+        if (!user.get().isActive()) {
+            return Optional.empty();
+        }
+
         if (!user.get()
                 .getPassword()
                 .equals(password)) {

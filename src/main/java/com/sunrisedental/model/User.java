@@ -6,6 +6,7 @@ public class User {
     private String username;
     private String password;
     private String role;
+    private boolean active;
 
     public User(
             int userId,
@@ -26,6 +27,22 @@ public class User {
             String password,
             String role) {
 
+        this(
+                userId,
+                username,
+                password,
+                role,
+                true
+        );
+    }
+
+    public User(
+            int userId,
+            String username,
+            String password,
+            String role,
+            boolean active) {
+
         this.userId =
                 userId;
 
@@ -37,6 +54,9 @@ public class User {
 
         this.role =
                 role;
+
+        this.active =
+                active;
     }
 
     public int getUserId() {
@@ -53,5 +73,9 @@ public class User {
 
     public String getRole() {
         return role;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

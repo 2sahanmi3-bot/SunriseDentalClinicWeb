@@ -150,6 +150,89 @@ public class StaffManagementController extends HttpServlet {
             }
         }
 
+        if ("updateStatus".equals(action)) {
+
+            try {
+
+                int userId =
+                        Integer.parseInt(
+                                request.getParameter(
+                                        "userId"
+                                )
+                        );
+
+                boolean active =
+                        Boolean.parseBoolean(
+                                request.getParameter(
+                                        "active"
+                                )
+                        );
+
+                staffManagementService
+                        .changeUserStatus(
+                                userId,
+                                active
+                        );
+
+                request.setAttribute(
+                        "successMessage",
+                        active
+                                ? "User account activated successfully"
+                                : "User account deactivated successfully"
+                );
+
+                request.setAttribute(
+                        "users",
+                        staffManagementService
+                                .getAllUsers()
+                );
+
+                request.getRequestDispatcher(
+                        "/WEB-INF/view/manageStaff.jsp"
+                ).forward(
+                        request,
+                        response
+                );
+
+                return;
+
+            } catch (IllegalArgumentException e) {
+
+                request.setAttribute(
+                        "errorMessage",
+                        e.getMessage()
+                );
+
+                try {
+
+                    request.setAttribute(
+                            "users",
+                            staffManagementService
+                                    .getAllUsers()
+                    );
+
+                } catch (SQLException sqlException) {
+
+                    throw new ServletException(
+                            sqlException
+                    );
+                }
+
+                request.getRequestDispatcher(
+                        "/WEB-INF/view/manageStaff.jsp"
+                ).forward(
+                        request,
+                        response
+                );
+
+                return;
+
+            } catch (SQLException e) {
+
+                throw new ServletException(e);
+            }
+        }
+
         String username =
                 request.getParameter(
                         "username"
