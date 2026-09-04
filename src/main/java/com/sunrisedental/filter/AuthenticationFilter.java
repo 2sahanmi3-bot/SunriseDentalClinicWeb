@@ -18,6 +18,7 @@ import java.io.IOException;
                 "/dashboard",
                 "/patient",
                 "/appointment",
+                "/api/appointments",
                 "/billing",
                 "/reports",
                 "/help"

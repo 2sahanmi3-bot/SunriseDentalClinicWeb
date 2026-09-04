@@ -46,11 +46,30 @@ public class AppointmentApiController extends HttpServlet {
         String appointmentNumber =
                 request.getParameter("appointmentNumber");
 
+        response.setContentType(
+                "application/json;charset=UTF-8"
+        );
+
+        if (appointmentNumber == null
+                || appointmentNumber.isBlank()) {
+
+            response.setStatus(
+                    HttpServletResponse.SC_BAD_REQUEST
+            );
+
+            writeError(
+                    response,
+                    "Appointment number is required"
+            );
+
+            return;
+        }
+
         try {
 
             Optional<Appointment> appointment =
                     appointmentService.findByAppointmentNumber(
-                            appointmentNumber
+                            appointmentNumber.trim()
                     );
 
             if (appointment.isPresent()) {
@@ -58,38 +77,55 @@ public class AppointmentApiController extends HttpServlet {
                 Appointment foundAppointment =
                         appointment.get();
 
-                response.setContentType(
-                        "application/json"
-                );
-
                 PrintWriter writer =
                         response.getWriter();
 
                 writer.print(
                         "{"
                                 + "\"appointmentNumber\":\""
-                                + foundAppointment.getAppointmentNumber()
+                                + escapeJson(
+                                        foundAppointment.getAppointmentNumber()
+                                )
                                 + "\","
                                 + "\"patientName\":\""
-                                + foundAppointment.getPatientName()
+                                + escapeJson(
+                                        foundAppointment.getPatientName()
+                                )
                                 + "\","
                                 + "\"address\":\""
-                                + foundAppointment.getAddress()
+                                + escapeJson(
+                                        foundAppointment.getAddress()
+                                )
                                 + "\","
                                 + "\"contactNumber\":\""
-                                + foundAppointment.getContactNumber()
+                                + escapeJson(
+                                        foundAppointment.getContactNumber()
+                                )
                                 + "\","
                                 + "\"dentistName\":\""
-                                + foundAppointment.getDentistName()
+                                + escapeJson(
+                                        foundAppointment.getDentistName()
+                                )
                                 + "\","
                                 + "\"treatmentType\":\""
-                                + foundAppointment.getTreatmentType()
+                                + escapeJson(
+                                        foundAppointment.getTreatmentType()
+                                )
                                 + "\","
                                 + "\"appointmentDate\":\""
-                                + foundAppointment.getAppointmentDate()
+                                + escapeJson(
+                                        foundAppointment.getAppointmentDate()
+                                )
                                 + "\","
                                 + "\"appointmentTime\":\""
-                                + foundAppointment.getAppointmentTime()
+                                + escapeJson(
+                                        foundAppointment.getAppointmentTime()
+                                )
+                                + "\","
+                                + "\"status\":\""
+                                + escapeJson(
+                                        foundAppointment.getStatus()
+                                )
                                 + "\""
                                 + "}"
                 );
@@ -100,20 +136,54 @@ public class AppointmentApiController extends HttpServlet {
                         HttpServletResponse.SC_NOT_FOUND
                 );
 
-                response.setContentType(
-                        "application/json"
-                );
-
-                PrintWriter writer =
-                        response.getWriter();
-
-                writer.print(
-                        "{\"error\":\"Appointment not found\"}"
+                writeError(
+                        response,
+                        "Appointment not found"
                 );
             }
 
         } catch (SQLException e) {
-            throw new ServletException(e);
+
+            response.setStatus(
+                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            );
+
+            writeError(
+                    response,
+                    "Unable to retrieve appointment"
+            );
         }
+    }
+
+    private void writeError(
+            HttpServletResponse response,
+            String message)
+            throws IOException {
+
+        PrintWriter writer =
+                response.getWriter();
+
+        writer.print(
+                "{\"error\":\""
+                        + escapeJson(
+                                message
+                        )
+                        + "\"}"
+        );
+    }
+
+    private String escapeJson(
+            String value) {
+
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }

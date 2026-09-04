@@ -4,10 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.servlet.FilterChain;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class AuthenticationFilterTest {
@@ -117,7 +119,24 @@ class AuthenticationFilterTest {
 
         verify(response, never())
                 .sendRedirect(
-                        "login.jsp"
+                "login.jsp"
+        );
+    }
+
+    @Test
+    void filterShouldProtectAppointmentApi() {
+
+        WebFilter webFilter =
+                AuthenticationFilter.class.getAnnotation(
+                        WebFilter.class
                 );
+
+        assertTrue(
+                java.util.Arrays.asList(
+                        webFilter.urlPatterns()
+                ).contains(
+                        "/api/appointments"
+                )
+        );
     }
 }
