@@ -103,6 +103,20 @@ public class AppointmentService {
             return false;
         }
 
+        // Prevent the same dentist from being scheduled
+        // for two appointments at the same date and time.
+        if (appointment.getDentistId() != null
+                && appointmentDAO.existsDentistBooking(
+                appointment.getDentistId(),
+                appointment.getAppointmentDate(),
+                appointment.getAppointmentTime()
+        )) {
+
+            throw new IllegalArgumentException(
+                    "Dentist is already booked for this date and time"
+            );
+        }
+
         return appointmentDAO.saveAppointment(
                 appointment
         );
