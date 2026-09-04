@@ -337,5 +337,65 @@ class AppointmentServiceTest {
                 appointmentDAO
         );
     }
-}
 
+    @Test
+    void shouldRejectDoubleBookedDentist()
+            throws Exception {
+
+        Appointment appointment =
+                new Appointment(
+                        0,
+                        "APT-DB-001",
+                        1,
+                        2,
+                        "Patient Test",
+                        "Colombo",
+                        "0771234567",
+                        "Dr Silva",
+                        "Cleaning",
+                        "2026-09-10",
+                        "10:00",
+                        "SCHEDULED"
+                );
+
+        when(
+                appointmentDAO.findByAppointmentNumber(
+                        "APT-DB-001"
+                )
+        ).thenReturn(
+                Optional.empty()
+        );
+
+        when(
+                appointmentDAO.existsDentistBooking(
+                        2,
+                        "2026-09-10",
+                        "10:00"
+                )
+        ).thenReturn(
+                true
+        );
+
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                appointmentService
+                                        .registerAppointment(
+                                                appointment
+                                        )
+                );
+
+        assertEquals(
+                "Dentist is already booked for this date and time",
+                exception.getMessage()
+        );
+
+        verify(
+                appointmentDAO,
+                never()
+        ).saveAppointment(
+                any(Appointment.class)
+        );
+    }
+}

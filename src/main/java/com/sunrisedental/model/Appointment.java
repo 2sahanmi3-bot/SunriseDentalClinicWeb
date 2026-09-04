@@ -5,6 +5,7 @@ public class Appointment {
     private int appointmentId;
     private String appointmentNumber;
     private Integer patientId;
+    private Integer dentistId;
     private String patientName;
     private String address;
     private String contactNumber;
@@ -27,6 +28,9 @@ public class Appointment {
         this.patientId =
                 null;
 
+        this.dentistId =
+                null;
+
         this.status =
                 "SCHEDULED";
     }
@@ -45,6 +49,7 @@ public class Appointment {
         this(
                 appointmentId,
                 appointmentNumber,
+                null,
                 null,
                 patientName,
                 address,
@@ -70,6 +75,36 @@ public class Appointment {
             String appointmentTime,
             String status) {
 
+        this(
+                appointmentId,
+                appointmentNumber,
+                patientId,
+                null,
+                patientName,
+                address,
+                contactNumber,
+                dentistName,
+                treatmentType,
+                appointmentDate,
+                appointmentTime,
+                status
+        );
+    }
+
+    public Appointment(
+            int appointmentId,
+            String appointmentNumber,
+            Integer patientId,
+            Integer dentistId,
+            String patientName,
+            String address,
+            String contactNumber,
+            String dentistName,
+            String treatmentType,
+            String appointmentDate,
+            String appointmentTime,
+            String status) {
+
         this.appointmentId =
                 appointmentId;
 
@@ -78,6 +113,9 @@ public class Appointment {
 
         this.patientId =
                 patientId;
+
+        this.dentistId =
+                dentistId;
 
         this.patientName =
                 patientName;
@@ -114,6 +152,10 @@ public class Appointment {
 
     public Integer getPatientId() {
         return patientId;
+    }
+
+    public Integer getDentistId() {
+        return dentistId;
     }
 
     public String getPatientName() {

@@ -33,8 +33,8 @@ public class AppointmentDAO {
                                     "patient_name, address, contact_number, " +
                                     "dentist_name, treatment_type, " +
                                     "appointment_date, appointment_time, " +
-                                    "patient_id, status) " +
-                                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                                    "patient_id, dentist_id, status) " +
+                                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     );
 
             statement.setInt(
@@ -97,8 +97,23 @@ public class AppointmentDAO {
                 );
             }
 
+            if (appointment.getDentistId() == null) {
+
+                statement.setNull(
+                        11,
+                        Types.INTEGER
+                );
+
+            } else {
+
+                statement.setInt(
+                        11,
+                        appointment.getDentistId()
+                );
+            }
+
             statement.setString(
-                    11,
+                    12,
                     appointment.getStatus()
             );
 
@@ -134,8 +149,8 @@ public class AppointmentDAO {
             statement =
                     connection.prepareStatement(
                             "SELECT appointment_id, appointment_number, " +
-                                    "patient_id, patient_name, address, " +
-                                    "contact_number, dentist_name, " +
+                                    "patient_id, dentist_id, patient_name, " +
+                                    "address, contact_number, dentist_name, " +
                                     "treatment_type, appointment_date, " +
                                     "appointment_time, status " +
                                     "FROM appointments " +
@@ -157,6 +172,11 @@ public class AppointmentDAO {
                                 "patient_id"
                         );
 
+                Integer dentistId =
+                        (Integer) resultSet.getObject(
+                                "dentist_id"
+                        );
+
                 Appointment appointment =
                         new Appointment(
                                 resultSet.getInt(
@@ -166,6 +186,7 @@ public class AppointmentDAO {
                                         "appointment_number"
                                 ),
                                 patientId,
+                                dentistId,
                                 resultSet.getString(
                                         "patient_name"
                                 ),
@@ -237,8 +258,8 @@ public class AppointmentDAO {
             statement =
                     connection.prepareStatement(
                             "SELECT appointment_id, appointment_number, " +
-                                    "patient_id, patient_name, address, " +
-                                    "contact_number, dentist_name, " +
+                                    "patient_id, dentist_id, patient_name, " +
+                                    "address, contact_number, dentist_name, " +
                                     "treatment_type, appointment_date, " +
                                     "appointment_time, status " +
                                     "FROM appointments " +
@@ -267,6 +288,9 @@ public class AppointmentDAO {
                                 ),
                                 (Integer) resultSet.getObject(
                                         "patient_id"
+                                ),
+                                (Integer) resultSet.getObject(
+                                        "dentist_id"
                                 ),
                                 resultSet.getString(
                                         "patient_name"
@@ -297,6 +321,68 @@ public class AppointmentDAO {
             }
 
             return appointments;
+
+        } finally {
+
+            if (resultSet != null) {
+                resultSet.close();
+            }
+
+            if (statement != null) {
+                statement.close();
+            }
+
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    public boolean existsDentistBooking(
+            int dentistId,
+            String appointmentDate,
+            String appointmentTime)
+            throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            connection =
+                    DBConnectionFactory.getConnection();
+
+            statement =
+                    connection.prepareStatement(
+                            "SELECT appointment_id " +
+                                    "FROM appointments " +
+                                    "WHERE dentist_id = ? " +
+                                    "AND appointment_date = ? " +
+                                    "AND appointment_time = ? " +
+                                    "AND status = 'SCHEDULED' " +
+                                    "LIMIT 1"
+                    );
+
+            statement.setInt(
+                    1,
+                    dentistId
+            );
+
+            statement.setString(
+                    2,
+                    appointmentDate
+            );
+
+            statement.setString(
+                    3,
+                    appointmentTime
+            );
+
+            resultSet =
+                    statement.executeQuery();
+
+            return resultSet.next();
 
         } finally {
 

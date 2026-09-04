@@ -144,6 +144,9 @@ CREATE TABLE appointments (
                               patient_id INT
                                   NULL,
 
+                              dentist_id INT
+                                  NULL,
+
                               patient_name VARCHAR(100)
                                   NOT NULL,
 
@@ -183,6 +186,10 @@ CREATE TABLE appointments (
                               CONSTRAINT fk_appointments_patient
                                   FOREIGN KEY (patient_id)
                                       REFERENCES patients (patient_id),
+
+                              CONSTRAINT fk_appointments_dentist
+                                  FOREIGN KEY (dentist_id)
+                                      REFERENCES dentists (dentist_id),
 
                               CONSTRAINT chk_appointment_status
                                   CHECK (
