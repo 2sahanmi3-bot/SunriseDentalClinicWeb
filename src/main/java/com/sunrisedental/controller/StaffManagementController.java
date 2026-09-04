@@ -35,6 +35,20 @@ public class StaffManagementController extends HttpServlet {
     }
 
     @Override
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.getRequestDispatcher(
+                "/WEB-INF/view/manageStaff.jsp"
+        ).forward(
+                request,
+                response
+        );
+    }
+
+    @Override
     protected void doPost(
             HttpServletRequest request,
             HttpServletResponse response)
@@ -75,7 +89,7 @@ public class StaffManagementController extends HttpServlet {
 
             RequestDispatcher dispatcher =
                     request.getRequestDispatcher(
-                            "WEB-INF/view/manageStaff.jsp"
+                            "/WEB-INF/view/manageStaff.jsp"
                     );
 
             dispatcher.forward(
@@ -92,7 +106,7 @@ public class StaffManagementController extends HttpServlet {
 
             RequestDispatcher dispatcher =
                     request.getRequestDispatcher(
-                            "WEB-INF/view/manageStaff.jsp"
+                            "/WEB-INF/view/manageStaff.jsp"
                     );
 
             dispatcher.forward(
