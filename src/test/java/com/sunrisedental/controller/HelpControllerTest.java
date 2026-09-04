@@ -39,7 +39,7 @@ class HelpControllerTest {
             throws Exception {
 
         when(request.getRequestDispatcher(
-                "help.jsp"))
+                "/WEB-INF/view/help.jsp"))
                 .thenReturn(dispatcher);
 
         controller.doGet(
@@ -49,7 +49,7 @@ class HelpControllerTest {
 
         verify(request)
                 .getRequestDispatcher(
-                        "help.jsp"
+                        "/WEB-INF/view/help.jsp"
                 );
 
         verify(dispatcher)

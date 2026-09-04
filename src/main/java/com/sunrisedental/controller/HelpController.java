@@ -20,7 +20,7 @@ public class HelpController extends HttpServlet {
 
         RequestDispatcher dispatcher =
                 request.getRequestDispatcher(
-                        "help.jsp"
+                        "/WEB-INF/view/help.jsp"
                 );
 
         dispatcher.forward(
