@@ -16,6 +16,7 @@ import java.io.IOException;
 @WebFilter(
         urlPatterns = {
                 "/dashboard",
+                "/patient",
                 "/appointment",
                 "/billing",
                 "/help"

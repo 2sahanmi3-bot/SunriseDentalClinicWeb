@@ -33,6 +33,10 @@
                 Dashboard
             </a>
 
+            <a href="${pageContext.request.contextPath}/patient">
+                Patient Management
+            </a>
+
             <a href="${pageContext.request.contextPath}/appointment">
                 Appointments
             </a>
@@ -109,6 +113,10 @@
         <h2>
             Quick Actions
         </h2>
+
+        <a href="${pageContext.request.contextPath}/patient">
+            Patient Management
+        </a>
 
         <a href="${pageContext.request.contextPath}/appointment">
             Appointments
