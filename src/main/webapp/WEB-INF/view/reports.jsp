@@ -29,6 +29,15 @@
 
 <body>
 
+<c:set var="activePage"
+       value="reports"/>
+
+<div class="app-layout">
+
+<jsp:include page="/WEB-INF/view/includes/sidebar.jsp"/>
+
+<div class="app-main">
+
 <header class="top-bar">
 
     <div class="container">
@@ -344,6 +353,10 @@
     </c:if>
 
 </main>
+
+</div>
+
+</div>
 
 </body>
 

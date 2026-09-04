@@ -16,6 +16,15 @@
 
 <body>
 
+<c:set var="activePage"
+       value="appointments"/>
+
+<div class="app-layout">
+
+<jsp:include page="/WEB-INF/view/includes/sidebar.jsp"/>
+
+<div class="app-main">
+
 <div class="page-container">
 
     <header class="top-bar">
@@ -222,6 +231,10 @@
         </div>
 
     </main>
+
+</div>
+
+</div>
 
 </div>
 

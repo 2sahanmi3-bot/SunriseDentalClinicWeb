@@ -18,6 +18,15 @@
 
 <body>
 
+<c:set var="activePage"
+       value="help"/>
+
+<div class="app-layout">
+
+<jsp:include page="/WEB-INF/view/includes/sidebar.jsp"/>
+
+<div class="app-main">
+
 <header class="top-bar">
 
     <div class="container">
@@ -301,6 +310,10 @@
     </section>
 
 </main>
+
+</div>
+
+</div>
 
 </body>
 </html>

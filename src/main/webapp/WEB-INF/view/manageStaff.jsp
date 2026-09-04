@@ -14,6 +14,15 @@
 
 <body>
 
+<c:set var="activePage"
+       value="users"/>
+
+<div class="app-layout">
+
+<jsp:include page="/WEB-INF/view/includes/sidebar.jsp"/>
+
+<div class="app-main">
+
 <header class="top-bar">
     <div class="container">
         <h1>Sunrise Dental Clinic</h1>
@@ -323,6 +332,10 @@
     </section>
 
 </main>
+
+</div>
+
+</div>
 
 </body>
 </html>
