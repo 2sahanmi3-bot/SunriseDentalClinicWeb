@@ -5,6 +5,8 @@ import com.sunrisedental.model.User;
 
 import java.sql.SQLException;
 
+import java.util.Optional;
+
 public class StaffManagementService {
 
     private UserDAO userDAO;
@@ -21,6 +23,18 @@ public class StaffManagementService {
             String password,
             String role)
             throws SQLException {
+
+        Optional<User> existingUser =
+                userDAO.findByUsername(
+                        username
+                );
+
+        if (existingUser.isPresent()) {
+
+            throw new IllegalArgumentException(
+                    "Username already exists"
+            );
+        }
 
         User user =
                 new User(
