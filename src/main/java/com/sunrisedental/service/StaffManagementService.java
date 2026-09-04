@@ -22,8 +22,16 @@ public class StaffManagementService {
             String role)
             throws SQLException {
 
-        throw new UnsupportedOperationException(
-                "Not implemented"
+        User user =
+                new User(
+                        0,
+                        username,
+                        password,
+                        role
+                );
+
+        return userDAO.saveUser(
+                user
         );
     }
 }
