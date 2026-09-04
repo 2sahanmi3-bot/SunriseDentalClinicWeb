@@ -67,7 +67,7 @@ class StaffManagementControllerTest {
 
         when(
                 request.getRequestDispatcher(
-                        "WEB-INF/view/manageStaff.jsp"
+                        "/WEB-INF/view/manageStaff.jsp"
                 )
         ).thenReturn(
                 dispatcher
