@@ -75,8 +75,15 @@ public class AuthenticationController extends HttpServlet {
                         user.getRole()
                 );
 
+                session.setAttribute(
+                        "loginMessage",
+                        "Login successful. Welcome, "
+                                + user.getUsername()
+                                + "."
+                );
+
                 response.sendRedirect(
-                        "appointment"
+                        "dashboard"
                 );
 
             } else {

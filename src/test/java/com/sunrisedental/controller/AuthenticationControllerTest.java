@@ -98,7 +98,7 @@ class AuthenticationControllerTest {
                 );
 
         verify(response)
-                .sendRedirect("appointment");
+                .sendRedirect("dashboard");
     }
 
     @Test
@@ -227,7 +227,7 @@ class AuthenticationControllerTest {
 
         verify(response)
                 .sendRedirect(
-                        "appointment"
+                        "dashboard"
                 );
     }
 }
