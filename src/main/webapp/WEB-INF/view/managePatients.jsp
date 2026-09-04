@@ -219,6 +219,7 @@
                     <th>Name</th>
                     <th>Contact</th>
                     <th>Email</th>
+                    <th>Actions</th>
                 </tr>
 
                 </thead>
@@ -246,6 +247,18 @@
                             <c:out value="${patient.email}"/>
                         </td>
 
+                        <td>
+
+                            <a href="${pageContext.request.contextPath}/patient?action=view&patientId=${patient.patientId}">
+                                View
+                            </a>
+
+                            <a href="${pageContext.request.contextPath}/patient?action=edit&patientId=${patient.patientId}">
+                                Edit
+                            </a>
+
+                        </td>
+
                     </tr>
 
                 </c:forEach>
@@ -253,6 +266,137 @@
                 </tbody>
 
             </table>
+
+        </section>
+
+    </c:if>
+
+
+    <c:if test="${not empty selectedPatient && empty editMode}">
+
+        <section class="card">
+
+            <h3>Patient Details</h3>
+
+            <p>
+                <strong>Patient ID:</strong>
+                <c:out value="${selectedPatient.patientId}"/>
+            </p>
+
+            <p>
+                <strong>Name:</strong>
+                <c:out value="${selectedPatient.patientName}"/>
+            </p>
+
+            <p>
+                <strong>Address:</strong>
+                <c:out value="${selectedPatient.address}"/>
+            </p>
+
+            <p>
+                <strong>Contact Number:</strong>
+                <c:out value="${selectedPatient.contactNumber}"/>
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                <c:out value="${selectedPatient.email}"/>
+            </p>
+
+            <a href="${pageContext.request.contextPath}/patient?action=edit&patientId=${selectedPatient.patientId}">
+                Edit Patient
+            </a>
+
+        </section>
+
+    </c:if>
+
+
+    <c:if test="${not empty selectedPatient && editMode}">
+
+        <section class="card">
+
+            <h3>Edit Patient</h3>
+
+            <form method="post"
+                  action="${pageContext.request.contextPath}/patient">
+
+                <input type="hidden"
+                       name="action"
+                       value="update">
+
+                <input type="hidden"
+                       name="patientId"
+                       value="${selectedPatient.patientId}">
+
+                <div class="form-group">
+
+                    <label for="editPatientName">
+                        Patient Name
+                    </label>
+
+                    <input type="text"
+                           id="editPatientName"
+                           name="patientName"
+                           maxlength="100"
+                           value="<c:out value='${selectedPatient.patientName}'/>"
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="editAddress">
+                        Address
+                    </label>
+
+                    <textarea id="editAddress"
+                              name="address"
+                              maxlength="255"
+                              required><c:out value="${selectedPatient.address}"/></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="editContactNumber">
+                        Contact Number
+                    </label>
+
+                    <input type="text"
+                           id="editContactNumber"
+                           name="contactNumber"
+                           maxlength="10"
+                           pattern="0[0-9]{9}"
+                           inputmode="numeric"
+                           value="<c:out value='${selectedPatient.contactNumber}'/>"
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="editEmail">
+                        Email
+                    </label>
+
+                    <input type="email"
+                           id="editEmail"
+                           name="email"
+                           maxlength="100"
+                           value="<c:out value='${selectedPatient.email}'/>">
+
+                </div>
+
+                <button type="submit">
+                    Save Changes
+                </button>
+
+                <a href="${pageContext.request.contextPath}/patient?action=view&patientId=${selectedPatient.patientId}">
+                    Cancel
+                </a>
+
+            </form>
 
         </section>
 

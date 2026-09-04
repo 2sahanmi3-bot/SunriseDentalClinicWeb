@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet("/patient")
 public class PatientController extends HttpServlet {
@@ -47,9 +48,9 @@ public class PatientController extends HttpServlet {
                         "action"
                 );
 
-        if ("search".equals(action)) {
+        try {
 
-            try {
+            if ("search".equals(action)) {
 
                 String contactNumber =
                         request.getParameter(
@@ -77,17 +78,55 @@ public class PatientController extends HttpServlet {
                     );
                 }
 
-            } catch (IllegalArgumentException e) {
+            } else if ("view".equals(action)
+                    || "edit".equals(action)) {
 
-                request.setAttribute(
-                        "errorMessage",
-                        e.getMessage()
-                );
+                int patientId =
+                        Integer.parseInt(
+                                request.getParameter(
+                                        "patientId"
+                                )
+                        );
 
-            } catch (SQLException e) {
+                Optional<Patient> patient =
+                        patientService.getPatient(
+                                patientId
+                        );
 
-                throw new ServletException(e);
+                if (patient.isPresent()) {
+
+                    request.setAttribute(
+                            "selectedPatient",
+                            patient.get()
+                    );
+
+                    if ("edit".equals(action)) {
+
+                        request.setAttribute(
+                                "editMode",
+                                true
+                        );
+                    }
+
+                } else {
+
+                    request.setAttribute(
+                            "errorMessage",
+                            "Patient not found"
+                    );
+                }
             }
+
+        } catch (IllegalArgumentException e) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    e.getMessage()
+            );
+
+        } catch (SQLException e) {
+
+            throw new ServletException(e);
         }
 
         request.getRequestDispatcher(
@@ -104,30 +143,84 @@ public class PatientController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        String action =
+                request.getParameter(
+                        "action"
+                );
+
         try {
 
-            boolean registered =
-                    patientService.registerPatient(
-                            request.getParameter(
-                                    "patientName"
-                            ),
-                            request.getParameter(
-                                    "address"
-                            ),
-                            request.getParameter(
-                                    "contactNumber"
-                            ),
-                            request.getParameter(
-                                    "email"
-                            )
+            if ("update".equals(action)) {
+
+                int patientId =
+                        Integer.parseInt(
+                                request.getParameter(
+                                        "patientId"
+                                )
+                        );
+
+                boolean updated =
+                        patientService.updatePatient(
+                                patientId,
+                                request.getParameter(
+                                        "patientName"
+                                ),
+                                request.getParameter(
+                                        "address"
+                                ),
+                                request.getParameter(
+                                        "contactNumber"
+                                ),
+                                request.getParameter(
+                                        "email"
+                                )
+                        );
+
+                if (updated) {
+
+                    request.setAttribute(
+                            "successMessage",
+                            "Patient details updated successfully"
                     );
 
-            if (registered) {
+                    Optional<Patient> patient =
+                            patientService.getPatient(
+                                    patientId
+                            );
 
-                request.setAttribute(
-                        "successMessage",
-                        "Patient registered successfully"
-                );
+                    patient.ifPresent(value ->
+                            request.setAttribute(
+                                    "selectedPatient",
+                                    value
+                            )
+                    );
+                }
+
+            } else {
+
+                boolean registered =
+                        patientService.registerPatient(
+                                request.getParameter(
+                                        "patientName"
+                                ),
+                                request.getParameter(
+                                        "address"
+                                ),
+                                request.getParameter(
+                                        "contactNumber"
+                                ),
+                                request.getParameter(
+                                        "email"
+                                )
+                        );
+
+                if (registered) {
+
+                    request.setAttribute(
+                            "successMessage",
+                            "Patient registered successfully"
+                    );
+                }
             }
 
         } catch (IllegalArgumentException e) {

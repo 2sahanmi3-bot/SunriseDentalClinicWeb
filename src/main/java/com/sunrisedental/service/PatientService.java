@@ -5,6 +5,7 @@ import com.sunrisedental.model.Patient;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class PatientService {
 
@@ -95,5 +96,76 @@ public class PatientService {
                 .findByContactNumber(
                         contactNumber.trim()
                 );
+    }
+
+    public Optional<Patient> getPatient(
+            int patientId)
+            throws SQLException {
+
+        return patientDAO.findById(
+                patientId
+        );
+    }
+
+    public boolean updatePatient(
+            int patientId,
+            String patientName,
+            String address,
+            String contactNumber,
+            String email)
+            throws SQLException {
+
+        if (patientName == null
+                || patientName.isBlank()
+                || address == null
+                || address.isBlank()
+                || contactNumber == null
+                || contactNumber.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "Please complete all required patient fields"
+            );
+        }
+
+        patientName =
+                patientName.trim();
+
+        address =
+                address.trim();
+
+        contactNumber =
+                contactNumber.trim();
+
+        if (!contactNumber.matches(
+                "0\\d{9}"
+        )) {
+
+            throw new IllegalArgumentException(
+                    "Invalid contact number"
+            );
+        }
+
+        if (email != null) {
+
+            email =
+                    email.trim();
+
+            if (email.isBlank()) {
+                email = null;
+            }
+        }
+
+        Patient patient =
+                new Patient(
+                        patientId,
+                        patientName,
+                        address,
+                        contactNumber,
+                        email
+                );
+
+        return patientDAO.updatePatient(
+                patient
+        );
     }
 }
