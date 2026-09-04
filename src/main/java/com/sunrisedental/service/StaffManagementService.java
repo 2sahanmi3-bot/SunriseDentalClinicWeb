@@ -77,6 +77,47 @@ public class StaffManagementService {
             );
         }
 
+        List<User> users =
+                userDAO.findAllUsers();
+
+        User targetUser = null;
+
+        for (User user : users) {
+
+            if (user.getUserId() == userId) {
+                targetUser = user;
+                break;
+            }
+        }
+
+        if (targetUser == null) {
+
+            throw new IllegalArgumentException(
+                    "User account not found"
+            );
+        }
+
+        if (targetUser.isActive()
+                && "ADMIN".equals(targetUser.getRole())
+                && "STAFF".equals(role)) {
+
+            long activeAdmins =
+                    users.stream()
+                            .filter(User::isActive)
+                            .filter(user ->
+                                    "ADMIN".equals(
+                                            user.getRole()
+                                    ))
+                            .count();
+
+            if (activeAdmins <= 1) {
+
+                throw new IllegalArgumentException(
+                        "At least one active admin account is required"
+                );
+            }
+        }
+
         return userDAO.updateUserRole(
                 userId,
                 role
@@ -85,8 +126,59 @@ public class StaffManagementService {
 
     public boolean changeUserStatus(
             int userId,
-            boolean active)
+            boolean active,
+            String currentUsername)
             throws SQLException {
+
+        List<User> users =
+                userDAO.findAllUsers();
+
+        User targetUser = null;
+
+        for (User user : users) {
+
+            if (user.getUserId() == userId) {
+                targetUser = user;
+                break;
+            }
+        }
+
+        if (targetUser == null) {
+
+            throw new IllegalArgumentException(
+                    "User account not found"
+            );
+        }
+
+        // Do not allow an admin to disable the account they are using.
+        if (!active
+                && targetUser.getUsername()
+                .equals(currentUsername)) {
+
+            throw new IllegalArgumentException(
+                    "You cannot deactivate your own account"
+            );
+        }
+
+        if (!active
+                && "ADMIN".equals(targetUser.getRole())) {
+
+            long activeAdmins =
+                    users.stream()
+                            .filter(User::isActive)
+                            .filter(user ->
+                                    "ADMIN".equals(
+                                            user.getRole()
+                                    ))
+                            .count();
+
+            if (activeAdmins <= 1) {
+
+                throw new IllegalArgumentException(
+                        "At least one active admin account is required"
+                );
+            }
+        }
 
         return userDAO.updateUserStatus(
                 userId,

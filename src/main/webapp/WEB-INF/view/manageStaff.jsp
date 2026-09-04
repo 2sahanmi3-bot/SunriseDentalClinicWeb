@@ -230,46 +230,62 @@
 
                             <td>
 
-                                <form method="post"
-                                      action="${pageContext.request.contextPath}/admin/staff">
+                                <c:choose>
 
-                                    <input type="hidden"
-                                           name="action"
-                                           value="updateStatus">
+                                    <c:when test="${user.username == sessionScope.staffUser}">
 
-                                    <input type="hidden"
-                                           name="userId"
-                                           value="${user.userId}">
+                                        <span>
+                                            Current account
+                                        </span>
 
-                                    <c:choose>
+                                    </c:when>
 
-                                        <c:when test="${user.active}">
+                                    <c:otherwise>
 
-                                            <input type="hidden"
-                                                   name="active"
-                                                   value="false">
-
-                                            <button type="submit">
-                                                Deactivate
-                                            </button>
-
-                                        </c:when>
-
-                                        <c:otherwise>
+                                        <form method="post"
+                                              action="${pageContext.request.contextPath}/admin/staff">
 
                                             <input type="hidden"
-                                                   name="active"
-                                                   value="true">
+                                                   name="action"
+                                                   value="updateStatus">
 
-                                            <button type="submit">
-                                                Activate
-                                            </button>
+                                            <input type="hidden"
+                                                   name="userId"
+                                                   value="${user.userId}">
 
-                                        </c:otherwise>
+                                            <c:choose>
 
-                                    </c:choose>
+                                                <c:when test="${user.active}">
 
-                                </form>
+                                                    <input type="hidden"
+                                                           name="active"
+                                                           value="false">
+
+                                                    <button type="submit">
+                                                        Deactivate
+                                                    </button>
+
+                                                </c:when>
+
+                                                <c:otherwise>
+
+                                                    <input type="hidden"
+                                                           name="active"
+                                                           value="true">
+
+                                                    <button type="submit">
+                                                        Activate
+                                                    </button>
+
+                                                </c:otherwise>
+
+                                            </c:choose>
+
+                                        </form>
+
+                                    </c:otherwise>
+
+                                </c:choose>
 
                             </td>
                         </tr>

@@ -168,10 +168,18 @@ public class StaffManagementController extends HttpServlet {
                                 )
                         );
 
+                String currentUsername =
+                        (String) request
+                                .getSession(false)
+                                .getAttribute(
+                                        "staffUser"
+                                );
+
                 staffManagementService
                         .changeUserStatus(
                                 userId,
-                                active
+                                active,
+                                currentUsername
                         );
 
                 request.setAttribute(
