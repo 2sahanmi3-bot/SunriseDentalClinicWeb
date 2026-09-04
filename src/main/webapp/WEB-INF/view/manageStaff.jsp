@@ -74,29 +74,39 @@
 
 <main class="container">
 
+    <div class="page-header">
+
+        <h1>User Management</h1>
+
+        <p>
+            Manage authorized staff accounts, roles and account access.
+        </p>
+
+    </div>
+
     <section class="card">
 
-        <h2>User Management</h2>
+        <h2>Create User Account</h2>
 
         <p>
             Add a new authorized staff account for the clinic.
         </p>
 
-        <% if (request.getAttribute("successMessage") != null) { %>
+        <c:if test="${not empty successMessage}">
 
         <div class="success-message">
             <c:out value="${successMessage}"/>
         </div>
 
-        <% } %>
+        </c:if>
 
-        <% if (request.getAttribute("errorMessage") != null) { %>
+        <c:if test="${not empty errorMessage}">
 
         <div class="error-message">
             <c:out value="${errorMessage}"/>
         </div>
 
-        <% } %>
+        </c:if>
 
         <form method="post"
               action="${pageContext.request.contextPath}/admin/staff">
@@ -174,6 +184,8 @@
 
             <c:otherwise>
 
+                <div class="table-wrapper">
+
                 <table>
 
                     <thead>
@@ -210,11 +222,15 @@
                                 <c:choose>
 
                                     <c:when test="${user.active}">
-                                        Active
+                                        <span class="status-badge status-active">
+                                            Active
+                                        </span>
                                     </c:when>
 
                                     <c:otherwise>
-                                        Inactive
+                                        <span class="status-badge status-inactive">
+                                            Inactive
+                                        </span>
                                     </c:otherwise>
 
                                 </c:choose>
@@ -272,7 +288,8 @@
                                     <c:otherwise>
 
                                         <form method="post"
-                                              action="${pageContext.request.contextPath}/admin/staff">
+                                              action="${pageContext.request.contextPath}/admin/staff"
+                                              class="inline-action-form">
 
                                             <input type="hidden"
                                                    name="action"
@@ -290,7 +307,8 @@
                                                            name="active"
                                                            value="false">
 
-                                                    <button type="submit">
+                                                    <button type="submit"
+                                                            class="danger-button">
                                                         Deactivate
                                                     </button>
 
@@ -302,7 +320,8 @@
                                                            name="active"
                                                            value="true">
 
-                                                    <button type="submit">
+                                                    <button type="submit"
+                                                            class="secondary-button">
                                                         Activate
                                                     </button>
 
@@ -324,6 +343,8 @@
                     </tbody>
 
                 </table>
+
+                </div>
 
             </c:otherwise>
 

@@ -92,6 +92,16 @@
 
     <main class="content-card">
 
+        <div class="page-header">
+
+            <h1>Appointment Management</h1>
+
+            <p>
+                Register and manage patient appointments.
+            </p>
+
+        </div>
+
         <div class="search-section">
 
             <h2>Search Appointment</h2>

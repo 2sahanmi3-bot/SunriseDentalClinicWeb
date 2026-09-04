@@ -92,7 +92,15 @@
 
 <main class="container">
 
-    <h2>Patient Management</h2>
+    <div class="page-header">
+
+        <h1>Patient Management</h1>
+
+        <p>
+            Manage patient information and appointment history.
+        </p>
+
+    </div>
 
 
     <c:if test="${not empty successMessage}">
@@ -180,7 +188,8 @@
             </div>
 
 
-            <button type="submit">
+            <button type="submit"
+                    class="primary-button">
                 Register Patient
             </button>
 
@@ -216,7 +225,8 @@
 
             </div>
 
-            <button type="submit">
+            <button type="submit"
+                    class="primary-button">
                 Search
             </button>
 
@@ -230,6 +240,8 @@
         <section class="card">
 
             <h3>Search Results</h3>
+
+            <div class="table-wrapper">
 
             <table>
 
@@ -288,6 +300,8 @@
 
             </table>
 
+            </div>
+
         </section>
 
     </c:if>
@@ -324,11 +338,13 @@
                 <c:out value="${selectedPatient.email}"/>
             </p>
 
-            <a href="${pageContext.request.contextPath}/patient?action=edit&patientId=${selectedPatient.patientId}">
+            <a href="${pageContext.request.contextPath}/patient?action=edit&patientId=${selectedPatient.patientId}"
+               class="secondary-button">
                 Edit Patient
             </a>
 
-            <a href="${pageContext.request.contextPath}/appointment?patientId=${selectedPatient.patientId}">
+            <a href="${pageContext.request.contextPath}/appointment?patientId=${selectedPatient.patientId}"
+               class="primary-button">
                 Book Appointment
             </a>
 
@@ -346,6 +362,8 @@
                 </c:when>
 
                 <c:otherwise>
+
+                    <div class="table-wrapper">
 
                     <table>
 
@@ -391,7 +409,23 @@
                                 </td>
 
                                 <td>
-                                    <c:out value="${appointment.status}"/>
+                                    <c:choose>
+                                        <c:when test="${appointment.status == 'SCHEDULED'}">
+                                            <span class="status-badge status-scheduled">
+                                                <c:out value="${appointment.status}"/>
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${appointment.status == 'COMPLETED'}">
+                                            <span class="status-badge status-completed">
+                                                <c:out value="${appointment.status}"/>
+                                            </span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-badge status-cancelled">
+                                                <c:out value="${appointment.status}"/>
+                                            </span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
 
                                 <td>
@@ -409,6 +443,8 @@
                         </tbody>
 
                     </table>
+
+                    </div>
 
                 </c:otherwise>
 
@@ -495,11 +531,13 @@
 
                 </div>
 
-                <button type="submit">
+                <button type="submit"
+                        class="primary-button">
                     Save Changes
                 </button>
 
-                <a href="${pageContext.request.contextPath}/patient?action=view&patientId=${selectedPatient.patientId}">
+                <a href="${pageContext.request.contextPath}/patient?action=view&patientId=${selectedPatient.patientId}"
+                   class="secondary-button">
                     Cancel
                 </a>
 

@@ -89,9 +89,17 @@
 
     <main class="content-card">
 
-        <h2>
-            Appointment Details
-        </h2>
+        <div class="page-header">
+
+            <h1>
+                Appointment Details
+            </h1>
+
+            <p>
+                Review appointment information and update scheduled appointments.
+            </p>
+
+        </div>
 
         <c:if test="${not empty errorMessage}">
 
@@ -160,7 +168,24 @@
 
             <p>
                 <strong>Status:</strong>
-                <c:out value="${appointment.status}"/>
+
+                <c:choose>
+                    <c:when test="${appointment.status == 'SCHEDULED'}">
+                        <span class="status-badge status-scheduled">
+                            <c:out value="${appointment.status}"/>
+                        </span>
+                    </c:when>
+                    <c:when test="${appointment.status == 'COMPLETED'}">
+                        <span class="status-badge status-completed">
+                            <c:out value="${appointment.status}"/>
+                        </span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="status-badge status-cancelled">
+                            <c:out value="${appointment.status}"/>
+                        </span>
+                    </c:otherwise>
+                </c:choose>
             </p>
 
         </div>
@@ -186,7 +211,8 @@
                            name="status"
                            value="COMPLETED">
 
-                    <button type="submit">
+                    <button type="submit"
+                            class="success-button">
                         Mark Completed
                     </button>
 
@@ -209,6 +235,7 @@
                            value="CANCELLED">
 
                     <button type="submit"
+                            class="danger-button"
                             onclick="return confirm('Cancel this appointment?');">
                         Cancel Appointment
                     </button>

@@ -14,6 +14,9 @@
     --error-border: #F1B8B8;
     --error-text: #8A2F2F;
     --shadow: 0 14px 35px rgba(16, 45, 87, 0.08);
+    --shadow-strong: 0 18px 42px rgba(16, 45, 87, 0.14);
+    --radius-card: 18px;
+    --radius-control: 10px;
 }
 
 * {
@@ -24,6 +27,11 @@ body {
     margin: 0;
     font-family: Arial, "Segoe UI", sans-serif;
     background: var(--page-bg);
+    color: var(--navy);
+}
+
+body::selection {
+    background: var(--light-blue);
     color: var(--navy);
 }
 
@@ -47,7 +55,33 @@ a:hover {
     padding: 48px;
     background:
             radial-gradient(circle at top left, rgba(33, 128, 232, 0.16), transparent 34%),
+            radial-gradient(circle at bottom right, rgba(33, 128, 232, 0.10), transparent 28%),
             var(--page-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-page::before,
+.login-page::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    background: rgba(33, 128, 232, 0.08);
+    pointer-events: none;
+}
+
+.login-page::before {
+    width: 220px;
+    height: 220px;
+    top: -70px;
+    right: 18%;
+}
+
+.login-page::after {
+    width: 150px;
+    height: 150px;
+    bottom: 36px;
+    left: 8%;
 }
 
 .login-intro {
@@ -57,6 +91,8 @@ a:hover {
     border-radius: 26px;
     background: linear-gradient(135deg, var(--white), var(--light-blue));
     box-shadow: var(--shadow);
+    position: relative;
+    z-index: 1;
 }
 
 .login-intro h1 {
@@ -95,6 +131,8 @@ a:hover {
     border: 1px solid var(--border);
     border-radius: 22px;
     box-shadow: var(--shadow);
+    position: relative;
+    z-index: 1;
 }
 
 .login-card h1 {
@@ -139,6 +177,7 @@ a:hover {
     border-right: 1px solid var(--border);
     background: var(--white);
     box-shadow: 8px 0 30px rgba(16, 45, 87, 0.04);
+    z-index: 10;
 }
 
 .sidebar-brand {
@@ -188,12 +227,14 @@ a:hover {
     color: var(--navy);
     text-decoration: none;
     font-weight: bold;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .sidebar-nav a:hover,
 .sidebar-nav a.active {
     background: var(--light-blue);
     color: var(--primary-blue);
+    transform: translateX(2px);
 }
 
 .sidebar-section-title {
@@ -211,14 +252,24 @@ a:hover {
     border-top: 1px solid var(--border);
 }
 
+.sidebar-footer strong {
+    color: var(--navy);
+}
+
 .logout-link {
     margin-top: 10px;
     background: var(--light-blue);
     color: var(--primary-blue);
 }
 
+.logout-link:hover {
+    background: #DCEEFF;
+    color: var(--primary-blue-hover);
+}
+
 .page-header {
     margin-bottom: 24px;
+    padding-bottom: 4px;
 }
 
 .page-header h1 {
@@ -271,8 +322,13 @@ a:hover {
     padding: 26px;
     background: var(--white);
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-radius: var(--radius-card);
     box-shadow: var(--shadow);
+}
+
+.card > :last-child,
+.content-card > :last-child {
+    margin-bottom: 0;
 }
 
 .content-card {
@@ -293,6 +349,7 @@ a:hover {
 .page-description {
     color: var(--muted);
     margin-bottom: 25px;
+    line-height: 1.6;
 }
 
 .main-nav,
@@ -336,7 +393,33 @@ textarea {
     width: 100%;
     padding: 11px 13px;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: var(--radius-control);
+    background: var(--white);
+    color: var(--navy);
+    font-family: Arial, "Segoe UI", sans-serif;
+    font-size: 15px;
+}
+
+.report-options form {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) auto;
+    align-items: end;
+    gap: 12px;
+}
+
+.report-options label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--navy);
+    font-weight: bold;
+}
+
+.report-options input,
+.report-options select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-control);
     background: var(--white);
     color: var(--navy);
     font-family: Arial, "Segoe UI", sans-serif;
@@ -375,6 +458,16 @@ textarea:focus {
     margin-top: 22px;
 }
 
+.card > a.primary-button,
+.card > a.secondary-button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.inline-action-form {
+    margin: 0;
+}
+
 .search-section {
     margin-bottom: 30px;
 }
@@ -401,11 +494,13 @@ textarea:focus {
 button,
 .primary-button,
 .secondary-button,
+.success-button,
+.danger-button,
 .quick-actions a {
     display: inline-block;
     padding: 10px 16px;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius-control);
     cursor: pointer;
     font-size: 15px;
     font-weight: bold;
@@ -432,11 +527,46 @@ button:hover,
     color: var(--primary-blue);
 }
 
+.success-button {
+    border: 1px solid #B7E4C7;
+    background: #E8F8EF;
+    color: #276749;
+}
+
+.success-button:hover {
+    background: #D6F1E1;
+    color: #1F5A3B;
+}
+
+.danger-button {
+    border: 1px solid var(--error-border);
+    background: var(--error-bg);
+    color: var(--error-text);
+}
+
+.danger-button:hover {
+    background: #FADDDD;
+    color: #742525;
+}
+
+button:focus-visible,
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.success-button:focus-visible,
+.danger-button:focus-visible,
+.quick-actions a:focus-visible,
+.sidebar-nav a:focus-visible,
+.logout-link:focus-visible {
+    outline: 3px solid rgba(33, 128, 232, 0.28);
+    outline-offset: 2px;
+}
+
 .error-message,
 .success-message {
     margin-bottom: 18px;
     padding: 12px 14px;
-    border-radius: 10px;
+    border-radius: var(--radius-control);
+    line-height: 1.5;
 }
 
 .error-message {
@@ -453,14 +583,28 @@ button:hover,
 
 /* Tables. */
 
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 16px;
     overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    border: none;
+    border-radius: 0;
     background: var(--white);
+}
+
+.table-wrapper table {
+    margin-top: 0;
+    min-width: 720px;
 }
 
 th,
@@ -478,6 +622,50 @@ th {
 
 tr:last-child td {
     border-bottom: none;
+}
+
+tbody tr {
+    transition: background 0.16s ease;
+}
+
+tbody tr:hover {
+    background: #F8FBFF;
+}
+
+td form {
+    margin: 0;
+}
+
+td a {
+    font-weight: bold;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.status-scheduled,
+.status-active {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.status-completed {
+    background: var(--success-bg);
+    color: var(--success-text);
+}
+
+.status-cancelled,
+.status-inactive {
+    background: var(--error-bg);
+    color: var(--error-text);
 }
 
 /* Billing and reports. */
@@ -510,6 +698,25 @@ tr:last-child td {
     border-radius: 16px;
     background: linear-gradient(180deg, var(--white), #F8FBFF);
     box-shadow: 0 8px 24px rgba(16, 45, 87, 0.06);
+    min-height: 142px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.dashboard-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-blue);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-strong);
 }
 
 .dashboard-card h3 {
@@ -587,6 +794,24 @@ tr:last-child td {
     justify-content: center;
 }
 
+@media (max-width: 1200px) {
+
+    .app-main {
+        padding: 26px;
+    }
+
+    .sidebar {
+        width: 240px;
+    }
+}
+
+@media (max-width: 992px) {
+
+    .dashboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media print {
 
     body {
@@ -637,8 +862,17 @@ tr:last-child td {
         flex-wrap: wrap;
     }
 
+    .sidebar-nav a,
+    .logout-link {
+        padding: 10px 11px;
+    }
+
     .sidebar-footer {
         margin-top: 18px;
+    }
+
+    .report-options form {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -681,7 +915,46 @@ tr:last-child td {
     }
 
     .search-form .primary-button,
-    .form-actions .primary-button {
+    .form-actions .primary-button,
+    .form-actions .secondary-button,
+    .card > a.primary-button,
+    .card > a.secondary-button,
+    .appointment-actions button,
+    .receipt-actions button,
+    .receipt-actions a {
         width: 100%;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        display: table;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .login-page {
+        padding: 16px;
+        gap: 18px;
+    }
+
+    .login-card,
+    .login-intro,
+    .card,
+    .content-card {
+        padding: 22px;
+        border-radius: 16px;
+    }
+
+    .page-header h1 {
+        font-size: 25px;
+    }
+
+    .dashboard-number {
+        font-size: 32px;
     }
 }

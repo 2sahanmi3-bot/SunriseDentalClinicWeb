@@ -89,12 +89,15 @@
 
     <main class="content-card billing-card">
 
-        <h2>Generate Patient Bill</h2>
+        <div class="page-header">
 
-        <p class="page-description">
-            Enter the appointment number to generate the bill.
-            Charges are taken from the stored treatment details.
-        </p>
+            <h1>Billing</h1>
+
+            <p>
+                Generate treatment bills and printable receipts.
+            </p>
+
+        </div>
 
         <c:if test="${not empty errorMessage}">
 

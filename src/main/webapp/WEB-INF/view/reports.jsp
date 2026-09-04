@@ -100,7 +100,15 @@
 
 <main class="container">
 
-    <h2>Reports</h2>
+    <div class="page-header">
+
+        <h1>Reports</h1>
+
+        <p>
+            Review clinic schedules and treatment activity.
+        </p>
+
+    </div>
 
 
     <c:if test="${not empty errorMessage}">
@@ -197,9 +205,10 @@
 
         <h3>Treatment Summary Report</h3>
 
-        <a href="${pageContext.request.contextPath}/reports?action=treatments">
-            View Treatment Summary
-        </a>
+            <a href="${pageContext.request.contextPath}/reports?action=treatments"
+               class="secondary-button">
+                View Treatment Summary
+            </a>
 
     </section>
 
@@ -224,6 +233,8 @@
 
 
             <c:if test="${not empty appointments}">
+
+                <div class="table-wrapper">
 
                 <table>
 
@@ -268,7 +279,23 @@
                             </td>
 
                             <td>
-                                <c:out value="${appointment.status}"/>
+                                <c:choose>
+                                    <c:when test="${appointment.status == 'SCHEDULED'}">
+                                        <span class="status-badge status-scheduled">
+                                            <c:out value="${appointment.status}"/>
+                                        </span>
+                                    </c:when>
+                                    <c:when test="${appointment.status == 'COMPLETED'}">
+                                        <span class="status-badge status-completed">
+                                            <c:out value="${appointment.status}"/>
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="status-badge status-cancelled">
+                                            <c:out value="${appointment.status}"/>
+                                        </span>
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
 
                         </tr>
@@ -279,10 +306,14 @@
 
                 </table>
 
+                </div>
+
             </c:if>
 
 
             <c:if test="${not empty treatmentSummary}">
+
+                <div class="table-wrapper">
 
                 <table>
 
@@ -328,6 +359,8 @@
 
                 </table>
 
+                </div>
+
             </c:if>
 
 
@@ -341,7 +374,7 @@
 
 
             <button type="button"
-                    class="print-button"
+                    class="print-button primary-button"
                     onclick="window.print();">
 
                 Print Report

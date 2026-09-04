@@ -10,7 +10,7 @@
 
         <div>
             <h1>
-                Sunrise Dental
+                Sunrise Dental Clinic
             </h1>
 
             <p>
@@ -77,6 +77,14 @@
     </nav>
 
     <div class="sidebar-footer">
+        <p>
+            Signed in as
+            <br>
+            <strong>
+                <c:out value="${sessionScope.staffUser}"/>
+            </strong>
+        </p>
+
         <p>
             <c:choose>
                 <c:when test="${sessionScope.staffRole == 'ADMIN'}">

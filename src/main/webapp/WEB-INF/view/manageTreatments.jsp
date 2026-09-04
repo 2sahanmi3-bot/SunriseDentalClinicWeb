@@ -88,7 +88,15 @@
 
 <main class="container">
 
-    <h2>Treatment Management</h2>
+    <div class="page-header">
+
+        <h1>Treatment Management</h1>
+
+        <p>
+            Manage treatment charges, consultation fees and availability.
+        </p>
+
+    </div>
 
 
     <c:if test="${not empty successMessage}">
@@ -178,11 +186,13 @@
                     </div>
 
 
-                    <button type="submit">
+                    <button type="submit"
+                            class="primary-button">
                         Save Changes
                     </button>
 
-                    <a href="${pageContext.request.contextPath}/admin/treatments">
+                    <a href="${pageContext.request.contextPath}/admin/treatments"
+                       class="secondary-button">
                         Cancel
                     </a>
 
@@ -249,7 +259,8 @@
                     </div>
 
 
-                    <button type="submit">
+                    <button type="submit"
+                            class="primary-button">
                         Add Treatment
                     </button>
 
@@ -277,6 +288,8 @@
             </c:when>
 
             <c:otherwise>
+
+                <div class="table-wrapper">
 
                 <table>
 
@@ -324,11 +337,15 @@
                                 <c:choose>
 
                                     <c:when test="${treatment.active}">
-                                        Active
+                                        <span class="status-badge status-active">
+                                            Active
+                                        </span>
                                     </c:when>
 
                                     <c:otherwise>
-                                        Inactive
+                                        <span class="status-badge status-inactive">
+                                            Inactive
+                                        </span>
                                     </c:otherwise>
 
                                 </c:choose>
@@ -364,7 +381,8 @@
                                                    name="active"
                                                    value="false">
 
-                                            <button type="submit">
+                                            <button type="submit"
+                                                    class="danger-button">
                                                 Deactivate
                                             </button>
 
@@ -376,7 +394,8 @@
                                                    name="active"
                                                    value="true">
 
-                                            <button type="submit">
+                                            <button type="submit"
+                                                    class="secondary-button">
                                                 Activate
                                             </button>
 
@@ -395,6 +414,8 @@
                     </tbody>
 
                 </table>
+
+                </div>
 
             </c:otherwise>
 

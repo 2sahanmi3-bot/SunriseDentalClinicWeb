@@ -87,7 +87,7 @@
             <button type="submit"
                     class="primary-button">
 
-                Login
+                Sign In
 
             </button>
 
