@@ -118,6 +118,11 @@
             </p>
 
             <p>
+                <strong>Email:</strong>
+                <c:out value="${appointmentPatient.email}"/>
+            </p>
+
+            <p>
                 <strong>Dentist:</strong>
                 <%= appointment.getDentistName() %>
             </p>

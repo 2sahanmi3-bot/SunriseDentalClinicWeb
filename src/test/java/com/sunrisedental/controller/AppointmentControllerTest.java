@@ -2,6 +2,7 @@ package com.sunrisedental.controller;
 
 import com.sunrisedental.model.Appointment;
 import com.sunrisedental.model.Dentist;
+import com.sunrisedental.model.Patient;
 import com.sunrisedental.model.Treatment;
 
 import com.sunrisedental.service.AppointmentService;
@@ -115,6 +116,23 @@ class AppointmentControllerTest {
                 )
         );
 
+        when(
+                patientService.findOrCreatePatient(
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+        ).thenReturn(
+                new Patient(
+                        3,
+                        "Nimal Perera",
+                        "Colombo",
+                        "0771234567",
+                        "nimal@example.com"
+                )
+        );
+
         controller =
                 new AppointmentController(
                         appointmentService,
@@ -154,6 +172,9 @@ class AppointmentControllerTest {
                                 )
                                         && Integer.valueOf(2).equals(
                                         appointment.getDentistId()
+                                )
+                                        && Integer.valueOf(3).equals(
+                                        appointment.getPatientId()
                                 )
                                         && "Dr Silva".equals(
                                         appointment.getDentistName()
@@ -348,6 +369,9 @@ class AppointmentControllerTest {
                                 )
                                         && "0771234567".equals(
                                         appointment.getContactNumber()
+                                )
+                                        && Integer.valueOf(3).equals(
+                                        appointment.getPatientId()
                                 )
                                         && Integer.valueOf(2).equals(
                                         appointment.getDentistId()

@@ -12,6 +12,7 @@ import com.sunrisedental.model.Treatment;
 
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.DentistService;
+import com.sunrisedental.service.EmailService;
 import com.sunrisedental.service.PatientService;
 import com.sunrisedental.service.TreatmentService;
 
@@ -34,6 +35,7 @@ public class AppointmentController extends HttpServlet {
     private PatientService patientService;
     private DentistService dentistService;
     private TreatmentService treatmentService;
+    private EmailService emailService;
 
     public AppointmentController() {
 
@@ -49,7 +51,8 @@ public class AppointmentController extends HttpServlet {
                 ),
                 new TreatmentService(
                         new TreatmentDAO()
-                )
+                ),
+                new EmailService()
         );
     }
 
@@ -107,6 +110,22 @@ public class AppointmentController extends HttpServlet {
             DentistService dentistService,
             TreatmentService treatmentService) {
 
+        this(
+                appointmentService,
+                patientService,
+                dentistService,
+                treatmentService,
+                new EmailService()
+        );
+    }
+
+    public AppointmentController(
+            AppointmentService appointmentService,
+            PatientService patientService,
+            DentistService dentistService,
+            TreatmentService treatmentService,
+            EmailService emailService) {
+
         this.appointmentService =
                 appointmentService;
 
@@ -118,6 +137,9 @@ public class AppointmentController extends HttpServlet {
 
         this.treatmentService =
                 treatmentService;
+
+        this.emailService =
+                emailService;
     }
 
     @Override
@@ -176,6 +198,18 @@ public class AppointmentController extends HttpServlet {
                             "appointment",
                             appointment.get()
                     );
+
+                    loadAppointmentPatient(
+                            request,
+                            appointment.get()
+                    );
+
+                    if ("CANCELLED".equals(status)) {
+
+                        sendCancellationEmail(
+                                appointment.get()
+                        );
+                    }
                 }
 
                 request.getRequestDispatcher(
@@ -240,6 +274,11 @@ public class AppointmentController extends HttpServlet {
                                 "contactNumber"
                         );
 
+                String email =
+                        request.getParameter(
+                                "email"
+                        );
+
                 String treatmentType =
                         request.getParameter(
                                 "treatmentType"
@@ -255,31 +294,13 @@ public class AppointmentController extends HttpServlet {
                                 "appointmentTime"
                         );
 
-                Integer patientId =
-                        null;
-
-                String patientIdParameter =
-                        request.getParameter(
-                                "patientId"
+                Patient patient =
+                        patientService.findOrCreatePatient(
+                                patientName,
+                                address,
+                                contactNumber,
+                                email
                         );
-
-                if (patientIdParameter != null
-                        && !patientIdParameter.isBlank()) {
-
-                    try {
-
-                        patientId =
-                                Integer.valueOf(
-                                        patientIdParameter
-                                );
-
-                    } catch (NumberFormatException e) {
-
-                        throw new IllegalArgumentException(
-                                "Invalid patient"
-                        );
-                    }
-                }
 
                 String dentistIdParameter =
                         request.getParameter(
@@ -344,7 +365,7 @@ public class AppointmentController extends HttpServlet {
                         new Appointment(
                                 0,
                                 appointmentNumber,
-                                patientId,
+                                patient.getPatientId(),
                                 dentistId,
                                 patientName,
                                 address,
@@ -363,6 +384,11 @@ public class AppointmentController extends HttpServlet {
                                 );
 
                 if (registered) {
+
+                    sendAppointmentConfirmation(
+                            patient,
+                            appointment
+                    );
 
                     response.sendRedirect(
                             "appointment?action=search&appointmentNumber="
@@ -483,6 +509,11 @@ public class AppointmentController extends HttpServlet {
                             appointment.get()
                     );
 
+                    loadAppointmentPatient(
+                            request,
+                            appointment.get()
+                    );
+
                     request.getRequestDispatcher(
                             "WEB-INF/view/viewAppointment.jsp"
                     ).forward(
@@ -598,5 +629,62 @@ public class AppointmentController extends HttpServlet {
                 request,
                 response
         );
+    }
+
+    private void sendAppointmentConfirmation(
+            Patient patient,
+            Appointment appointment) {
+
+        emailService.sendAppointmentConfirmation(
+                patient.getEmail(),
+                appointment
+        );
+    }
+
+    private void sendCancellationEmail(
+            Appointment appointment)
+            throws SQLException {
+
+        if (appointment.getPatientId() == null) {
+
+            return;
+        }
+
+        Optional<Patient> patient =
+                patientService.getPatient(
+                        appointment.getPatientId()
+                );
+
+        if (patient.isPresent()) {
+
+            emailService.sendCancellationEmail(
+                    patient.get().getEmail(),
+                    appointment
+            );
+        }
+    }
+
+    private void loadAppointmentPatient(
+            HttpServletRequest request,
+            Appointment appointment)
+            throws SQLException {
+
+        if (appointment.getPatientId() == null) {
+
+            return;
+        }
+
+        Optional<Patient> patient =
+                patientService.getPatient(
+                        appointment.getPatientId()
+                );
+
+        if (patient.isPresent()) {
+
+            request.setAttribute(
+                    "appointmentPatient",
+                    patient.get()
+            );
+        }
     }
 }

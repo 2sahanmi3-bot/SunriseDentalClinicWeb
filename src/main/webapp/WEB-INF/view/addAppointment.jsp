@@ -216,6 +216,21 @@
 
                 <div class="form-group">
 
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           maxlength="100"
+                           value="<c:out value='${selectedPatient.email}'/>"
+                           required>
+
+                </div>
+
+                <div class="form-group">
+
                     <label for="dentistId">
                         Dentist
                     </label>
