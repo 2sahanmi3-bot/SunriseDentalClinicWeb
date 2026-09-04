@@ -4,7 +4,7 @@ import com.sunrisedental.dao.UserDAO;
 import com.sunrisedental.model.User;
 
 import java.sql.SQLException;
-
+import java.util.List;
 import java.util.Optional;
 
 public class StaffManagementService {
@@ -56,5 +56,11 @@ public class StaffManagementService {
         return userDAO.saveUser(
                 user
         );
+    }
+
+    public List<User> getAllUsers()
+            throws SQLException {
+
+        return userDAO.findAllUsers();
     }
 }

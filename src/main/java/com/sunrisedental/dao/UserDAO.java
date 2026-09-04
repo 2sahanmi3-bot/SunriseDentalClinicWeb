@@ -3,6 +3,8 @@ package com.sunrisedental.dao;
 import com.sunrisedental.model.User;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,6 +67,61 @@ public class UserDAO {
             }
 
             // Close the connection after the staff search is finished.
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    public List<User> findAllUsers()
+            throws SQLException {
+
+        List<User> users =
+                new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            connection =
+                    DBConnectionFactory.getConnection();
+
+            statement =
+                    connection.prepareStatement(
+                            "SELECT user_id, username, password, role " +
+                                    "FROM users " +
+                                    "ORDER BY username"
+                    );
+
+            resultSet =
+                    statement.executeQuery();
+
+            while (resultSet.next()) {
+
+                users.add(
+                        new User(
+                                resultSet.getInt("user_id"),
+                                resultSet.getString("username"),
+                                resultSet.getString("password"),
+                                resultSet.getString("role")
+                        )
+                );
+            }
+
+            return users;
+
+        } finally {
+
+            if (resultSet != null) {
+                resultSet.close();
+            }
+
+            if (statement != null) {
+                statement.close();
+            }
+
             if (connection != null) {
                 connection.close();
             }

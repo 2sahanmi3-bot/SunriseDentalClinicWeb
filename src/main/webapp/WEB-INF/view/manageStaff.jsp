@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Manage Staff - Sunrise Dental Clinic</title>
+    <title>User Management - Sunrise Dental Clinic</title>
 
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/style.css">
@@ -27,7 +29,7 @@
 
             <a href="${pageContext.request.contextPath}/admin/staff"
                class="active">
-                Staff Management
+                User Management
             </a>
 
             <a href="${pageContext.request.contextPath}/help">
@@ -45,7 +47,7 @@
 
     <section class="card">
 
-        <h2>Create Staff Account</h2>
+        <h2>User Management</h2>
 
         <p>
             Add a new authorized staff account for the clinic.
@@ -124,6 +126,63 @@
             </button>
 
         </form>
+
+    </section>
+
+    <section class="card">
+
+        <h2>Authorized User Accounts</h2>
+
+        <c:choose>
+
+            <c:when test="${empty users}">
+
+                <p>
+                    No user accounts found.
+                </p>
+
+            </c:when>
+
+            <c:otherwise>
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <c:forEach var="user"
+                               items="${users}">
+
+                        <tr>
+                            <td>
+                                    ${user.userId}
+                            </td>
+
+                            <td>
+                                    ${user.username}
+                            </td>
+
+                            <td>
+                                    ${user.role}
+                            </td>
+                        </tr>
+
+                    </c:forEach>
+
+                    </tbody>
+
+                </table>
+
+            </c:otherwise>
+
+        </c:choose>
 
     </section>
 

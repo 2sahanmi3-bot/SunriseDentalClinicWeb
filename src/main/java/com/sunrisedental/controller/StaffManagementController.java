@@ -40,12 +40,24 @@ public class StaffManagementController extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher(
-                "/WEB-INF/view/manageStaff.jsp"
-        ).forward(
-                request,
-                response
-        );
+        try {
+
+            request.setAttribute(
+                    "users",
+                    staffManagementService.getAllUsers()
+            );
+
+            request.getRequestDispatcher(
+                    "/WEB-INF/view/manageStaff.jsp"
+            ).forward(
+                    request,
+                    response
+            );
+
+        } catch (SQLException e) {
+
+            throw new ServletException(e);
+        }
     }
 
     @Override
@@ -71,37 +83,35 @@ public class StaffManagementController extends HttpServlet {
 
         try {
 
-            boolean created =
-                    staffManagementService
-                            .createStaffUser(
-                                    username,
-                                    password,
-                                    role
-                            );
+            try {
 
-            if (created) {
+                boolean created =
+                        staffManagementService
+                                .createStaffUser(
+                                        username,
+                                        password,
+                                        role
+                                );
+
+                if (created) {
+
+                    request.setAttribute(
+                            "successMessage",
+                            "Staff account created successfully"
+                    );
+                }
+
+            } catch (IllegalArgumentException e) {
 
                 request.setAttribute(
-                        "successMessage",
-                        "Staff account created successfully"
+                        "errorMessage",
+                        e.getMessage()
                 );
             }
 
-            RequestDispatcher dispatcher =
-                    request.getRequestDispatcher(
-                            "/WEB-INF/view/manageStaff.jsp"
-                    );
-
-            dispatcher.forward(
-                    request,
-                    response
-            );
-
-        } catch (IllegalArgumentException e) {
-
             request.setAttribute(
-                    "errorMessage",
-                    e.getMessage()
+                    "users",
+                    staffManagementService.getAllUsers()
             );
 
             RequestDispatcher dispatcher =
