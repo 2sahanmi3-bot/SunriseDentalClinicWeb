@@ -2,6 +2,7 @@ package com.sunrisedental.service;
 
 import com.sunrisedental.dao.UserDAO;
 import com.sunrisedental.model.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -48,18 +49,58 @@ public class AuthenticationService {
             return Optional.empty();
         }
 
+        User authenticatedUser =
+                user.get();
+
         // Inactive accounts are not allowed to log in.
-        if (!user.get().isActive()) {
+        if (!authenticatedUser.isActive()) {
             return Optional.empty();
         }
 
-        if (!user.get()
-                .getPassword()
-                .equals(password)) {
+        String storedPassword =
+                authenticatedUser.getPassword();
 
+        boolean passwordMatches;
+
+        if (storedPassword != null
+                && storedPassword.startsWith("$2")) {
+
+            passwordMatches =
+                    BCrypt.checkpw(
+                            password,
+                            storedPassword
+                    );
+
+        } else {
+
+            // Existing plaintext accounts are upgraded after one successful login.
+            passwordMatches =
+                    storedPassword != null
+                            && storedPassword.equals(
+                                    password
+                            );
+
+            if (passwordMatches) {
+
+                String hashedPassword =
+                        BCrypt.hashpw(
+                                password,
+                                BCrypt.gensalt()
+                        );
+
+                userDAO.updatePassword(
+                        authenticatedUser.getUserId(),
+                        hashedPassword
+                );
+            }
+        }
+
+        if (!passwordMatches) {
             return Optional.empty();
         }
 
-        return user;
+        return Optional.of(
+                authenticatedUser
+        );
     }
 }

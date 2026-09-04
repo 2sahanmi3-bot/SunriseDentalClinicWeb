@@ -2,6 +2,7 @@ package com.sunrisedental.service;
 
 import com.sunrisedental.dao.UserDAO;
 import com.sunrisedental.model.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -45,11 +46,17 @@ public class StaffManagementService {
             );
         }
 
+        String hashedPassword =
+                BCrypt.hashpw(
+                        password,
+                        BCrypt.gensalt()
+                );
+
         User user =
                 new User(
                         0,
                         username,
-                        password,
+                        hashedPassword,
                         role
                 );
 

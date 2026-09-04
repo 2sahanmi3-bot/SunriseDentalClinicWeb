@@ -4,6 +4,7 @@ import com.sunrisedental.dao.UserDAO;
 import com.sunrisedental.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -173,6 +174,50 @@ class AuthenticationServiceTest {
                 userDAO
         ).findByUsername(
                 "admin"
+        );
+    }
+
+    @Test
+    void shouldAuthenticateWithHashedPassword()
+            throws Exception {
+
+        String hashedPassword =
+                BCrypt.hashpw(
+                        "admin123",
+                        BCrypt.gensalt()
+                );
+
+        User user =
+                new User(
+                        1,
+                        "admin",
+                        hashedPassword,
+                        "ADMIN",
+                        true
+                );
+
+        when(
+                userDAO.findByUsername(
+                        "admin"
+                )
+        ).thenReturn(
+                Optional.of(user)
+        );
+
+        Optional<User> result =
+                authenticationService
+                        .authenticateUser(
+                                "admin",
+                                "admin123"
+                        );
+
+        assertTrue(
+                result.isPresent()
+        );
+
+        assertEquals(
+                "ADMIN",
+                result.get().getRole()
         );
     }
 }

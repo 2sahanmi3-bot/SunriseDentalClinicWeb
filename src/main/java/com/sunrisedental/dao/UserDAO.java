@@ -265,4 +265,48 @@ public class UserDAO {
             }
         }
     }
+
+    public boolean updatePassword(
+            int userId,
+            String password)
+            throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            connection =
+                    DBConnectionFactory.getConnection();
+
+            statement =
+                    connection.prepareStatement(
+                            "UPDATE users " +
+                                    "SET password = ? " +
+                                    "WHERE user_id = ?"
+                    );
+
+            statement.setString(
+                    1,
+                    password
+            );
+
+            statement.setInt(
+                    2,
+                    userId
+            );
+
+            return statement.executeUpdate() > 0;
+
+        } finally {
+
+            if (statement != null) {
+                statement.close();
+            }
+
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 }
