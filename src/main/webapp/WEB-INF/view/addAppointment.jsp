@@ -216,15 +216,35 @@
 
                 <div class="form-group">
 
-                    <label for="dentistName">
+                    <label for="dentistId">
                         Dentist
                     </label>
 
-                    <input type="text"
-                           id="dentistName"
-                           name="dentistName"
-                           maxlength="100"
-                           required>
+                    <select id="dentistId"
+                            name="dentistId"
+                            required>
+
+                        <option value="">
+                            Select a dentist
+                        </option>
+
+                        <c:forEach var="dentist"
+                                   items="${dentists}">
+
+                            <option value="${dentist.dentistId}">
+
+                                <c:out value="${dentist.dentistName}"/>
+
+                                <c:if test="${not empty dentist.specialization}">
+                                    -
+                                    <c:out value="${dentist.specialization}"/>
+                                </c:if>
+
+                            </option>
+
+                        </c:forEach>
+
+                    </select>
 
                 </div>
 

@@ -1,39 +1,52 @@
 package com.sunrisedental.controller;
 
 import com.sunrisedental.model.Appointment;
+import com.sunrisedental.model.Dentist;
+
 import com.sunrisedental.service.AppointmentService;
+import com.sunrisedental.service.DentistService;
+import com.sunrisedental.service.PatientService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.RequestDispatcher;
 
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 class AppointmentControllerTest {
 
     private AppointmentService appointmentService;
+    private PatientService patientService;
+    private DentistService dentistService;
+
     private AppointmentController controller;
 
     private HttpServletRequest request;
     private HttpServletResponse response;
     private RequestDispatcher dispatcher;
 
+    private Dentist dentist;
+
     @BeforeEach
-    void setUp() {
+    void setUp()
+            throws Exception {
 
         appointmentService =
                 mock(AppointmentService.class);
 
-        controller =
-                new AppointmentController(
-                        appointmentService
-                );
+        patientService =
+                mock(PatientService.class);
+
+        dentistService =
+                mock(DentistService.class);
 
         request =
                 mock(HttpServletRequest.class);
@@ -43,6 +56,32 @@ class AppointmentControllerTest {
 
         dispatcher =
                 mock(RequestDispatcher.class);
+
+        dentist =
+                new Dentist(
+                        2,
+                        "Dr Silva",
+                        "General Dentistry",
+                        "0770000000",
+                        true
+                );
+
+        when(
+                dentistService.getDentist(
+                        2
+                )
+        ).thenReturn(
+                Optional.of(
+                        dentist
+                )
+        );
+
+        controller =
+                new AppointmentController(
+                        appointmentService,
+                        patientService,
+                        dentistService
+                );
     }
 
     @Test
@@ -54,6 +93,9 @@ class AppointmentControllerTest {
 
         when(request.getParameter("appointmentNumber"))
                 .thenReturn("APT001");
+
+        when(request.getParameter("dentistId"))
+                .thenReturn("2");
 
         when(appointmentService.registerAppointment(
                 any(Appointment.class)))
@@ -69,6 +111,12 @@ class AppointmentControllerTest {
                         argThat(appointment ->
                                 "APT001".equals(
                                         appointment.getAppointmentNumber()
+                                )
+                                        && Integer.valueOf(2).equals(
+                                        appointment.getDentistId()
+                                )
+                                        && "Dr Silva".equals(
+                                        appointment.getDentistName()
                                 )
                         )
                 );
@@ -89,6 +137,9 @@ class AppointmentControllerTest {
         when(request.getParameter("appointmentNumber"))
                 .thenReturn("APT001");
 
+        when(request.getParameter("dentistId"))
+                .thenReturn("2");
+
         when(appointmentService.registerAppointment(
                 any(Appointment.class)))
                 .thenReturn(false);
@@ -107,6 +158,9 @@ class AppointmentControllerTest {
                         "errorMessage",
                         "Appointment could not be registered"
                 );
+
+        verify(dentistService)
+                .getActiveDentists();
 
         verify(dispatcher)
                 .forward(
@@ -216,8 +270,8 @@ class AppointmentControllerTest {
         when(request.getParameter("contactNumber"))
                 .thenReturn("0771234567");
 
-        when(request.getParameter("dentistName"))
-                .thenReturn("Dr Silva");
+        when(request.getParameter("dentistId"))
+                .thenReturn("2");
 
         when(request.getParameter("treatmentType"))
                 .thenReturn("Cleaning");
@@ -252,6 +306,9 @@ class AppointmentControllerTest {
                                         && "0771234567".equals(
                                         appointment.getContactNumber()
                                 )
+                                        && Integer.valueOf(2).equals(
+                                        appointment.getDentistId()
+                                )
                                         && "Dr Silva".equals(
                                         appointment.getDentistName()
                                 )
@@ -263,6 +320,9 @@ class AppointmentControllerTest {
                                 )
                                         && "09:30".equals(
                                         appointment.getAppointmentTime()
+                                )
+                                        && "SCHEDULED".equals(
+                                        appointment.getStatus()
                                 )
                         )
                 );
@@ -277,6 +337,9 @@ class AppointmentControllerTest {
 
         when(request.getParameter("appointmentNumber"))
                 .thenReturn("  APT100  ");
+
+        when(request.getParameter("dentistId"))
+                .thenReturn("2");
 
         when(appointmentService.registerAppointment(
                 any(Appointment.class)))
