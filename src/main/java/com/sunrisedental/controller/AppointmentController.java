@@ -3,14 +3,17 @@ package com.sunrisedental.controller;
 import com.sunrisedental.dao.AppointmentDAO;
 import com.sunrisedental.dao.DentistDAO;
 import com.sunrisedental.dao.PatientDAO;
+import com.sunrisedental.dao.TreatmentDAO;
 
 import com.sunrisedental.model.Appointment;
 import com.sunrisedental.model.Dentist;
 import com.sunrisedental.model.Patient;
+import com.sunrisedental.model.Treatment;
 
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.DentistService;
 import com.sunrisedental.service.PatientService;
+import com.sunrisedental.service.TreatmentService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,6 +33,7 @@ public class AppointmentController extends HttpServlet {
     private AppointmentService appointmentService;
     private PatientService patientService;
     private DentistService dentistService;
+    private TreatmentService treatmentService;
 
     public AppointmentController() {
 
@@ -42,6 +46,9 @@ public class AppointmentController extends HttpServlet {
                 ),
                 new DentistService(
                         new DentistDAO()
+                ),
+                new TreatmentService(
+                        new TreatmentDAO()
                 )
         );
     }
@@ -56,6 +63,9 @@ public class AppointmentController extends HttpServlet {
                 ),
                 new DentistService(
                         new DentistDAO()
+                ),
+                new TreatmentService(
+                        new TreatmentDAO()
                 )
         );
     }
@@ -69,6 +79,9 @@ public class AppointmentController extends HttpServlet {
                 patientService,
                 new DentistService(
                         new DentistDAO()
+                ),
+                new TreatmentService(
+                        new TreatmentDAO()
                 )
         );
     }
@@ -78,6 +91,22 @@ public class AppointmentController extends HttpServlet {
             PatientService patientService,
             DentistService dentistService) {
 
+        this(
+                appointmentService,
+                patientService,
+                dentistService,
+                new TreatmentService(
+                        new TreatmentDAO()
+                )
+        );
+    }
+
+    public AppointmentController(
+            AppointmentService appointmentService,
+            PatientService patientService,
+            DentistService dentistService,
+            TreatmentService treatmentService) {
+
         this.appointmentService =
                 appointmentService;
 
@@ -86,6 +115,9 @@ public class AppointmentController extends HttpServlet {
 
         this.dentistService =
                 dentistService;
+
+        this.treatmentService =
+                treatmentService;
     }
 
     @Override
@@ -217,6 +249,19 @@ public class AppointmentController extends HttpServlet {
                         dentist.get()
                                 .getDentistName();
 
+                Optional<Treatment> treatment =
+                        treatmentService.findByTreatmentName(
+                                treatmentType
+                        );
+
+                if (treatment.isEmpty()
+                        || !treatment.get().isActive()) {
+
+                    throw new IllegalArgumentException(
+                            "Please select an active treatment"
+                    );
+                }
+
                 Appointment appointment =
                         new Appointment(
                                 0,
@@ -312,6 +357,10 @@ public class AppointmentController extends HttpServlet {
                         request
                 );
 
+                loadActiveTreatments(
+                        request
+                );
+
             } catch (SQLException e) {
 
                 throw new ServletException(e);
@@ -396,6 +445,16 @@ public class AppointmentController extends HttpServlet {
         );
     }
 
+    private void loadActiveTreatments(
+            HttpServletRequest request)
+            throws SQLException {
+
+        request.setAttribute(
+                "treatments",
+                treatmentService.getActiveTreatments()
+        );
+    }
+
     private void loadSelectedPatient(
             HttpServletRequest request)
             throws SQLException {
@@ -448,6 +507,10 @@ public class AppointmentController extends HttpServlet {
         );
 
         loadActiveDentists(
+                request
+        );
+
+        loadActiveTreatments(
                 request
         );
 

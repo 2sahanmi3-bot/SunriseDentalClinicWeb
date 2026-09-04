@@ -89,6 +89,14 @@ public class TreatmentDAOTest {
                 1500.00
         );
 
+        when(
+                resultSet.getBoolean(
+                        "active"
+                )
+        ).thenReturn(
+                true
+        );
+
         try (
                 MockedStatic<DBConnectionFactory> mocked =
                         mockStatic(
@@ -127,6 +135,10 @@ public class TreatmentDAOTest {
             assertEquals(
                     1500.00,
                     result.get().getConsultationFee()
+            );
+
+            assertTrue(
+                    result.get().isActive()
             );
 
             verify(statement).setString(

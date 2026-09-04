@@ -55,6 +55,10 @@
                     Dentist Management
                 </a>
 
+                <a href="${pageContext.request.contextPath}/admin/treatments">
+                    Treatment Management
+                </a>
+
             </c:if>
 
             <a href="${pageContext.request.contextPath}/help">
@@ -140,6 +144,10 @@
                 Dentist Management
             </a>
 
+            <a href="${pageContext.request.contextPath}/admin/treatments">
+                Treatment Management
+            </a>
+
         </c:if>
 
     </section>
@@ -163,6 +171,10 @@
 
             <a href="${pageContext.request.contextPath}/admin/dentists">
                 Manage Dentists
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/treatments">
+                Manage Treatments
             </a>
 
         </section>

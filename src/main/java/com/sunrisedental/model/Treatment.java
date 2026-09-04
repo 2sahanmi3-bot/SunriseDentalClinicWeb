@@ -6,12 +6,29 @@ public class Treatment {
     private String treatmentName;
     private double treatmentCharge;
     private double consultationFee;
+    private boolean active;
 
     public Treatment(
             int treatmentId,
             String treatmentName,
             double treatmentCharge,
             double consultationFee) {
+
+        this(
+                treatmentId,
+                treatmentName,
+                treatmentCharge,
+                consultationFee,
+                true
+        );
+    }
+
+    public Treatment(
+            int treatmentId,
+            String treatmentName,
+            double treatmentCharge,
+            double consultationFee,
+            boolean active) {
 
         this.treatmentId =
                 treatmentId;
@@ -24,6 +41,9 @@ public class Treatment {
 
         this.consultationFee =
                 consultationFee;
+
+        this.active =
+                active;
     }
 
     public int getTreatmentId() {
@@ -40,5 +60,9 @@ public class Treatment {
 
     public double getConsultationFee() {
         return consultationFee;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

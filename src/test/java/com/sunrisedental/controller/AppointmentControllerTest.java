@@ -2,10 +2,12 @@ package com.sunrisedental.controller;
 
 import com.sunrisedental.model.Appointment;
 import com.sunrisedental.model.Dentist;
+import com.sunrisedental.model.Treatment;
 
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.DentistService;
 import com.sunrisedental.service.PatientService;
+import com.sunrisedental.service.TreatmentService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +29,7 @@ class AppointmentControllerTest {
     private AppointmentService appointmentService;
     private PatientService patientService;
     private DentistService dentistService;
+    private TreatmentService treatmentService;
 
     private AppointmentController controller;
 
@@ -47,6 +51,9 @@ class AppointmentControllerTest {
 
         dentistService =
                 mock(DentistService.class);
+
+        treatmentService =
+                mock(TreatmentService.class);
 
         request =
                 mock(HttpServletRequest.class);
@@ -76,11 +83,44 @@ class AppointmentControllerTest {
                 )
         );
 
+        when(request.getParameter("treatmentType"))
+                .thenReturn("Cleaning");
+
+        when(
+                treatmentService.findByTreatmentName(
+                        "Cleaning"
+                )
+        ).thenReturn(
+                Optional.of(
+                        new Treatment(
+                                1,
+                                "Cleaning",
+                                5000.00,
+                                1500.00,
+                                true
+                        )
+                )
+        );
+
+        when(
+                treatmentService.getActiveTreatments()
+        ).thenReturn(
+                List.of(
+                        new Treatment(
+                                1,
+                                "Cleaning",
+                                5000.00,
+                                1500.00
+                        )
+                )
+        );
+
         controller =
                 new AppointmentController(
                         appointmentService,
                         patientService,
-                        dentistService
+                        dentistService,
+                        treatmentService
                 );
     }
 
@@ -161,6 +201,9 @@ class AppointmentControllerTest {
 
         verify(dentistService)
                 .getActiveDentists();
+
+        verify(treatmentService)
+                .getActiveTreatments();
 
         verify(dispatcher)
                 .forward(

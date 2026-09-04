@@ -111,6 +111,10 @@ CREATE TABLE treatments (
                             consultation_fee DECIMAL(10, 2)
                                 NOT NULL,
 
+                            active BOOLEAN
+                                NOT NULL
+                                DEFAULT TRUE,
+
                             PRIMARY KEY (treatment_id),
 
                             CONSTRAINT uq_treatments_name

@@ -259,28 +259,17 @@
                             required>
 
                         <option value="">
-                            Select Treatment
+                            Select a treatment
                         </option>
 
-                        <option value="Cleaning">
-                            Cleaning
-                        </option>
+                        <c:forEach var="treatment"
+                                   items="${treatments}">
 
-                        <option value="Filling">
-                            Filling
-                        </option>
+                            <option value="${treatment.treatmentName}">
+                                <c:out value="${treatment.treatmentName}"/>
+                            </option>
 
-                        <option value="Extraction">
-                            Extraction
-                        </option>
-
-                        <option value="Root Canal">
-                            Root Canal
-                        </option>
-
-                        <option value="Crown">
-                            Crown
-                        </option>
+                        </c:forEach>
 
                     </select>
 
