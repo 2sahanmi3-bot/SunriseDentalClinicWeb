@@ -117,4 +117,41 @@ class StaffManagementServiceTest {
                 any(User.class)
         );
     }
+
+    @Test
+    void shouldRejectInvalidRole()
+            throws Exception {
+
+        when(
+                userDAO.findByUsername(
+                        "staff02"
+                )
+        ).thenReturn(
+                Optional.empty()
+        );
+
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                staffManagementService
+                                        .createStaffUser(
+                                                "staff02",
+                                                "staff123",
+                                                "MANAGER"
+                                        )
+                );
+
+        assertEquals(
+                "Invalid user role",
+                exception.getMessage()
+        );
+
+        verify(
+                userDAO,
+                never()
+        ).saveUser(
+                any(User.class)
+        );
+    }
 }
