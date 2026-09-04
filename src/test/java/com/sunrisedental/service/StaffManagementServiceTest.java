@@ -5,6 +5,7 @@ import com.sunrisedental.model.User;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -58,7 +59,8 @@ class StaffManagementServiceTest {
                                 "staff01".equals(
                                         user.getUsername()
                                 )
-                                        && "staff123".equals(
+                                        && BCrypt.checkpw(
+                                        "staff123",
                                         user.getPassword()
                                 )
                                         && "STAFF".equals(
