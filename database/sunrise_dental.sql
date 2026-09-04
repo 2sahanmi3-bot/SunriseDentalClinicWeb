@@ -22,6 +22,10 @@ CREATE TABLE users (
                        role VARCHAR(20)
                            NOT NULL,
 
+                       active BOOLEAN
+                           NOT NULL
+                           DEFAULT TRUE,
+
                        PRIMARY KEY (user_id),
 
                        CONSTRAINT uq_users_username
@@ -29,6 +33,32 @@ CREATE TABLE users (
 
                        CONSTRAINT chk_users_role
                            CHECK (role IN ('ADMIN', 'STAFF'))
+)
+    ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+-- PATIENTS
+-- Stores patient records managed by clinic staff.
+
+CREATE TABLE patients (
+
+                          patient_id INT
+                              NOT NULL
+                              AUTO_INCREMENT,
+
+                          patient_name VARCHAR(100)
+                              NOT NULL,
+
+                          address VARCHAR(255)
+                              NOT NULL,
+
+                          contact_number VARCHAR(10)
+                              NOT NULL,
+
+                          email VARCHAR(100),
+
+                          PRIMARY KEY (patient_id)
 )
     ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -164,11 +194,15 @@ SHOW TABLES;
 
 DESCRIBE users;
 
+DESCRIBE patients;
+
 DESCRIBE treatments;
 
 DESCRIBE appointments;
 
 SELECT * FROM users;
+
+SELECT * FROM patients;
 
 SELECT * FROM treatments;
 
