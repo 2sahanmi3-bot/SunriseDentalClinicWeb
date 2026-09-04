@@ -28,8 +28,16 @@
 
         <nav class="main-nav">
 
+            <a href="${pageContext.request.contextPath}/dashboard">
+                Dashboard
+            </a>
+
             <a href="${pageContext.request.contextPath}/appointment">
                 Appointments
+            </a>
+
+            <a href="${pageContext.request.contextPath}/patient">
+                Patients
             </a>
 
             <a href="${pageContext.request.contextPath}/billing"
@@ -38,10 +46,22 @@
                 Billing
             </a>
 
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
+
             <c:if test="${sessionScope.staffRole == 'ADMIN'}">
 
                 <a href="${pageContext.request.contextPath}/admin/staff">
-                    Staff Management
+                    User Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/dentists">
+                    Dentist Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/treatments">
+                    Treatment Management
                 </a>
 
             </c:if>
@@ -67,23 +87,13 @@
             Charges are taken from the stored treatment details.
         </p>
 
-        <%-- Show billing errors returned by the controller. --%>
-        <%
-            String errorMessage =
-                    (String) request.getAttribute(
-                            "errorMessage"
-                    );
-
-            if (errorMessage != null) {
-        %>
+        <c:if test="${not empty errorMessage}">
 
         <div class="error-message">
-            <%= errorMessage %>
+            <c:out value="${errorMessage}"/>
         </div>
 
-        <%
-            }
-        %>
+        </c:if>
 
         <form method="post"
               action="${pageContext.request.contextPath}/billing">

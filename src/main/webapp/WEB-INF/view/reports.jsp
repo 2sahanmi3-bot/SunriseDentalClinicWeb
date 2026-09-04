@@ -64,6 +64,14 @@
                     User Management
                 </a>
 
+                <a href="${pageContext.request.contextPath}/admin/dentists">
+                    Dentist Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/treatments">
+                    Treatment Management
+                </a>
+
             </c:if>
 
             <a href="${pageContext.request.contextPath}/help">

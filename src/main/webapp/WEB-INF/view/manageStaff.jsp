@@ -19,6 +19,14 @@
         <h1>Sunrise Dental Clinic</h1>
 
         <nav>
+            <a href="${pageContext.request.contextPath}/dashboard">
+                Dashboard
+            </a>
+
+            <a href="${pageContext.request.contextPath}/patient">
+                Patients
+            </a>
+
             <a href="${pageContext.request.contextPath}/appointment">
                 Appointments
             </a>
@@ -27,9 +35,21 @@
                 Billing
             </a>
 
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
+
             <a href="${pageContext.request.contextPath}/admin/staff"
                class="active">
                 User Management
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/dentists">
+                Dentist Management
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/treatments">
+                Treatment Management
             </a>
 
             <a href="${pageContext.request.contextPath}/help">
@@ -56,7 +76,7 @@
         <% if (request.getAttribute("successMessage") != null) { %>
 
         <div class="success-message">
-            <%= request.getAttribute("successMessage") %>
+            <c:out value="${successMessage}"/>
         </div>
 
         <% } %>
@@ -64,7 +84,7 @@
         <% if (request.getAttribute("errorMessage") != null) { %>
 
         <div class="error-message">
-            <%= request.getAttribute("errorMessage") %>
+            <c:out value="${errorMessage}"/>
         </div>
 
         <% } %>
@@ -165,15 +185,15 @@
 
                         <tr>
                             <td>
-                                    ${user.userId}
+                                <c:out value="${user.userId}"/>
                             </td>
 
                             <td>
-                                    ${user.username}
+                                <c:out value="${user.username}"/>
                             </td>
 
                             <td>
-                                    ${user.role}
+                                <c:out value="${user.role}"/>
                             </td>
 
                             <td>

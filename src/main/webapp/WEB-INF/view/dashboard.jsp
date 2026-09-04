@@ -86,7 +86,7 @@
 
         <div class="success-message">
 
-                ${sessionScope.loginMessage}
+                <c:out value="${sessionScope.loginMessage}"/>
 
         </div>
 

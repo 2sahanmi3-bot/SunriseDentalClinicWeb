@@ -46,10 +46,22 @@
                 Billing
             </a>
 
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
+
             <c:if test="${sessionScope.staffRole == 'ADMIN'}">
 
                 <a href="${pageContext.request.contextPath}/admin/staff">
                     User Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/dentists">
+                    Dentist Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/treatments">
+                    Treatment Management
                 </a>
 
             </c:if>
@@ -77,7 +89,7 @@
     <c:if test="${not empty successMessage}">
 
         <div class="success-message">
-                ${successMessage}
+            <c:out value="${successMessage}"/>
         </div>
 
     </c:if>
@@ -86,7 +98,7 @@
     <c:if test="${not empty errorMessage}">
 
         <div class="error-message">
-                ${errorMessage}
+            <c:out value="${errorMessage}"/>
         </div>
 
     </c:if>

@@ -29,17 +29,37 @@
 
         <nav class="main-nav">
 
+            <a href="${pageContext.request.contextPath}/dashboard">
+                Dashboard
+            </a>
+
             <a href="${pageContext.request.contextPath}/appointment">
                 Appointments
+            </a>
+
+            <a href="${pageContext.request.contextPath}/patient">
+                Patients
             </a>
 
             <a href="${pageContext.request.contextPath}/billing">
                 Billing
             </a>
 
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
+
             <c:if test="${sessionScope.staffRole == 'ADMIN'}">
                 <a href="${pageContext.request.contextPath}/admin/staff">
-                    Staff Management
+                    User Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/dentists">
+                    Dentist Management
+                </a>
+
+                <a href="${pageContext.request.contextPath}/admin/treatments">
+                    Treatment Management
                 </a>
             </c:if>
 
@@ -74,7 +94,7 @@
                 <span>Appointment Number</span>
 
                 <strong>
-                    ${bill.appointmentNumber}
+                    <c:out value="${bill.appointmentNumber}"/>
                 </strong>
 
             </div>
@@ -84,7 +104,7 @@
                 <span>Patient Name</span>
 
                 <strong>
-                    ${bill.patientName}
+                    <c:out value="${bill.patientName}"/>
                 </strong>
 
             </div>
@@ -94,7 +114,7 @@
                 <span>Treatment</span>
 
                 <strong>
-                    ${bill.treatmentType}
+                    <c:out value="${bill.treatmentType}"/>
                 </strong>
 
             </div>

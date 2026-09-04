@@ -45,6 +45,10 @@
                 Billing
             </a>
 
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
+
             <a href="${pageContext.request.contextPath}/admin/staff">
                 User Management
             </a>
@@ -52,6 +56,10 @@
             <a href="${pageContext.request.contextPath}/admin/dentists"
                class="active">
                 Dentist Management
+            </a>
+
+            <a href="${pageContext.request.contextPath}/admin/treatments">
+                Treatment Management
             </a>
 
             <a href="${pageContext.request.contextPath}/help">

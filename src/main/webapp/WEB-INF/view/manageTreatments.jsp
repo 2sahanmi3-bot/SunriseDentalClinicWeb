@@ -45,6 +45,10 @@
                 Billing
             </a>
 
+            <a href="${pageContext.request.contextPath}/reports">
+                Reports
+            </a>
+
             <a href="${pageContext.request.contextPath}/admin/staff">
                 User Management
             </a>
