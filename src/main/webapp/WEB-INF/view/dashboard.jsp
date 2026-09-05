@@ -3,7 +3,7 @@
            uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -18,258 +18,344 @@
           href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
-<body>
+<body class="dashboard-page">
 
 <c:set var="activePage"
        value="dashboard"/>
 
-<div class="app-layout">
+<div class="app-layout dashboard-shell">
 
-<jsp:include page="/WEB-INF/view/includes/sidebar.jsp"/>
+    <jsp:include page="/WEB-INF/view/includes/sidebar.jsp"/>
 
-<div class="app-main">
+    <main class="dashboard-main">
 
-<header class="top-bar">
+        <header class="dashboard-topbar">
 
-    <div class="container">
+            <div class="dashboard-topbar-spacer"></div>
 
-        <h1>
-            Sunrise Dental Clinic
-        </h1>
+            <div class="dashboard-user">
 
-        <nav>
+                <div class="user-avatar">
+                    <c:choose>
+                        <c:when test="${sessionScope.staffRole == 'ADMIN'}">
+                            AD
+                        </c:when>
+                        <c:otherwise>
+                            ST
+                        </c:otherwise>
+                    </c:choose>
+                </div>
 
-            <a href="${pageContext.request.contextPath}/dashboard"
-               class="active">
-                Dashboard
-            </a>
+                <div>
+                    <strong>
+                        <c:out value="${sessionScope.staffUser}"/>
+                    </strong>
 
-            <a href="${pageContext.request.contextPath}/patient">
-                Patient Management
-            </a>
-
-            <a href="${pageContext.request.contextPath}/appointment">
-                Appointments
-            </a>
-
-            <a href="${pageContext.request.contextPath}/billing">
-                Billing
-            </a>
-
-            <a href="${pageContext.request.contextPath}/reports">
-                Reports
-            </a>
-
-            <c:if test="${sessionScope.staffRole == 'ADMIN'}">
-
-                <a href="${pageContext.request.contextPath}/admin/staff">
-                    User Management
-                </a>
-
-                <a href="${pageContext.request.contextPath}/admin/dentists">
-                    Dentist Management
-                </a>
-
-                <a href="${pageContext.request.contextPath}/admin/treatments">
-                    Treatment Management
-                </a>
-
-            </c:if>
-
-            <a href="${pageContext.request.contextPath}/help">
-                Help
-            </a>
-
-            <a href="${pageContext.request.contextPath}/auth?action=logout">
-                Logout
-            </a>
-
-        </nav>
-
-    </div>
-
-</header>
-
-
-<main class="container">
-
-    <div class="page-header">
-
-        <h1>
-            Welcome back, <c:out value="${sessionScope.staffUser}"/>
-        </h1>
-
-        <p>
-            Here's what's happening at Sunrise Dental Clinic today.
-        </p>
-
-    </div>
-
-    <c:if test="${not empty sessionScope.loginMessage}">
-
-        <div class="success-message">
-
-                <c:out value="${sessionScope.loginMessage}"/>
-
-        </div>
-
-        <c:remove var="loginMessage"
-                  scope="session"/>
-
-    </c:if>
-
-
-    <section class="card">
-
-        <h2>
-            Welcome, ${sessionScope.staffUser}
-        </h2>
-
-        <p>
-            Role:
-            <c:choose>
-
-                <c:when test="${sessionScope.staffRole == 'ADMIN'}">
-                    Administrator
-                </c:when>
-
-                <c:otherwise>
-                    Staff
-                </c:otherwise>
-
-            </c:choose>
-        </p>
-
-    </section>
-
-
-    <section class="card">
-
-        <h2>
-            Clinic Statistics
-        </h2>
-
-        <div class="dashboard-grid">
-
-            <div class="dashboard-card">
-
-                <h3>
-                    Today's Appointments
-                </h3>
-
-                <p class="dashboard-number">
-                    <c:out value="${stats.todayAppointments}"/>
-                </p>
+                    <span>
+                        <c:choose>
+                            <c:when test="${sessionScope.staffRole == 'ADMIN'}">
+                                Administrator
+                            </c:when>
+                            <c:otherwise>
+                                Staff
+                            </c:otherwise>
+                        </c:choose>
+                    </span>
+                </div>
 
             </div>
 
-            <div class="dashboard-card">
+        </header>
 
-                <h3>
-                    Upcoming Appointments
-                </h3>
 
-                <p class="dashboard-number">
-                    <c:out value="${stats.upcomingAppointments}"/>
-                </p>
+        <section class="dashboard-content">
 
-            </div>
+            <div class="dashboard-welcome">
 
-            <div class="dashboard-card">
-
-                <h3>
-                    Registered Patients
-                </h3>
-
-                <p class="dashboard-number">
-                    <c:out value="${stats.totalPatients}"/>
-                </p>
-
-            </div>
-
-            <c:if test="${sessionScope.staffRole == 'ADMIN'}">
-
-                <div class="dashboard-card">
-
-                    <h3>
-                        Active Dentists
-                    </h3>
-
-                    <p class="dashboard-number">
-                        <c:out value="${stats.activeDentists}"/>
+                <div>
+                    <p class="dashboard-kicker">
+                        Clinic Overview
                     </p>
+
+                    <h1>
+                        Welcome back,
+                        <c:out value="${sessionScope.staffUser}"/>
+                    </h1>
+
+                    <p>
+                        Here's what's happening at Sunrise Dental Clinic today.
+                    </p>
+                </div>
+
+                <div class="dashboard-date">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+
+            </div>
+
+
+            <c:if test="${not empty sessionScope.loginMessage}">
+
+                <div class="dashboard-alert">
+
+                    <div class="alert-check">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+
+                    <div>
+                        <strong>Login successful!</strong>
+
+                        <p>
+                            <c:out value="${sessionScope.loginMessage}"/>
+                        </p>
+                    </div>
 
                 </div>
 
-                <div class="dashboard-card">
+                <c:remove var="loginMessage"
+                          scope="session"/>
 
-                    <h3>
-                        Active User Accounts
-                    </h3>
+            </c:if>
 
-                    <p class="dashboard-number">
-                        <c:out value="${stats.activeUsers}"/>
-                    </p>
+
+            <div class="dashboard-stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon stat-blue">
+                        <i class="fa-regular fa-calendar"></i>
+                    </div>
+
+                    <div class="stat-details">
+                        <span>Today's Appointments</span>
+
+                        <strong>
+                            <c:out value="${stats.todayAppointments}"/>
+                        </strong>
+                    </div>
 
                 </div>
 
-            </c:if>
 
-        </div>
+                <div class="stat-card">
 
-    </section>
+                    <div class="stat-icon stat-orange">
+                        <i class="fa-regular fa-clock"></i>
+                    </div>
 
+                    <div class="stat-details">
+                        <span>Upcoming Appointments</span>
 
-    <section class="card">
+                        <strong>
+                            <c:out value="${stats.upcomingAppointments}"/>
+                        </strong>
+                    </div>
 
-        <h2>
-            Quick Actions
-        </h2>
-
-        <div class="quick-actions">
-
-            <a href="${pageContext.request.contextPath}/patient">
-                Find Patient
-            </a>
-
-            <a href="${pageContext.request.contextPath}/appointment">
-                Register Appointment
-            </a>
-
-            <a href="${pageContext.request.contextPath}/billing">
-                Generate Bill
-            </a>
-
-            <a href="${pageContext.request.contextPath}/reports">
-                View Reports
-            </a>
-
-            <c:if test="${sessionScope.staffRole == 'ADMIN'}">
-
-                <a href="${pageContext.request.contextPath}/admin/staff">
-                    User Management
-                </a>
-
-                <a href="${pageContext.request.contextPath}/admin/dentists">
-                    Dentist Management
-                </a>
-
-                <a href="${pageContext.request.contextPath}/admin/treatments">
-                    Treatment Management
-                </a>
-
-            </c:if>
-
-        </div>
-
-    </section>
+                </div>
 
 
-</main>
+                <div class="stat-card">
+
+                    <div class="stat-icon stat-green">
+                        <i class="fa-solid fa-user-group"></i>
+                    </div>
+
+                    <div class="stat-details">
+                        <span>Registered Patients</span>
+
+                        <strong>
+                            <c:out value="${stats.totalPatients}"/>
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon stat-purple">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+
+                        <div class="stat-details">
+                            <span>Active Dentists</span>
+
+                            <strong>
+                                <c:out value="${stats.activeDentists}"/>
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon stat-blue">
+                            <i class="fa-solid fa-users-gear"></i>
+                        </div>
+
+                        <div class="stat-details">
+                            <span>Active User Accounts</span>
+
+                            <strong>
+                                <c:out value="${stats.activeUsers}"/>
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </c:if>
+
+            </div>
+
+
+            <section class="quick-actions-card">
+
+                <div class="section-heading">
+                    <h2>Quick Actions</h2>
+
+                    <p>
+                        Common tasks to manage your clinic efficiently.
+                    </p>
+                </div>
+
+                <div class="quick-actions-grid">
+
+                    <a href="${pageContext.request.contextPath}/patient"
+                       class="quick-action quick-blue">
+
+                        <div class="quick-icon">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+
+                        <span>Find Patient</span>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <a href="${pageContext.request.contextPath}/appointment"
+                       class="quick-action quick-green">
+
+                        <div class="quick-icon">
+                            <i class="fa-regular fa-calendar-plus"></i>
+                        </div>
+
+                        <span>Register Appointment</span>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <a href="${pageContext.request.contextPath}/billing"
+                       class="quick-action quick-orange">
+
+                        <div class="quick-icon">
+                            <i class="fa-regular fa-file-lines"></i>
+                        </div>
+
+                        <span>Generate Bill</span>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <a href="${pageContext.request.contextPath}/reports"
+                       class="quick-action quick-purple">
+
+                        <div class="quick-icon">
+                            <i class="fa-solid fa-chart-column"></i>
+                        </div>
+
+                        <span>View Reports</span>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <c:if test="${sessionScope.staffRole == 'ADMIN'}">
+
+                        <a href="${pageContext.request.contextPath}/admin/staff"
+                           class="quick-action quick-blue">
+
+                            <div class="quick-icon">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+
+                            <span>User Management</span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+
+
+                        <a href="${pageContext.request.contextPath}/admin/dentists"
+                           class="quick-action quick-red">
+
+                            <div class="quick-icon">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </div>
+
+                            <span>Dentist Management</span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+
+
+                        <a href="${pageContext.request.contextPath}/admin/treatments"
+                           class="quick-action quick-green">
+
+                            <div class="quick-icon">
+                                <i class="fa-solid fa-tooth"></i>
+                            </div>
+
+                            <span>Treatment Management</span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </a>
+
+                    </c:if>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
 
 </div>
 
-</div>
+<script>
+    const dateElement =
+        document.getElementById("currentDate");
+
+    if (dateElement) {
+
+        const today =
+            new Date();
+
+        dateElement.textContent =
+            today.toLocaleDateString(
+                "en-GB",
+                {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                }
+            );
+    }
+</script>
 
 </body>
 </html>

@@ -1,11 +1,12 @@
 <%@ taglib prefix="c"
            uri="http://java.sun.com/jsp/jstl/core" %>
 
-<aside class="sidebar screen-only-navigation">
+<aside class="app-sidebar sidebar screen-only-navigation">
 
     <div class="sidebar-brand">
+
         <div class="brand-mark">
-            SD
+            <i class="fa-solid fa-tooth"></i>
         </div>
 
         <div>
@@ -22,33 +23,39 @@
     <nav class="sidebar-nav">
 
         <a href="${pageContext.request.contextPath}/dashboard"
-           class="${activePage == 'dashboard' ? 'active' : ''}">
-            Dashboard
+           class="sidebar-link ${activePage == 'dashboard' ? 'active' : ''}">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
         </a>
 
         <a href="${pageContext.request.contextPath}/patient"
-           class="${activePage == 'patients' ? 'active' : ''}">
-            Patients
+           class="sidebar-link ${activePage == 'patients' ? 'active' : ''}">
+            <i class="fa-regular fa-user"></i>
+            <span>Patients</span>
         </a>
 
         <a href="${pageContext.request.contextPath}/appointment"
-           class="${activePage == 'appointments' ? 'active' : ''}">
-            Appointments
+           class="sidebar-link ${activePage == 'appointments' ? 'active' : ''}">
+            <i class="fa-regular fa-calendar"></i>
+            <span>Appointments</span>
         </a>
 
         <a href="${pageContext.request.contextPath}/billing"
-           class="${activePage == 'billing' ? 'active' : ''}">
-            Billing
+           class="sidebar-link ${activePage == 'billing' ? 'active' : ''}">
+            <i class="fa-regular fa-credit-card"></i>
+            <span>Billing</span>
         </a>
 
         <a href="${pageContext.request.contextPath}/reports"
-           class="${activePage == 'reports' ? 'active' : ''}">
-            Reports
+           class="sidebar-link ${activePage == 'reports' ? 'active' : ''}">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Reports</span>
         </a>
 
         <a href="${pageContext.request.contextPath}/help"
-           class="${activePage == 'help' ? 'active' : ''}">
-            Help
+           class="sidebar-link ${activePage == 'help' ? 'active' : ''}">
+            <i class="fa-regular fa-circle-question"></i>
+            <span>Help</span>
         </a>
 
         <c:if test="${sessionScope.staffRole == 'ADMIN'}">
@@ -58,18 +65,21 @@
             </div>
 
             <a href="${pageContext.request.contextPath}/admin/staff"
-               class="${activePage == 'users' ? 'active' : ''}">
-                User Management
+               class="sidebar-link ${activePage == 'users' ? 'active' : ''}">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>User Management</span>
             </a>
 
             <a href="${pageContext.request.contextPath}/admin/dentists"
-               class="${activePage == 'dentists' ? 'active' : ''}">
-                Dentist Management
+               class="sidebar-link ${activePage == 'dentists' ? 'active' : ''}">
+                <i class="fa-solid fa-user-doctor"></i>
+                <span>Dentist Management</span>
             </a>
 
             <a href="${pageContext.request.contextPath}/admin/treatments"
-               class="${activePage == 'treatments' ? 'active' : ''}">
-                Treatment Management
+               class="sidebar-link ${activePage == 'treatments' ? 'active' : ''}">
+                <i class="fa-solid fa-tooth"></i>
+                <span>Treatment Management</span>
             </a>
 
         </c:if>
@@ -98,6 +108,7 @@
 
         <a href="${pageContext.request.contextPath}/auth?action=logout"
            class="logout-link">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
             Logout
         </a>
     </div>
