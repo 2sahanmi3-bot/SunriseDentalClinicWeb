@@ -3,101 +3,209 @@
            uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
+
     <title>Sunrise Dental Clinic - Login</title>
 
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
-<body>
+<body class="clinic-login-page">
 
-<div class="login-page">
+<main class="clinic-login-shell">
 
-    <section class="login-intro">
+    <section class="clinic-login-hero">
 
-        <h1>
-            Sunrise Dental Clinic
-        </h1>
+        <div class="clinic-hero-pattern"></div>
 
-        <p>
-            Simple and reliable clinic management for your team.
-            Manage patients, appointments, treatments and billing securely
-            from one professional system.
-        </p>
+        <div class="clinic-brand-block">
 
-        <div class="login-highlights">
-            <span>Secure</span>
-            <span>Simple</span>
-            <span>Clinic focused</span>
+            <div class="clinic-brand-mark">
+                <i class="fa-solid fa-tooth"></i>
+            </div>
+
+            <p class="clinic-eyebrow">
+                Internal Clinic System
+            </p>
+
+            <h1>
+                Sunrise Dental Clinic
+            </h1>
+
+            <p class="clinic-tagline">
+                Healthy Smiles.
+                <br>
+                Brighter Tomorrows.
+            </p>
+
+            <p class="clinic-hero-copy">
+                Simple and reliable clinic management for your team.
+                Manage patients, appointments, treatments and billing
+                from one secure workspace.
+            </p>
+
+        </div>
+
+        <div class="clinic-benefits">
+
+            <div class="clinic-benefit">
+                <span>
+                    <i class="fa-solid fa-shield-halved"></i>
+                </span>
+
+                <div>
+                    <strong>Secure</strong>
+                    <p>Protected staff access and role-based controls.</p>
+                </div>
+            </div>
+
+            <div class="clinic-benefit">
+                <span>
+                    <i class="fa-solid fa-bolt"></i>
+                </span>
+
+                <div>
+                    <strong>Simple</strong>
+                    <p>Clear workflows for daily clinic operations.</p>
+                </div>
+            </div>
+
+            <div class="clinic-benefit">
+                <span>
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </span>
+
+                <div>
+                    <strong>Clinic Focused</strong>
+                    <p>Built around patients, appointments and care.</p>
+                </div>
+            </div>
+
         </div>
 
     </section>
 
-    <div class="login-card">
 
-        <h1>Sign In</h1>
+    <section class="clinic-login-panel">
 
-        <p class="subtitle">
-            Sign in to access the clinic management system.
-        </p>
+        <div class="clinic-login-card">
 
-        <c:if test="${not empty errorMessage}">
+            <div class="clinic-card-heading">
+                <h2>Sign In</h2>
 
-        <div class="error-message">
-            <c:out value="${errorMessage}"/>
+                <p>
+                    Sign in to access the clinic management system.
+                </p>
+            </div>
+
+            <c:if test="${not empty errorMessage}">
+
+                <div class="clinic-login-error">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    <span>
+                        <c:out value="${errorMessage}"/>
+                    </span>
+                </div>
+
+            </c:if>
+
+            <form method="post"
+                  action="${pageContext.request.contextPath}/auth"
+                  class="clinic-login-form">
+
+                <div class="clinic-field">
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <div class="clinic-input">
+                        <i class="fa-regular fa-user"></i>
+
+                        <input type="text"
+                               id="username"
+                               name="username"
+                               maxlength="50"
+                               autocomplete="username"
+                               placeholder="Enter your username"
+                               required>
+                    </div>
+                </div>
+
+                <div class="clinic-field">
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="clinic-input">
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               autocomplete="current-password"
+                               placeholder="Enter your password"
+                               required>
+
+                        <button type="button"
+                                class="clinic-password-toggle"
+                                id="passwordToggle"
+                                aria-label="Show password">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="clinic-login-button">
+                    <span>Sign In</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+            </form>
+
         </div>
 
-        </c:if>
+    </section>
 
-        <form method="post"
-              action="${pageContext.request.contextPath}/auth">
+</main>
 
-            <div class="form-group">
+<script>
+    const passwordInput =
+        document.getElementById("password");
 
-                <label for="username">
-                    Username
-                </label>
+    const passwordToggle =
+        document.getElementById("passwordToggle");
 
-                <input type="text"
-                       id="username"
-                       name="username"
-                       maxlength="50"
-                       autocomplete="username"
-                       required>
+    if (passwordInput && passwordToggle) {
 
-            </div>
+        passwordToggle.addEventListener("click", function () {
 
-            <div class="form-group">
+            const icon =
+                passwordToggle.querySelector("i");
 
-                <label for="password">
-                    Password
-                </label>
+            if (passwordInput.type === "password") {
 
-                <input type="password"
-                       id="password"
-                       name="password"
-                       autocomplete="current-password"
-                       required>
+                passwordInput.type = "text";
+                passwordToggle.setAttribute("aria-label", "Hide password");
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
 
-            </div>
+            } else {
 
-            <button type="submit"
-                    class="primary-button">
-
-                Sign In
-
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
+                passwordInput.type = "password";
+                passwordToggle.setAttribute("aria-label", "Show password");
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

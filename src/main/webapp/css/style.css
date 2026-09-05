@@ -1,3 +1,5 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css");
+
 :root {
     --primary-blue: #2180E8;
     --primary-blue-hover: #176FD0;
@@ -1022,5 +1024,355 @@ td a {
     .receipt-total strong {
         display: block;
         margin-top: 6px;
+    }
+}
+
+/* Modern clinic login. */
+
+.clinic-login-page {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--navy);
+    font-family: Arial, "Segoe UI", sans-serif;
+}
+
+.clinic-login-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(390px, 0.9fr);
+    background:
+            radial-gradient(circle at 12% 18%, rgba(33, 128, 232, 0.18), transparent 28%),
+            linear-gradient(135deg, #F8FBFF, #EAF3FD);
+}
+
+.clinic-login-hero {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(36px, 5vw, 72px);
+    background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(234, 243, 253, 0.84)),
+            radial-gradient(circle at 80% 22%, rgba(33, 128, 232, 0.18), transparent 24%),
+            radial-gradient(circle at 18% 86%, rgba(32, 174, 122, 0.12), transparent 24%);
+}
+
+.clinic-hero-pattern {
+    position: absolute;
+    inset: auto -120px -160px auto;
+    width: 420px;
+    height: 420px;
+    border-radius: 999px;
+    background: rgba(33, 128, 232, 0.08);
+    pointer-events: none;
+}
+
+.clinic-hero-pattern::before {
+    content: "";
+    position: absolute;
+    inset: 70px;
+    border: 1px solid rgba(33, 128, 232, 0.14);
+    border-radius: inherit;
+}
+
+.clinic-brand-block {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+}
+
+.clinic-brand-mark {
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 24px;
+    border-radius: 20px;
+    background: var(--primary-blue);
+    color: var(--white);
+    font-size: 30px;
+    box-shadow: 0 18px 34px rgba(33, 128, 232, 0.22);
+}
+
+.clinic-eyebrow {
+    margin: 0 0 14px;
+    color: var(--primary-blue);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.clinic-brand-block h1 {
+    max-width: 600px;
+    margin: 0;
+    color: var(--navy);
+    font-size: clamp(44px, 6vw, 78px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+}
+
+.clinic-tagline {
+    margin: 26px 0 0;
+    color: var(--primary-blue);
+    font-size: clamp(26px, 3vw, 40px);
+    font-weight: 800;
+    line-height: 1.08;
+}
+
+.clinic-hero-copy {
+    max-width: 560px;
+    margin: 24px 0 0;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.8;
+}
+
+.clinic-benefits {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 760px;
+}
+
+.clinic-benefit {
+    display: flex;
+    gap: 14px;
+    min-height: 118px;
+    padding: 18px;
+    border: 1px solid rgba(221, 231, 242, 0.88);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.74);
+    backdrop-filter: blur(8px);
+}
+
+.clinic-benefit span {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.clinic-benefit strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--navy);
+}
+
+.clinic-benefit p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.clinic-login-panel {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(24px, 4vw, 56px);
+    background:
+            radial-gradient(circle at top right, rgba(33, 128, 232, 0.10), transparent 32%),
+            var(--white);
+}
+
+.clinic-login-card {
+    width: 100%;
+    max-width: 520px;
+    padding: clamp(30px, 4vw, 52px);
+    border: 1px solid rgba(221, 231, 242, 0.96);
+    border-radius: 26px;
+    background: var(--white);
+    box-shadow: 0 26px 58px rgba(16, 45, 87, 0.11);
+}
+
+.clinic-card-heading {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.clinic-card-heading h2 {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: clamp(32px, 4vw, 46px);
+    letter-spacing: -0.03em;
+}
+
+.clinic-card-heading p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.clinic-login-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    padding: 14px 15px;
+    border: 1px solid var(--error-border);
+    border-radius: 14px;
+    background: var(--error-bg);
+    color: var(--error-text);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.clinic-login-form {
+    display: grid;
+    gap: 20px;
+}
+
+.clinic-field label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--navy);
+    font-weight: 800;
+}
+
+.clinic-input {
+    position: relative;
+}
+
+.clinic-input > i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #5D789C;
+    pointer-events: none;
+}
+
+.clinic-input input {
+    width: 100%;
+    height: 58px;
+    padding: 0 54px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: #FBFDFF;
+    color: var(--navy);
+    font-size: 15px;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.clinic-input input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(33, 128, 232, 0.12);
+}
+
+.clinic-input input::placeholder {
+    color: #8BA0B8;
+}
+
+.clinic-password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    transform: translateY(-50%);
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #6F86A4;
+}
+
+.clinic-password-toggle:hover,
+.clinic-password-toggle:focus-visible {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.clinic-login-button {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 15px;
+    background: var(--primary-blue);
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 800;
+    box-shadow: 0 16px 30px rgba(33, 128, 232, 0.22);
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.clinic-login-button:hover {
+    transform: translateY(-2px);
+    background: var(--primary-blue-hover);
+    box-shadow: 0 20px 38px rgba(33, 128, 232, 0.28);
+}
+
+@media (max-width: 1100px) {
+
+    .clinic-login-shell {
+        grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);
+    }
+
+    .clinic-benefits {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 860px) {
+
+    .clinic-login-shell {
+        display: block;
+    }
+
+    .clinic-login-hero,
+    .clinic-login-panel {
+        min-height: auto;
+    }
+
+    .clinic-login-hero {
+        padding: 34px 22px;
+    }
+
+    .clinic-benefits {
+        margin-top: 36px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .clinic-brand-mark {
+        width: 56px;
+        height: 56px;
+        font-size: 25px;
+    }
+
+    .clinic-benefit {
+        min-height: auto;
+    }
+
+    .clinic-login-panel {
+        padding: 18px;
+    }
+
+    .clinic-login-card {
+        border-radius: 20px;
+    }
+
+    .clinic-input input,
+    .clinic-login-button {
+        height: 54px;
     }
 }
